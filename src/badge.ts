@@ -1,6 +1,7 @@
+// @ts-nocheck
 import { SVG } from '@svgdotjs/svg.js'
 
-function createBadge(points:any):SVG.G {
+function createBadge(points:any) {
   const svg = SVG('badge').size(300, 300)
   const text = svg.text(points).font({
     family: 'sans-serif',

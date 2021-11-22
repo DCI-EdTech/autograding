@@ -1,7 +1,8 @@
+// @ts-nocheck
 import fs from 'fs';
 const path = require('path');
 
-export default generateTestsList = function(testsDir, packageJsonPath) {
+export default function(testsDir:string, packageJsonPath:string) {
   // read test folder contents  
   // if testsDir does not exist, look in src folder
   if (!fs.existsSync(testsDir)) {
@@ -12,7 +13,7 @@ export default generateTestsList = function(testsDir, packageJsonPath) {
   ;
 
   // filer autograding test files
-  const autogradingTestFiles = testFiles.reduce((acc, file) => {
+  const autogradingTestFiles = testFiles.reduce((acc, file:string) => {
     const taskName = path.basename(file).match(/^tasks\.(.*)\.js$/)[1];
     if(taskName) acc.push({taskName, file});
     return acc;
