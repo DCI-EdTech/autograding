@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import fs from 'fs'
 import path from 'path'
 import {Test, runAll} from './runner'
+import generateTestsList from './generateTestsList'
 
 const run = async (): Promise<void> => {
   try {
@@ -10,13 +11,19 @@ const run = async (): Promise<void> => {
       throw new Error('No GITHUB_WORKSPACE')
     }
 
-    const data = fs.readFileSync(path.resolve(cwd, '.github/classroom/autograding.json'))
-    const json = JSON.parse(data.toString())
+    // make test request to see if we can confirm that it's from github ci
+    
 
-    await runAll(json.tests as Array<Test>, cwd)
+    const tests = generateTestsList('__tests__', path.resolve(cwd, 'package.json'))
+
+    await runAll(tests as Array<Test>, cwd)
   } catch (error) {
     // If there is any error we'll fail the action with the error message
-    console.error(error.message)
+    let errorMessage = "Failed";
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    console.error(errorMessage)
     core.setFailed(`Autograding failure: ${error}`)
   }
 }

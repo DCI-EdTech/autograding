@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import createBadge from './badge'
 
 export const setCheckRunOutput = async (text: string): Promise<void> => {
   // If we have nothing to output, then bail
@@ -25,6 +26,28 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   // We need the workflow run id
   const runId = parseInt(process.env['GITHUB_RUN_ID'] || '')
   if (Number.isNaN(runId)) return
+
+  // Generate badge
+  const badge = createBadge(text)
+
+  // Get badge sha
+  const { data: { sha } } = await octokit.rest.repos.getContent({
+    owner,
+    repo,
+    path: "badge.svg",
+    ref: "badges"
+  });
+
+  // upload badge to repository
+  await octokit.repos.createOrUpdateFileContents({
+    owner,
+    repo,
+    path: 'badge.svg',
+    message: 'Update badge',
+    content: badge,
+    sha: sha || '',
+    branch: 'badges',
+  })
 
   // Fetch the workflow run
   const workflowRunResponse = await octokit.actions.getWorkflowRun({
