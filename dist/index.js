@@ -636,7 +636,7 @@ exports.setCheckRunOutput = async (text) => {
     // Generate badge
     //const badge = createBadge(text)
     // Get badge sha
-    const { data: { sha } } = await octokit.rest.repos.getContent({
+    const { data: { sha } } = await octokit.repos.getContent({
         owner,
         repo,
         path: "badge.svg",
