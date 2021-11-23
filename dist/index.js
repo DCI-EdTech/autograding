@@ -636,12 +636,19 @@ exports.setCheckRunOutput = async (text) => {
     // Generate badge
     //const badge = createBadge(text)
     // Get badge sha
-    const { data: { sha } } = await octokit.repos.getContents({
-        owner,
-        repo,
-        path: "badge.svg",
-        ref: "badges"
-    });
+    let sha;
+    try {
+        const response = await octokit.repos.getContents({
+            owner,
+            repo,
+            path: "badge.svg",
+            ref: "badges"
+        });
+        sha = response.data.sha;
+    }
+    catch (error) {
+        // branch doesn't exist yet
+    }
     // upload badge to repository
     await octokit.repos.createOrUpdateFileContents({
         owner,
