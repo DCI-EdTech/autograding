@@ -32,7 +32,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   //const badge = createBadge(text)
 
   // Get badge sha
-  const { data: { sha } } = await octokit.repos.get.getContents({
+  const { data: { sha } } = await octokit.repos.getContents({
     owner,
     repo,
     path: "badge.svg",
