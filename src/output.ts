@@ -29,7 +29,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   if (Number.isNaN(runId)) return
 
   // Generate badge
-  const badge = createBadge(text)
+  //const badge = createBadge(text)
 
   // Get badge sha
   const { data: { sha } } = await octokit.rest.repos.getContent({
@@ -45,7 +45,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
     repo,
     path: 'badge.svg',
     message: 'Update badge',
-    content: badge,
+    content: Buffer.from('Test').toString('base64'), //badge,
     sha: sha || '',
     branch: 'badges',
   })
