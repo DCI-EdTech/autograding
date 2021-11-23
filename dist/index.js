@@ -650,7 +650,7 @@ exports.setCheckRunOutput = async (text) => {
         // branch doesn't exist yet
     }
     // upload badge to repository
-    await octokit.repos.createOrUpdateFileContents({
+    await octokit.repos.createOrUpdateFile({
         owner,
         repo,
         path: 'badge.svg',

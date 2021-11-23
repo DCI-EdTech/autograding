@@ -46,7 +46,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   }
 
   // upload badge to repository
-  await octokit.repos.createOrUpdateFileContents({
+  await octokit.repos.createOrUpdateFile({
     owner,
     repo,
     path: 'badge.svg',
