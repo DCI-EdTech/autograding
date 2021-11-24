@@ -192,8 +192,8 @@ exports.setCheckRunOutput = async (text) => {
     if (Number.isNaN(runId))
         return;
     // Generate badge
-    const badge = `<svg width="200.6" height="40" viewBox="0 0 1003 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points: 100/100">
-    <title>Points: 100/100</title>
+    const badge = `<svg width="200.6" height="40" viewBox="0 0 1003 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points: ${text}">
+    <title>Points: ${text}</title>
     <g>
       <rect fill="#2f496e" width="433" height="200"/>
       <rect fill="#2988bc" x="433" width="570" height="200"/>
@@ -201,8 +201,8 @@ exports.setCheckRunOutput = async (text) => {
     <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
       <text x="60" y="148" textLength="333" fill="#000" opacity="0.1">Points</text>
       <text x="50" y="138" textLength="333">Points</text>
-      <text x="488" y="148" textLength="470" fill="#000" opacity="0.1">100/100</text>
-      <text x="478" y="138" textLength="470">100/100</text>
+      <text x="488" y="148" textLength="470" fill="#000" opacity="0.1">${text}</text>
+      <text x="478" y="138" textLength="470">${text}</text>
     </g>
     
   </svg>`; // createBadge(text)
