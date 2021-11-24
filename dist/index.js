@@ -194,11 +194,10 @@ exports.setCheckRunOutput = async (text) => {
     // Generate badge
     //const badge = createBadge(text)
     // get last commit of main
-    const commitsList = await octokit.rest.repos.listCommits({
+    const { data: [{ sha: lastCommitSHA }] } = await octokit.rest.repos.listCommits({
         owner,
         repo,
     });
-    throw new Error(JSON.stringify(commitsList));
     // create badges brach
     await octokit.rest.git.createRef({
         owner,
