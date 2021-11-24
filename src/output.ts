@@ -36,7 +36,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
     owner,
     repo,
     ref: `refs/heads/badges`,
-    sha: '6ef19b41225c5369f1c104d45d8d85efa9b057b53b14b4b9b939dd74decc5321', // empty tree
+    sha: '4b825dc642cb6eb9a060e54bf8d69288fbee4904', // empty tree
   });
   
 
@@ -46,7 +46,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
     const response = await octokit.rest.repos.getContent({
       owner,
       repo,
-      path: "badge.svg",
+      path: ".github/badges/badge.svg",
       ref: "badges"
     });
     sha = response.data.sha;
@@ -58,7 +58,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   await octokit.rest.repos.createOrUpdateFileContents({
     owner,
     repo,
-    path: 'badge.svg',
+    path: '.github/badges/badge.svg',
     message: 'Update badge',
     content: Buffer.from('Test').toString('base64'), //badge,
     sha: sha || '',

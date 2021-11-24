@@ -198,7 +198,7 @@ exports.setCheckRunOutput = async (text) => {
         owner,
         repo,
         ref: `refs/heads/badges`,
-        sha: '6ef19b41225c5369f1c104d45d8d85efa9b057b53b14b4b9b939dd74decc5321',
+        sha: '4b825dc642cb6eb9a060e54bf8d69288fbee4904',
     });
     // Get badge sha
     let sha;
@@ -206,7 +206,7 @@ exports.setCheckRunOutput = async (text) => {
         const response = await octokit.rest.repos.getContent({
             owner,
             repo,
-            path: "badge.svg",
+            path: ".github/badges/badge.svg",
             ref: "badges"
         });
         sha = response.data.sha;
@@ -218,7 +218,7 @@ exports.setCheckRunOutput = async (text) => {
     await octokit.rest.repos.createOrUpdateFileContents({
         owner,
         repo,
-        path: 'badge.svg',
+        path: '.github/badges/badge.svg',
         message: 'Update badge',
         content: Buffer.from('Test').toString('base64'),
         sha: sha || '',
