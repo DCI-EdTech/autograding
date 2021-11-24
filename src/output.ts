@@ -31,12 +31,18 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   // Generate badge
   //const badge = createBadge(text)
 
+  // get last commit of main
+  const [{sha:lastCommitSHA}] = await octokit.rest.repos.listCommits({
+    owner,
+    repo,
+  });
+
   // create badges brach
   await octokit.rest.git.createRef({
     owner,
     repo,
     ref: `refs/heads/badges`,
-    sha: '4b825dc642cb6eb9a060e54bf8d69288fbee4904', // empty tree
+    sha: lastCommitSHA,
   });
   
 
