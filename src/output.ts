@@ -13,7 +13,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   if (!token || token === '') return
 
   // Create the octokit client
-  const octokit: github.GitHub = new github.GitHub(token)
+  const octokit: github.GitHub = github.getOctokit(token)
   if (!octokit) return
 
   // The environment contains a variable for current repository. The repository
@@ -34,7 +34,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   // Get badge sha
   let sha;
   try {
-    const response = await octokit.repos.getContents({
+    const response = await octokit.rest.repos.getContent({
       owner,
       repo,
       path: "badge.svg",
@@ -46,7 +46,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   }
 
   // upload badge to repository
-  await octokit.repos.createOrUpdateFile({
+  await octokit.rest.repos.createOrUpdateFileContents({
     owner,
     repo,
     path: 'badge.svg',
@@ -57,7 +57,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   })
 
   // Fetch the workflow run
-  const workflowRunResponse = await octokit.actions.getWorkflowRun({
+  const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
     owner,
     repo,
     run_id: runId,
@@ -67,7 +67,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const checkSuiteUrl = (workflowRunResponse.data as any).check_suite_url
   const checkSuiteId = parseInt(checkSuiteUrl.match(/[0-9]+$/)[0], 10)
-  const checkRunsResponse = await octokit.checks.listForSuite({
+  const checkRunsResponse = await octokit.rest.checks.listForSuite({
     owner,
     repo,
     check_name: 'Autograding',
@@ -79,7 +79,7 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   // Update the checkrun, we'll assign the title, summary and text even though we expect
   // the title and summary to be overwritten by GitHub Actions (they are required in this call)
   // We'll also store the total in an annotation to future-proof
-  await octokit.checks.update({
+  await octokit.rest.checks.update({
     owner,
     repo,
     check_run_id: checkRun.id,
