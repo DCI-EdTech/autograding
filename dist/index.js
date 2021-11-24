@@ -198,7 +198,7 @@ exports.setCheckRunOutput = async (text) => {
         owner,
         repo,
         ref: `refs/heads/badges`,
-        sha: '',
+        sha: '4b825dc642cb6eb9a060e54bf8d69288fbee4904',
     });
     // Get badge sha
     let sha;
