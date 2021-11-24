@@ -5,7 +5,7 @@ import createBadge from './badge'
 
 export const setCheckRunOutput = async (points:number, availablePoints:number): Promise<void> => {
   // If we have nothing to output, then bail
-  if (text === '') return
+  if (typeof points === undefined) return
 
   // Our action will need to API access the repository so we require a token
   // This will need to be set in the calling workflow, otherwise we'll exit
@@ -115,8 +115,8 @@ export const setCheckRunOutput = async (points:number, availablePoints:number): 
     check_run_id: checkRun.id,
     output: {
       title: 'Autograding',
-      summary: text,
-      text: text,
+      summary: `Points ${points}/${availablePoints}`,
+      text: `Points ${points}/${availablePoints}`,
       annotations: [
         {
           // Using the `.github` path is what GitHub Actions does
@@ -124,7 +124,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number): 
           start_line: 1,
           end_line: 1,
           annotation_level: 'notice',
-          message: text,
+          message: `Points ${points}/${availablePoints}`,
           title: 'Autograding complete',
         },
       ],

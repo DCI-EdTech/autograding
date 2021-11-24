@@ -167,7 +167,7 @@ const core = __importStar(__webpack_require__(470));
 const github = __importStar(__webpack_require__(469));
 exports.setCheckRunOutput = async (points, availablePoints) => {
     // If we have nothing to output, then bail
-    if (text === '')
+    if (typeof points === undefined)
         return;
     // Our action will need to API access the repository so we require a token
     // This will need to be set in the calling workflow, otherwise we'll exit
@@ -274,8 +274,8 @@ exports.setCheckRunOutput = async (points, availablePoints) => {
         check_run_id: checkRun.id,
         output: {
             title: 'Autograding',
-            summary: text,
-            text: text,
+            summary: `Points ${points}/${availablePoints}`,
+            text: `Points ${points}/${availablePoints}`,
             annotations: [
                 {
                     // Using the `.github` path is what GitHub Actions does
@@ -283,7 +283,7 @@ exports.setCheckRunOutput = async (points, availablePoints) => {
                     start_line: 1,
                     end_line: 1,
                     annotation_level: 'notice',
-                    message: text,
+                    message: `Points ${points}/${availablePoints}`,
                     title: 'Autograding complete',
                 },
             ],
