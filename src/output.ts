@@ -32,30 +32,32 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   //const badge = createBadge(text)
 
   // get last commit of main
-  const {data:[{sha:lastCommitSHA}]} = await octokit.rest.repos.listCommits({
-    owner,
-    repo,
-  });
+  try {
+    const {data:[{sha:lastCommitSHA}]} = await octokit.rest.repos.listCommits({
+      owner,
+      repo,
+    });
 
-  // create badges brach
-  await octokit.rest.git.createRef({
-    owner,
-    repo,
-    ref: `refs/heads/badges`,
-    sha: lastCommitSHA,
-  });
-  
+    // create badges brach
+    await octokit.rest.git.createRef({
+      owner,
+      repo,
+      ref: `refs/heads/badges`,
+      sha: lastCommitSHA,
+    });
+  } catch (error) {
+    // branch already exists
+  }  
 
   // Get badge sha
   let sha;
   try {
-    const response = await octokit.rest.repos.getContent({
+    ({data:{sha}} = await octokit.rest.repos.getContent({
       owner,
       repo,
       path: ".github/badges/badge.svg",
       ref: "badges"
-    });
-    sha = response.data.sha;
+    }));
   } catch (error) {
     // branch doesn't exist yet
   }
