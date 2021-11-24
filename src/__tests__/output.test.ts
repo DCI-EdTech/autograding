@@ -55,6 +55,6 @@ describe('output', () => {
       })
       .reply(200, {})
 
-    await expect(setCheckRunOutput('Dogs on parade')).resolves.not.toThrow()
+    await expect(setCheckRunOutput(80, 100)).resolves.not.toThrow()
   }, 10000)
 })

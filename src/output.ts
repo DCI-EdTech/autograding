@@ -3,7 +3,7 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import createBadge from './badge'
 
-export const setCheckRunOutput = async (text: string): Promise<void> => {
+export const setCheckRunOutput = async (points:number, availablePoints:number): Promise<void> => {
   // If we have nothing to output, then bail
   if (text === '') return
 
@@ -29,8 +29,8 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   if (Number.isNaN(runId)) return
 
   // Generate badge
-  const badge = `<svg width="200.6" height="40" viewBox="0 0 1003 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points: ${text}">
-    <title>Points: ${text}</title>
+  const badge = `<svg width="200.6" height="40" viewBox="0 0 1003 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points ${points}/${availablePoints}">
+    <title>Points ${points}/${availablePoints}</title>
     <g>
       <rect fill="#2f496e" width="433" height="200"/>
       <rect fill="#2988bc" x="433" width="570" height="200"/>
@@ -38,8 +38,8 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
     <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
       <text x="60" y="148" textLength="333" fill="#000" opacity="0.1">Points</text>
       <text x="50" y="138" textLength="333">Points</text>
-      <text x="488" y="148" textLength="470" fill="#000" opacity="0.1">${text}</text>
-      <text x="478" y="138" textLength="470">${text}</text>
+      <text x="488" y="148" textLength="470" fill="#000" opacity="0.1">${points}/${availablePoints}</text>
+      <text x="478" y="138" textLength="470">${points}/${availablePoints}</text>
     </g>
     
   </svg>`// createBadge(text)
