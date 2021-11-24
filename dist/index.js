@@ -193,6 +193,13 @@ exports.setCheckRunOutput = async (text) => {
         return;
     // Generate badge
     //const badge = createBadge(text)
+    // create badges brach
+    await octokit.rest.git.createRef({
+        owner,
+        repo,
+        ref: `refs/heads/badges`,
+        sha: '',
+    });
     // Get badge sha
     let sha;
     try {
