@@ -2,10 +2,6 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import createBadge from './badge'
-import util from 'util'
-import { exec as execSync } from 'child_process'
-
-const exec = util.promisify(execSync);
 
 export const setCheckRunOutput = async (text: string): Promise<void> => {
   // If we have nothing to output, then bail
@@ -36,15 +32,13 @@ export const setCheckRunOutput = async (text: string): Promise<void> => {
   //const badge = createBadge(text)
 
   // create badges brach
-  await exec('git checkout --orphan badges && git rm -rf .')
-  /*
   await octokit.rest.git.createRef({
     owner,
     repo,
     ref: `refs/heads/badges`,
-    sha: '4b825dc642cb6eb9a060e54bf8d69288fbee4904', // empty tree
+    sha: '6ef19b41225c5369f1c104d45d8d85efa9b057b53b14b4b9b939dd74decc5321', // empty tree
   });
-  */
+  
 
   // Get badge sha
   let sha;

@@ -161,16 +161,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const core = __importStar(__webpack_require__(470));
 const github = __importStar(__webpack_require__(469));
-const util_1 = __importDefault(__webpack_require__(669));
-const child_process_1 = __webpack_require__(129);
-const exec = util_1.default.promisify(child_process_1.exec);
 exports.setCheckRunOutput = async (text) => {
     // If we have nothing to output, then bail
     if (text === '')
@@ -200,15 +194,12 @@ exports.setCheckRunOutput = async (text) => {
     // Generate badge
     //const badge = createBadge(text)
     // create badges brach
-    await exec('git checkout --orphan badges && git rm -rf .');
-    /*
     await octokit.rest.git.createRef({
-      owner,
-      repo,
-      ref: `refs/heads/badges`,
-      sha: '4b825dc642cb6eb9a060e54bf8d69288fbee4904', // empty tree
+        owner,
+        repo,
+        ref: `refs/heads/badges`,
+        sha: '6ef19b41225c5369f1c104d45d8d85efa9b057b53b14b4b9b939dd74decc5321',
     });
-    */
     // Get badge sha
     let sha;
     try {
