@@ -18395,7 +18395,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const svg_js_1 = __webpack_require__(123);
 function createBadge(points) {
-    const svg = svg_js_1.SVG('badge').size(300, 300);
+    const svg = svg_js_1.SVG().size(300, 300);
     const text = svg.text(points).font({
         family: 'sans-serif',
         size: '200px',
