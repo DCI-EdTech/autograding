@@ -1,16 +1,32 @@
+// returns a window with a document and an svg root node
 // @ts-nocheck
-import { SVG } from '@svgdotjs/svg.js'
+import { createSVGWindow } from 'svgdom'
+import { SVG, registerWindow } from '@svgdotjs/svg.js'
 
-function createBadge(points:any) {
-  const svg = SVG().size(300, 300)
-  const text = svg.text(points).font({
+export default function createBadge(text) {
+  const window = createSVGWindow()
+  const document = window.document
+  const svg = new SVG(document.body).size(100, 100)
+  const root = svg.group()
+  const textNode = root.text(text).font({
     family: 'sans-serif',
-    size: '200px',
-    weight: 'bold'
+    size: '24px',
+    anchor: 'middle',
+    leading: '1em',
   })
-  const bbox = text.bbox()
-  text.move(150 - bbox.width / 2, 150 - bbox.height / 2)
+  const textBBox = textNode.bbox()
+  const textWidth = textBBox.width
+  const textHeight = textBBox.height
+  const padding = 10
+  const width = textWidth + padding * 2
+  const height = textHeight + padding * 2
+  const background = root.rect(width, height).fill('#fff')
+  const foreground = root.rect(width, height).fill('#000')
+  const badge = root.group().add(background).add(foreground).add(textNode)
+  badge.move(0, 0)
+  badge.transform({
+    x: -width / 2,
+    y: -height / 2,
+  })
   return svg.svg()
 }
-
-export default createBadge
