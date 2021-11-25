@@ -2,9 +2,9 @@
 import svg from 'svg-builder'
 
 export default function badge(text) {
-  svg.width(text.length * 10)
-  svg.height(22)
   return svg
+    .width(100)
+    .height(100)
     .rect(0, 0, text.length * 10, 20)
     .fill('#fff')
     .text({

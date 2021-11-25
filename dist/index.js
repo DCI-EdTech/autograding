@@ -12048,9 +12048,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const svg_builder_1 = __importDefault(__webpack_require__(334));
 function badge(text) {
-    svg_builder_1.default.width(text.length * 10);
-    svg_builder_1.default.height(22);
     return svg_builder_1.default
+        .width(100)
+        .height(100)
         .rect(0, 0, text.length * 10, 20)
         .fill('#fff')
         .text({
