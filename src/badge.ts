@@ -2,27 +2,17 @@
 import svg from 'svg-builder'
 
 export default function badge(text) {
+  svg.width(text.length * 10)
+  svg.height(22)
   return svg
-    .circle({
-        r: 40,
-        fill: 'none',
-        'stroke-width': 1,
-        stroke: '#CB3728',
-        cx: 42,
-        cy: 82
-    }).circle({
-        r: 40,
-        fill: 'none',
-        'stroke-width': 1,
-        stroke: '#3B92BC',
-        cx: 84,
-        cy: 82
-    }).text({
-        x: 10,
-        y: 20,
+    .rect(0, 0, text.length * 10, 20)
+    .fill('#fff')
+    .text({
+        x: 2,
+        y: 1,
         'font-family': 'helvetica',
         'font-size': 15,
-        stroke : '#fff',
-        fill: '#fff'
+        stroke : '#000',
+        fill: '#f00',
     }, text).render();
 }

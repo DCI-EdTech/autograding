@@ -12048,28 +12048,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const svg_builder_1 = __importDefault(__webpack_require__(334));
 function badge(text) {
+    svg_builder_1.default.width(text.length * 10);
+    svg_builder_1.default.height(22);
     return svg_builder_1.default
-        .circle({
-        r: 40,
-        fill: 'none',
-        'stroke-width': 1,
-        stroke: '#CB3728',
-        cx: 42,
-        cy: 82
-    }).circle({
-        r: 40,
-        fill: 'none',
-        'stroke-width': 1,
-        stroke: '#3B92BC',
-        cx: 84,
-        cy: 82
-    }).text({
-        x: 10,
-        y: 20,
+        .rect(0, 0, text.length * 10, 20)
+        .fill('#fff')
+        .text({
+        x: 2,
+        y: 1,
         'font-family': 'helvetica',
         'font-size': 15,
-        stroke: '#fff',
-        fill: '#fff'
+        stroke: '#000',
+        fill: '#f00',
     }, text).render();
 }
 exports.default = badge;
