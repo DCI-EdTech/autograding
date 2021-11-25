@@ -5,8 +5,6 @@ export default function badge(text) {
   return svg
     .width(100)
     .height(100)
-    .rect(0, 0, text.length * 10, 20)
-    .fill('#fff')
     .text({
         x: 2,
         y: 1,

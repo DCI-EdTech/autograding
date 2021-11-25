@@ -12051,8 +12051,6 @@ function badge(text) {
     return svg_builder_1.default
         .width(100)
         .height(100)
-        .rect(0, 0, text.length * 10, 20)
-        .fill('#fff')
         .text({
         x: 2,
         y: 1,
