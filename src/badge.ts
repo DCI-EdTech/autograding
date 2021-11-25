@@ -10,7 +10,7 @@ function createBadge(points:any) {
   })
   const bbox = text.bbox()
   text.move(150 - bbox.width / 2, 150 - bbox.height / 2)
-  return svg
+  return svg.svg()
 }
 
 export default createBadge

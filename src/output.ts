@@ -29,7 +29,8 @@ export const setCheckRunOutput = async (points:number, availablePoints:number): 
   if (Number.isNaN(runId)) return
 
   // Generate badge
-  const badge = `<svg width="200.6" height="40" viewBox="0 0 1003 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points ${points}/${availablePoints}">
+  const badge = createBadge(`Points ${points}/${availablePoints}`)
+  /*`<svg width="200.6" height="40" viewBox="0 0 1003 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points ${points}/${availablePoints}">
     <title>Points ${points}/${availablePoints}</title>
     <g>
       <rect fill="#2f496e" width="433" height="200"/>
@@ -42,7 +43,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number): 
       <text x="478" y="138" textLength="470">${points}/${availablePoints}</text>
     </g>
     
-  </svg>`// createBadge(text)
+  </svg>`*/
 
   // get last commit of main
   try {
