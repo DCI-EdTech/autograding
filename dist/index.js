@@ -12049,15 +12049,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const svg_builder_1 = __importDefault(__webpack_require__(334));
 function badge(text) {
     return svg_builder_1.default
-        .width(100)
+        .width(200)
         .height(100)
         .text({
-        x: 50,
-        y: 50,
+        x: 4,
+        y: 25,
         'font-family': 'helvetica',
         'font-size': 15,
-        stroke: '#000',
-        fill: '#f00',
+        fill: '#000',
     }, text).render();
 }
 exports.default = badge;
