@@ -8636,9 +8636,11 @@ const runCommand = async (test, cwd, timeout) => {
         // Start with a single new line
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
-            process.stdout.write(indent(chunk));
             if (chunk.toString().charAt(0) === '{') {
                 output = JSON.parse(chunk);
+            }
+            else {
+                process.stdout.write(indent(chunk));
             }
         });
         child.stderr.on('data', chunk => {
@@ -12051,7 +12053,7 @@ function badge(results) {
         'font-family': 'helvetica',
         'font-size': 15,
         fill: '#000',
-    }, results[0].name + ' ✅ ❌');
+    }, results.testResults[0].assertionResults[0].ancestorTitles[0] + ' ✅ ❌');
     return draw.render();
 }
 exports.default = badge;

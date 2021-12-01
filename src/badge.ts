@@ -12,6 +12,6 @@ export default function badge(results) {
       'font-family': 'helvetica',
       'font-size': 15,
       fill: '#000',
-  }, results[0].name + ' ✅ ❌');
+  }, results.testResults[0].assertionResults[0].ancestorTitles[0] + ' ✅ ❌');
   return draw.render()
 }
