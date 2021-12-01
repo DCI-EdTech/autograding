@@ -12068,16 +12068,7 @@ function badge(results) {
     });
     draw
         .width(450)
-        .height(lines * lineHeight + 10)
-        .rect({
-        x: 0,
-        y: 0,
-        width: 450,
-        height: lines * lineHeight + 10,
-        fill: '#000',
-        rx: 5,
-        ry: 5,
-    });
+        .height(lines * lineHeight + 10);
     return draw.render();
 }
 exports.default = badge;
