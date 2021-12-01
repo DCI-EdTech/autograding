@@ -8643,12 +8643,11 @@ const runCommand = async (test, cwd, timeout) => {
             process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
+        return output;
     }
     catch (error) {
+        error.result = output;
         throw error;
-    }
-    finally {
-        return output;
     }
 };
 exports.run = async (test, cwd) => {
@@ -8659,8 +8658,15 @@ exports.run = async (test, cwd) => {
     const elapsed = process.hrtime(start);
     // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
     timeout -= Math.floor(elapsed[0] * 1000 + elapsed[1] / 1000000);
-    const result = await runCommand(test, cwd, timeout);
-    return result;
+    let result;
+    try {
+        result = await runCommand(test, cwd, timeout);
+        return result;
+    }
+    catch (error) {
+        error.result = output;
+        throw error;
+    }
 };
 exports.runAll = async (tests, cwd) => {
     let points = 0;
@@ -8674,6 +8680,7 @@ exports.runAll = async (tests, cwd) => {
     log('');
     let failed = false;
     for (const test of tests) {
+        let result;
         try {
             if (test.points) {
                 hasPoints = true;
@@ -8681,8 +8688,7 @@ exports.runAll = async (tests, cwd) => {
             }
             log(color.cyan(`📝 ${test.name}`));
             log('');
-            const result = await exports.run(test, cwd);
-            console.log('result', result);
+            result = await exports.run(test, cwd);
             log('');
             log(color.green(`✅ ${test.name}`));
             log(``);
@@ -8694,10 +8700,12 @@ exports.runAll = async (tests, cwd) => {
             failed = true;
             log('');
             log(color.red(`❌ ${test.name}`));
+            result = error.result;
             core.setFailed(error.message);
         }
-        //results.push(result)
+        results.push(result);
     }
+    console.log('RESULTS', results);
     // Restart command processing
     log('');
     log(`::${token}::`);

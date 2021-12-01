@@ -151,10 +151,10 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     })
   
     await waitForExit(child, timeout)
-  } catch (error) {
-    throw error
-  } finally {
     return output
+  } catch (error) {
+    error.result = output
+    throw error
   }
 }
 
@@ -166,8 +166,14 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   const elapsed = process.hrtime(start)
   // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
   timeout -= Math.floor(elapsed[0] * 1000 + elapsed[1] / 1000000)
-  const result = await runCommand(test, cwd, timeout)
-  return result
+  let result
+  try {
+    result = await runCommand(test, cwd, timeout)
+    return result
+  } catch (error) {
+    error.result = output
+    throw error
+  }
 }
 
 export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => {
@@ -185,6 +191,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
   let failed = false
 
   for (const test of tests) {
+    let result
     try {
       if (test.points) {
         hasPoints = true
@@ -192,8 +199,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       }
       log(color.cyan(`📝 ${test.name}`))
       log('')
-      const result = await run(test, cwd)
-      console.log('result', result)
+      result = await run(test, cwd)
       log('')
       log(color.green(`✅ ${test.name}`))
       log(``)
@@ -204,10 +210,13 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       failed = true
       log('')
       log(color.red(`❌ ${test.name}`))
+      result = error.result
       core.setFailed(error.message)
     }
-    //results.push(result)
+    results.push(result)
   }
+
+  console.log('RESULTS', results)
 
   // Restart command processing
   log('')
