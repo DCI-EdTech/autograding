@@ -8623,35 +8623,33 @@ const runSetup = async (test, cwd, timeout) => {
     await waitForExit(setup, timeout);
 };
 const runCommand = async (test, cwd, timeout) => {
+    let output = '';
     try {
+        const child = child_process_1.spawn(test.run, {
+            cwd,
+            shell: true,
+            env: {
+                PATH: process.env['PATH'],
+                FORCE_COLOR: 'true',
+            },
+        });
+        // Start with a single new line
+        process.stdout.write(indent('\n'));
+        child.stdout.on('data', chunk => {
+            process.stdout.write(indent(chunk));
+            output += chunk;
+        });
+        child.stderr.on('data', chunk => {
+            process.stderr.write(indent(chunk));
+        });
+        await waitForExit(child, timeout);
     }
     catch (error) {
+        throw error;
     }
-    const child = child_process_1.spawn(test.run, {
-        cwd,
-        shell: true,
-        env: {
-            PATH: process.env['PATH'],
-            FORCE_COLOR: 'true',
-        },
-    });
-    let output = '';
-    let errOutput = '';
-    // Start with a single new line
-    process.stdout.write(indent('\n'));
-    child.stdout.on('data', chunk => {
-        process.stdout.write(indent(chunk));
-        console.log('STDOUT Chunk', chunk.toString());
-        output += chunk;
-    });
-    child.stderr.on('data', chunk => {
-        process.stderr.write(indent(chunk));
-        console.log('STDERR Chunk', chunk.toString());
-        errOutput += chunk;
-    });
-    await waitForExit(child, timeout);
-    console.log('STDOutput', output);
-    console.log('STDERROutput', errOutput);
+    finally {
+        console.log('STDOutput', output);
+    }
 };
 exports.run = async (test, cwd) => {
     // Timeouts are in minutes, but need to be in ms
