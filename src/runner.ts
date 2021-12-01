@@ -141,11 +141,13 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
 
   child.stdout.on('data', chunk => {
     process.stdout.write(indent(chunk))
+    console.log('STDOUT Chunk', chunk.toString())
     output += chunk
   })
 
   child.stderr.on('data', chunk => {
     process.stderr.write(indent(chunk))
+    console.log('STDERR Chunk', chunk.toString())
   })
 
   // Preload the inputs
