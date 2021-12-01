@@ -8707,7 +8707,7 @@ exports.runAll = async (tests, cwd) => {
         }
         break;
     }
-    console.log('RESULTS', results);
+    console.log('RESULT', result);
     // Restart command processing
     log('');
     log(`::${token}::`);

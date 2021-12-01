@@ -217,7 +217,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
     break
   }
 
-  console.log('RESULTS', results)
+  console.log('RESULT', result)
 
   // Restart command processing
   log('')
