@@ -135,6 +135,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   })
 
   let output = ''
+  let errOutput = ''
 
   // Start with a single new line
   process.stdout.write(indent('\n'))
@@ -148,6 +149,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   child.stderr.on('data', chunk => {
     process.stderr.write(indent(chunk))
     console.log('STDERR Chunk', chunk)
+    errOutput += chunk
   })
 
   // Preload the inputs
@@ -158,12 +160,8 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
 
   await waitForExit(child, timeout)
 
-  // Eventually work off the the test type
-  if ((!test.output || test.output == '') && (!test.input || test.input == '')) {
-    return
-  }
-
-  console.log('Output', output)
+  console.log('STDOutput', output)
+  console.log('STDERROutput', errOutput)
   const expected = normalizeLineEndings(test.output || '')
   const actual = normalizeLineEndings(output)
 

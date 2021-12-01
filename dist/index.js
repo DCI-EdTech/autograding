@@ -8631,6 +8631,7 @@ const runCommand = async (test, cwd, timeout) => {
         },
     });
     let output = '';
+    let errOutput = '';
     // Start with a single new line
     process.stdout.write(indent('\n'));
     child.stdout.on('data', chunk => {
@@ -8641,6 +8642,7 @@ const runCommand = async (test, cwd, timeout) => {
     child.stderr.on('data', chunk => {
         process.stderr.write(indent(chunk));
         console.log('STDERR Chunk', chunk);
+        errOutput += chunk;
     });
     // Preload the inputs
     if (test.input && test.input !== '') {
@@ -8648,11 +8650,8 @@ const runCommand = async (test, cwd, timeout) => {
         child.stdin.end();
     }
     await waitForExit(child, timeout);
-    // Eventually work off the the test type
-    if ((!test.output || test.output == '') && (!test.input || test.input == '')) {
-        return;
-    }
-    console.log('Output', output);
+    console.log('STDOutput', output);
+    console.log('STDERROutput', errOutput);
     const expected = normalizeLineEndings(test.output || '');
     const actual = normalizeLineEndings(output);
     switch (test.comparison) {
