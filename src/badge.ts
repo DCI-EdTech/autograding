@@ -2,7 +2,7 @@
 import svg from 'svg-builder'
 
 export default function badge(results) {
-  const draw = svg()
+  const draw = svg.newInstance()
   draw
   .width(200)
   .height(100)

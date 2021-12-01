@@ -12052,7 +12052,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const svg_builder_1 = __importDefault(__webpack_require__(334));
 function badge(results) {
-    const draw = svg_builder_1.default();
+    const draw = svg_builder_1.default.newInstance();
     draw
         .width(200)
         .height(100)
