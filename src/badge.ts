@@ -28,7 +28,7 @@ export default function badge(results) {
         'font-family': 'helvetica',
         'font-size': 15,
         fill: '#fff',
-      }, (result.status === 'passed' ? ' ✅' : ' ❌') + result.title);
+      }, (result.status === 'passed' ? '✅' : '❌') + ' ' + result.title);
     })
   })
   
