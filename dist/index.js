@@ -8635,12 +8635,12 @@ const runCommand = async (test, cwd, timeout) => {
     process.stdout.write(indent('\n'));
     child.stdout.on('data', chunk => {
         process.stdout.write(indent(chunk));
-        console.log('STDOUT Chunk', chunk.toString());
+        console.log('STDOUT Chunk', chunk);
         output += chunk;
     });
     child.stderr.on('data', chunk => {
         process.stderr.write(indent(chunk));
-        console.log('STDERR Chunk', chunk.toString());
+        console.log('STDERR Chunk', chunk);
     });
     // Preload the inputs
     if (test.input && test.input !== '') {
@@ -8652,6 +8652,7 @@ const runCommand = async (test, cwd, timeout) => {
     if ((!test.output || test.output == '') && (!test.input || test.input == '')) {
         return;
     }
+    console.log('Output', output);
     const expected = normalizeLineEndings(test.output || '');
     const actual = normalizeLineEndings(output);
     switch (test.comparison) {

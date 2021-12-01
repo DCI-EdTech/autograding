@@ -141,13 +141,13 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
 
   child.stdout.on('data', chunk => {
     process.stdout.write(indent(chunk))
-    console.log('STDOUT Chunk', chunk.toString())
+    console.log('STDOUT Chunk', chunk)
     output += chunk
   })
 
   child.stderr.on('data', chunk => {
     process.stderr.write(indent(chunk))
-    console.log('STDERR Chunk', chunk.toString())
+    console.log('STDERR Chunk', chunk)
   })
 
   // Preload the inputs
@@ -163,6 +163,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     return
   }
 
+  console.log('Output', output)
   const expected = normalizeLineEndings(test.output || '')
   const actual = normalizeLineEndings(output)
 
