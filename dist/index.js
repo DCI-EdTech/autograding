@@ -6190,7 +6190,7 @@ function default_1(testsDir, packageJsonPath) {
         return {
             "name": `Task ${item.taskName}`,
             "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
-            "run": `CI=true npm test --json -- ${testsDir}/${item.file}${testOpts ? ' ' + testOpts : ''}`,
+            "run": `CI=true npm test -- ${testsDir}/${item.file}${testOpts ? ' ' + testOpts : ''} --json`,
             "timeout": 10,
             "points": i === list.length - 1 ? 100 - pointsPerTask * (list.length - 1) : pointsPerTask
         };
