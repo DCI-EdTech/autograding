@@ -7,7 +7,7 @@ export default function badge(results) {
   const draw = svg.newInstance()
   draw
   .width(200)
-  .height(100)
+  .height(results.testResults[0].assertionResults.length * lineHeight)
 
   results.testResults[0].assertionResults.forEach(result => {
     lines++
