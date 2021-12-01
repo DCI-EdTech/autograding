@@ -196,7 +196,6 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       console.log('result', result)
       log('')
       log(color.green(`✅ ${test.name}`))
-      result.passed = true
       log(``)
       if (test.points) {
         points += test.points
@@ -207,7 +206,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       log(color.red(`❌ ${test.name}`))
       core.setFailed(error.message)
     }
-    results.push(result)
+    //results.push(result)
   }
 
   // Restart command processing
