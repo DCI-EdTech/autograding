@@ -8675,7 +8675,7 @@ exports.runAll = async (tests, cwd) => {
     let points = 0;
     let availablePoints = 0;
     let hasPoints = false;
-    const results = [];
+    let result;
     // https://help.github.com/en/actions/reference/development-tools-for-github-actions#stop-and-start-log-commands-stop-commands
     const token = uuid_1.v4();
     log('');
@@ -8683,7 +8683,6 @@ exports.runAll = async (tests, cwd) => {
     log('');
     let failed = false;
     for (const test of tests) {
-        let result;
         try {
             if (test.points) {
                 hasPoints = true;
@@ -8706,7 +8705,6 @@ exports.runAll = async (tests, cwd) => {
             result = error.result;
             core.setFailed(error.message);
         }
-        results.push(result);
         break;
     }
     console.log('RESULTS', results);
@@ -8728,7 +8726,7 @@ exports.runAll = async (tests, cwd) => {
         const text = `Points ${points}/${availablePoints}`;
         log(color.bold.bgCyan.black(text));
         core.setOutput('Points', `${points}/${availablePoints}`);
-        await output_1.setCheckRunOutput(points, availablePoints, results);
+        await output_1.setCheckRunOutput(points, availablePoints, result);
     }
 };
 
