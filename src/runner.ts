@@ -154,7 +154,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   } catch (error) {
     throw error
   } finally {
-    console.log('STDOutput', output)
+    return output
   }
 }
 
@@ -166,7 +166,8 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   const elapsed = process.hrtime(start)
   // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
   timeout -= Math.floor(elapsed[0] * 1000 + elapsed[1] / 1000000)
-  await runCommand(test, cwd, timeout)
+  const result = await runCommand(test, cwd, timeout)
+  return result
 }
 
 export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => {
@@ -184,7 +185,6 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
   let failed = false
 
   for (const test of tests) {
-    const result = {name: test.name, passed: false}
     try {
       if (test.points) {
         hasPoints = true
@@ -192,7 +192,8 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       }
       log(color.cyan(`📝 ${test.name}`))
       log('')
-      await run(test, cwd)
+      const result = await run(test, cwd)
+      console.log('result', result)
       log('')
       log(color.green(`✅ ${test.name}`))
       result.passed = true

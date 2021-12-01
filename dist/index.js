@@ -8648,7 +8648,7 @@ const runCommand = async (test, cwd, timeout) => {
         throw error;
     }
     finally {
-        console.log('STDOutput', output);
+        return output;
     }
 };
 exports.run = async (test, cwd) => {
@@ -8659,7 +8659,8 @@ exports.run = async (test, cwd) => {
     const elapsed = process.hrtime(start);
     // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
     timeout -= Math.floor(elapsed[0] * 1000 + elapsed[1] / 1000000);
-    await runCommand(test, cwd, timeout);
+    const result = await runCommand(test, cwd, timeout);
+    return result;
 };
 exports.runAll = async (tests, cwd) => {
     let points = 0;
@@ -8673,7 +8674,6 @@ exports.runAll = async (tests, cwd) => {
     log('');
     let failed = false;
     for (const test of tests) {
-        const result = { name: test.name, passed: false };
         try {
             if (test.points) {
                 hasPoints = true;
@@ -8681,7 +8681,8 @@ exports.runAll = async (tests, cwd) => {
             }
             log(color.cyan(`📝 ${test.name}`));
             log('');
-            await exports.run(test, cwd);
+            const result = await exports.run(test, cwd);
+            console.log('result', result);
             log('');
             log(color.green(`✅ ${test.name}`));
             result.passed = true;
