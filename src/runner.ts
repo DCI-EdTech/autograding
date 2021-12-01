@@ -126,7 +126,7 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 }
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
-  let output = ''
+  let output
 
   try {
     const child = spawn(test.run, {
@@ -144,7 +144,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     child.stdout.on('data', chunk => {
       process.stdout.write(indent(chunk))
       if(chunk.toString().charAt(0) === '{') {
-        output += chunk
+        output = JSON.parse(chunk)
       }
     })
   

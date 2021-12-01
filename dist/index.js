@@ -6190,7 +6190,7 @@ function default_1(testsDir, packageJsonPath) {
         return {
             "name": `Task ${item.taskName}`,
             "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
-            "run": `CI=true npm test -- "(src\/)?__tests__\/tasks\.(.*)\.js"${testOpts ? ' ' + testOpts : ''} --json`,
+            "run": `CI=true npm test -- "(src\/)?__tests__\/tasks\.(.*)\.js"${testOpts ? ' ' + testOpts : ''} --json --silent`,
             "timeout": 10,
             "points": i === list.length - 1 ? 100 - pointsPerTask * (list.length - 1) : pointsPerTask
         };
@@ -8623,7 +8623,7 @@ const runSetup = async (test, cwd, timeout) => {
     await waitForExit(setup, timeout);
 };
 const runCommand = async (test, cwd, timeout) => {
-    let output = '';
+    let output;
     try {
         const child = child_process_1.spawn(test.run, {
             cwd,
@@ -8638,7 +8638,7 @@ const runCommand = async (test, cwd, timeout) => {
         child.stdout.on('data', chunk => {
             process.stdout.write(indent(chunk));
             if (chunk.toString().charAt(0) === '{') {
-                output += chunk;
+                output = JSON.parse(chunk);
             }
         });
         child.stderr.on('data', chunk => {
