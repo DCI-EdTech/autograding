@@ -214,6 +214,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       core.setFailed(error.message)
     }
     results.push(result)
+    break
   }
 
   console.log('RESULTS', results)

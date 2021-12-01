@@ -6190,7 +6190,7 @@ function default_1(testsDir, packageJsonPath) {
         return {
             "name": `Task ${item.taskName}`,
             "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
-            "run": `CI=true npm test -- ${testsDir}/${item.file}${testOpts ? ' ' + testOpts : ''} --json`,
+            "run": `CI=true npm test (src\/)?__tests__\/tasks\.(.*)\.js${testOpts ? ' ' + testOpts : ''} --json`,
             "timeout": 10,
             "points": i === list.length - 1 ? 100 - pointsPerTask * (list.length - 1) : pointsPerTask
         };
@@ -8704,6 +8704,7 @@ exports.runAll = async (tests, cwd) => {
             core.setFailed(error.message);
         }
         results.push(result);
+        break;
     }
     console.log('RESULTS', results);
     // Restart command processing
