@@ -3,7 +3,7 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import createBadge from './badge'
 
-export const setCheckRunOutput = async (points:number, availablePoints:number): Promise<void> => {
+export const setCheckRunOutput = async (points:number, availablePoints:number, results:Array): Promise<void> => {
   // If we have nothing to output, then bail
   if (typeof points === undefined) return
 
@@ -29,7 +29,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number): 
   if (Number.isNaN(runId)) return
 
   // Generate badge
-  const badge = createBadge(`Points ${points}/${availablePoints}`)
+  const badge = createBadge(results)
   /*`<svg width="200.6" height="40" viewBox="0 0 1003 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points ${points}/${availablePoints}">
     <title>Points ${points}/${availablePoints}</title>
     <g>

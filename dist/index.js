@@ -210,7 +210,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const github = __importStar(__webpack_require__(469));
 const badge_1 = __importDefault(__webpack_require__(952));
-exports.setCheckRunOutput = async (points, availablePoints) => {
+exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // If we have nothing to output, then bail
     if (typeof points === undefined)
         return;
@@ -237,7 +237,7 @@ exports.setCheckRunOutput = async (points, availablePoints) => {
     if (Number.isNaN(runId))
         return;
     // Generate badge
-    const badge = badge_1.default(`Points ${points}/${availablePoints}`);
+    const badge = badge_1.default(results);
     /*`<svg width="200.6" height="40" viewBox="0 0 1003 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points ${points}/${availablePoints}">
       <title>Points ${points}/${availablePoints}</title>
       <g>
@@ -8686,6 +8686,7 @@ exports.runAll = async (tests, cwd) => {
     let points = 0;
     let availablePoints = 0;
     let hasPoints = false;
+    const results = [];
     // https://help.github.com/en/actions/reference/development-tools-for-github-actions#stop-and-start-log-commands-stop-commands
     const token = uuid_1.v4();
     log('');
@@ -8693,6 +8694,7 @@ exports.runAll = async (tests, cwd) => {
     log('');
     let failed = false;
     for (const test of tests) {
+        const result = { name: test.name, passed: false };
         try {
             if (test.points) {
                 hasPoints = true;
@@ -8703,6 +8705,7 @@ exports.runAll = async (tests, cwd) => {
             await exports.run(test, cwd);
             log('');
             log(color.green(`✅ ${test.name}`));
+            result.passed = true;
             log(``);
             if (test.points) {
                 points += test.points;
@@ -8714,6 +8717,7 @@ exports.runAll = async (tests, cwd) => {
             log(color.red(`❌ ${test.name}`));
             core.setFailed(error.message);
         }
+        results.push(result);
     }
     // Restart command processing
     log('');
@@ -8733,7 +8737,7 @@ exports.runAll = async (tests, cwd) => {
         const text = `Points ${points}/${availablePoints}`;
         log(color.bold.bgCyan.black(text));
         core.setOutput('Points', `${points}/${availablePoints}`);
-        await output_1.setCheckRunOutput(points, availablePoints);
+        await output_1.setCheckRunOutput(points, availablePoints, results);
     }
 };
 
@@ -12047,8 +12051,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const svg_builder_1 = __importDefault(__webpack_require__(334));
-function badge(text) {
-    return svg_builder_1.default
+function badge(results) {
+    const draw = svg_builder_1.default();
+    draw
         .width(200)
         .height(100)
         .text({
@@ -12057,7 +12062,8 @@ function badge(text) {
         'font-family': 'helvetica',
         'font-size': 15,
         fill: '#000',
-    }, text + ' ✅').render();
+    }, results[0].name + ' ✅ ❌');
+    return draw.render();
 }
 exports.default = badge;
 

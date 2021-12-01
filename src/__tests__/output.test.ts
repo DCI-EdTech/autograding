@@ -55,6 +55,6 @@ describe('output', () => {
       })
       .reply(200, {})
 
-    await expect(setCheckRunOutput(80, 100)).resolves.not.toThrow()
+    await expect(setCheckRunOutput(80, 100, [{name: 'test', passed: true}])).resolves.not.toThrow()
   }, 10000)
 })

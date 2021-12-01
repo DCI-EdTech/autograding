@@ -200,6 +200,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
   let points = 0
   let availablePoints = 0
   let hasPoints = false
+  const results = []
 
   // https://help.github.com/en/actions/reference/development-tools-for-github-actions#stop-and-start-log-commands-stop-commands
   const token = uuidv4()
@@ -210,6 +211,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
   let failed = false
 
   for (const test of tests) {
+    const result = {name: test.name, passed: false}
     try {
       if (test.points) {
         hasPoints = true
@@ -220,6 +222,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       await run(test, cwd)
       log('')
       log(color.green(`✅ ${test.name}`))
+      result.passed = true
       log(``)
       if (test.points) {
         points += test.points
@@ -230,6 +233,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
       log(color.red(`❌ ${test.name}`))
       core.setFailed(error.message)
     }
+    results.push(result)
   }
 
   // Restart command processing
@@ -251,6 +255,6 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
     const text = `Points ${points}/${availablePoints}`
     log(color.bold.bgCyan.black(text))
     core.setOutput('Points', `${points}/${availablePoints}`)
-    await setCheckRunOutput(points, availablePoints)
+    await setCheckRunOutput(points, availablePoints, results)
   }
 }
