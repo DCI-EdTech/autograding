@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {spawn, ChildProcess} from 'child_process'
 import kill from 'tree-kill'
 import {v4 as uuidv4} from 'uuid'
@@ -142,48 +143,20 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
 
   child.stdout.on('data', chunk => {
     process.stdout.write(indent(chunk))
-    console.log('STDOUT Chunk', chunk)
+    console.log('STDOUT Chunk', chunk.toString())
     output += chunk
   })
 
   child.stderr.on('data', chunk => {
     process.stderr.write(indent(chunk))
-    console.log('STDERR Chunk', chunk)
+    console.log('STDERR Chunk', chunk.toString())
     errOutput += chunk
   })
-
-  // Preload the inputs
-  if (test.input && test.input !== '') {
-    child.stdin.write(test.input)
-    child.stdin.end()
-  }
 
   await waitForExit(child, timeout)
 
   console.log('STDOutput', output)
   console.log('STDERROutput', errOutput)
-  const expected = normalizeLineEndings(test.output || '')
-  const actual = normalizeLineEndings(output)
-
-  switch (test.comparison) {
-    case 'exact':
-      if (actual != expected) {
-        throw new TestOutputError(`The output for test ${test.name} did not match`, expected, actual)
-      }
-      break
-    case 'regex':
-      // Note: do not use expected here
-      if (!actual.match(new RegExp(test.output || ''))) {
-        throw new TestOutputError(`The output for test ${test.name} did not match`, test.output || '', actual)
-      }
-      break
-    default:
-      // The default comparison mode is 'included'
-      if (!actual.includes(expected)) {
-        throw new TestOutputError(`The output for test ${test.name} did not match`, expected, actual)
-      }
-      break
-  }
 }
 
 export const run = async (test: Test, cwd: string): Promise<void> => {
