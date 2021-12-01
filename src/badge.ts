@@ -2,16 +2,25 @@
 import svg from 'svg-builder'
 
 export default function badge(results) {
+  const lineHeight = 25
+  let lines = 0
   const draw = svg.newInstance()
   draw
   .width(200)
   .height(100)
-  .text({
+
+  results.testResults[0].assertionResults.forEach(result => {
+    lines++
+
+    draw
+    .text({
       x: 4,
-      y: 25,
+      y: lineHeight * lines,
       'font-family': 'helvetica',
       'font-size': 15,
-      fill: '#000',
-  }, results.testResults[0].assertionResults[0].ancestorTitles[0] + ' ✅ ❌');
+      fill: '#fff',
+    }, result.title + (result.status === 'passed' ? ' ✅' : ' ❌'));
+  })
+  
   return draw.render()
 }

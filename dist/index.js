@@ -8637,7 +8637,6 @@ const runCommand = async (test, cwd, timeout) => {
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
             if (chunk.toString().charAt(0) === '{') {
-                console.log('UNPARSED', chunk.toString());
                 output = JSON.parse(chunk.toString());
             }
             else {
@@ -8708,7 +8707,7 @@ exports.runAll = async (tests, cwd) => {
         }
         break;
     }
-    console.log('RESULT', result);
+    console.log('RESULT', JSON.stringify(result));
     // Restart command processing
     log('');
     log(`::${token}::`);
@@ -12042,17 +12041,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const svg_builder_1 = __importDefault(__webpack_require__(334));
 function badge(results) {
+    const lineHeight = 25;
+    let lines = 0;
     const draw = svg_builder_1.default.newInstance();
     draw
         .width(200)
-        .height(100)
-        .text({
-        x: 4,
-        y: 25,
-        'font-family': 'helvetica',
-        'font-size': 15,
-        fill: '#000',
-    }, results.testResults[0].assertionResults[0].ancestorTitles[0] + ' ✅ ❌');
+        .height(100);
+    results.testResults[0].assertionResults.forEach(result => {
+        lines++;
+        draw
+            .text({
+            x: 4,
+            y: lineHeight * lines,
+            'font-family': 'helvetica',
+            'font-size': 15,
+            fill: '#fff',
+        }, result.title + (result.status === 'passed' ? ' ✅' : ' ❌'));
+    });
     return draw.render();
 }
 exports.default = badge;
