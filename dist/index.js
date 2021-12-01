@@ -8664,7 +8664,6 @@ exports.run = async (test, cwd) => {
         return result;
     }
     catch (error) {
-        error.result = output;
         throw error;
     }
 };

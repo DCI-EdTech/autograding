@@ -171,7 +171,6 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
     result = await runCommand(test, cwd, timeout)
     return result
   } catch (error) {
-    error.result = output
     throw error
   }
 }
