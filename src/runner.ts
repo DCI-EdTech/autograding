@@ -217,6 +217,20 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
     break
   }
 
+  // sort results by filename
+  result.testResults.sort((a, b) => {
+    const taskNameRegExp = /^tasks\.(.*)\.js$/
+    const aIndex = parseInt(a.name.match(taskNameRegExp)[1])
+    const bIndex = parseInt(b.name.match(taskNameRegExp)[1])
+    if (aIndex < bIndex) {
+      return -1
+    }
+    if (aIndex > bIndex) {
+      return 1
+    }
+    return 0
+  })
+
   console.log('RESULT', JSON.stringify(result))
 
   // Restart command processing
