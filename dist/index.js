@@ -8709,7 +8709,7 @@ exports.runAll = async (tests, cwd) => {
     }
     // sort results by filename
     result.testResults.sort((a, b) => {
-        const taskNameRegExp = /^tasks\.(.*)\.js$/;
+        const taskNameRegExp = /tasks\.(.*)\.js$/;
         const aIndex = parseInt(a.name.match(taskNameRegExp)[1]);
         const bIndex = parseInt(b.name.match(taskNameRegExp)[1]);
         if (aIndex < bIndex) {
