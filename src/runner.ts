@@ -254,6 +254,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
     const text = `Points ${points}/${availablePoints}`
     log(color.bold.bgCyan.black(text))
     core.setOutput('Points', `${points}/${availablePoints}`)
+    core.setOutput('env', `${process.env}`)
     await setCheckRunOutput(points, availablePoints, result)
   }
 }
