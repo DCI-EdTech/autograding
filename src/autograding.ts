@@ -4,7 +4,12 @@ import {Test, runAll} from './runner'
 import generateTestsList from './generateTestsList'
 
 const run = async (): Promise<void> => {
-  //TODO: modify readme and package.json on first push or check for contents
+  const event = process.env['GITHUB_EVENT_NAME']
+  if (event === 'create') {
+    //TODO: modify readme and package.json
+    console.log('inject')
+    return // stop autograding from running
+  }
 
   try {
     const cwd = process.env['GITHUB_WORKSPACE']
