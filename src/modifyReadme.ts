@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { readFile } from 'fs/promises';
+import { fs } from 'fs';
 import { createOctokit, owner, repo } from './octokit';
 
 const readmeInfoPath = `./AUTOGRADING.md`;
@@ -32,7 +32,7 @@ async function modifyReadme() {
 }
 
 async function addAutogradingInfo(readme) {
-  let readmeInfo = await readFile(readmeInfoPath, 'utf8');
+  let readmeInfo = fs.readFileSync(readmeInfoPath, 'utf8');
   const infoRE = new RegExp(`[\n\r]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
 
   // update results badge
