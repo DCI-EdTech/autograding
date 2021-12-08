@@ -1,28 +1,14 @@
 // @ts-nocheck
-import * as core from '@actions/core'
-import * as github from '@actions/github'
+import { createOctokit, owner, repo } from './octokit'
 import createBadge from './badge'
 
 export const setCheckRunOutput = async (points:number, availablePoints:number, results:Array): Promise<void> => {
   // If we have nothing to output, then bail
   if (typeof points === undefined) return
 
-  // Our action will need to API access the repository so we require a token
-  // This will need to be set in the calling workflow, otherwise we'll exit
-  const token = process.env['GITHUB_TOKEN'] || core.getInput('token')
-  if (!token || token === '') return
-
   // Create the octokit client
-  const octokit: github.GitHub = github.getOctokit(token)
+  const octokit: github.GitHub = createOctokit()
   if (!octokit) return
-
-  // The environment contains a variable for current repository. The repository
-  // will be formatted as a name with owner (`nwo`); e.g., jeffrafter/example
-  // We'll split this into two separate variables for later use
-  const nwo = process.env['GITHUB_REPOSITORY'] || '/'
-  const [owner, repo] = nwo.split('/')
-  if (!owner) return
-  if (!repo) return
 
   // We need the workflow run id
   const runId = parseInt(process.env['GITHUB_RUN_ID'] || '')
@@ -47,6 +33,8 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
 
   // get last commit of main
   try {
+    const badgePath = `.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg`
+
     const {data:[{sha:lastCommitSHA}]} = await octokit.rest.repos.listCommits({
       owner,
       repo,
@@ -69,7 +57,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     ({data:{sha}} = await octokit.rest.repos.getContent({
       owner,
       repo,
-      path: ".github/badges/badge.svg",
+      path: badgePath,
       ref: "badges"
     }));
   } catch (error) {
@@ -80,7 +68,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
   await octokit.rest.repos.createOrUpdateFileContents({
     owner,
     repo,
-    path: '.github/badges/badge.svg',
+    path: badgePath,
     message: 'Update badge',
     content: Buffer.from(badge).toString('base64'), //badge,
     sha: sha || '',

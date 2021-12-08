@@ -195,42 +195,20 @@ function onceStrict (fn) {
 
 "use strict";
 
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
-const core = __importStar(__webpack_require__(470));
-const github = __importStar(__webpack_require__(469));
+const octokit_1 = __webpack_require__(994);
 const badge_1 = __importDefault(__webpack_require__(952));
 exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // If we have nothing to output, then bail
     if (typeof points === undefined)
         return;
-    // Our action will need to API access the repository so we require a token
-    // This will need to be set in the calling workflow, otherwise we'll exit
-    const token = process.env['GITHUB_TOKEN'] || core.getInput('token');
-    if (!token || token === '')
-        return;
     // Create the octokit client
-    const octokit = github.getOctokit(token);
+    const octokit = octokit_1.createOctokit();
     if (!octokit)
-        return;
-    // The environment contains a variable for current repository. The repository
-    // will be formatted as a name with owner (`nwo`); e.g., jeffrafter/example
-    // We'll split this into two separate variables for later use
-    const nwo = process.env['GITHUB_REPOSITORY'] || '/';
-    const [owner, repo] = nwo.split('/');
-    if (!owner)
-        return;
-    if (!repo)
         return;
     // We need the workflow run id
     const runId = parseInt(process.env['GITHUB_RUN_ID'] || '');
@@ -254,14 +232,15 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     </svg>`*/
     // get last commit of main
     try {
+        const badgePath = `.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg`;
         const { data: [{ sha: lastCommitSHA }] } = await octokit.rest.repos.listCommits({
-            owner,
-            repo,
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
         });
         // create badges brach
         await octokit.rest.git.createRef({
-            owner,
-            repo,
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
             ref: `refs/heads/badges`,
             sha: lastCommitSHA,
         });
@@ -273,9 +252,9 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     let sha;
     try {
         ({ data: { sha } } = await octokit.rest.repos.getContent({
-            owner,
-            repo,
-            path: ".github/badges/badge.svg",
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            path: badgePath,
             ref: "badges"
         }));
     }
@@ -284,9 +263,9 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     }
     // upload badge to repository
     await octokit.rest.repos.createOrUpdateFileContents({
-        owner,
-        repo,
-        path: '.github/badges/badge.svg',
+        owner: octokit_1.owner,
+        repo: octokit_1.repo,
+        path: badgePath,
         message: 'Update badge',
         content: Buffer.from(badge).toString('base64'),
         sha: sha || '',
@@ -294,8 +273,8 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     });
     // Fetch the workflow run
     const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
-        owner,
-        repo,
+        owner: octokit_1.owner,
+        repo: octokit_1.repo,
         run_id: runId,
     });
     // Find the check suite run
@@ -303,8 +282,8 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     const checkSuiteUrl = workflowRunResponse.data.check_suite_url;
     const checkSuiteId = parseInt(checkSuiteUrl.match(/[0-9]+$/)[0], 10);
     const checkRunsResponse = await octokit.rest.checks.listForSuite({
-        owner,
-        repo,
+        owner: octokit_1.owner,
+        repo: octokit_1.repo,
         check_name: 'Autograding',
         check_suite_id: checkSuiteId,
     });
@@ -315,8 +294,8 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // the title and summary to be overwritten by GitHub Actions (they are required in this call)
     // We'll also store the total in an annotation to future-proof
     await octokit.rest.checks.update({
-        owner,
-        repo,
+        owner: octokit_1.owner,
+        repo: octokit_1.repo,
         check_run_id: checkRun.id,
         output: {
             title: 'Autograding',
@@ -1185,6 +1164,13 @@ function _default(name, version, hashfunc) {
 /***/ (function(module) {
 
 module.exports = require("punycode");
+
+/***/ }),
+
+/***/ 225:
+/***/ (function(module) {
+
+module.exports = require("fs/promises");
 
 /***/ }),
 
@@ -10098,12 +10084,19 @@ const core = __importStar(__webpack_require__(470));
 const path_1 = __importDefault(__webpack_require__(622));
 const runner_1 = __webpack_require__(835);
 const generateTestsList_1 = __importDefault(__webpack_require__(569));
+const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const run = async () => {
-    //TODO: modify readme and package.json on first push or check for contents
     try {
         const cwd = process.env['GITHUB_WORKSPACE'];
         if (!cwd) {
             throw new Error('No GITHUB_WORKSPACE');
+        }
+        const event = process.env['GITHUB_EVENT_NAME'];
+        if (event === 'create') {
+            //TODO: modify readme and package.json
+            console.log('inject');
+            await modifyReadme_1.default();
+            return; // stop autograding from running
         }
         // make test request to see if we can confirm that it's from github ci
         const tests = generateTestsList_1.default('__tests__', path_1.default.resolve(cwd, 'package.json'));
@@ -10671,6 +10664,56 @@ exports.GraphqlResponseError = GraphqlResponseError;
 exports.graphql = graphql$1;
 exports.withCustomRequest = withCustomRequest;
 //# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 905:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+// @ts-nocheck
+const promises_1 = __webpack_require__(225);
+const octokit_1 = __webpack_require__(994);
+const readmeInfoPath = `./AUTOGRADING.md`;
+const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
+async function modifyReadme() {
+    const octokit = octokit_1.createOctokit();
+    if (!octokit)
+        return;
+    // get readme
+    const { data: { sha, content: readme } } = await octokit.repos.getContents({
+        owner: octokit_1.owner,
+        repo: octokit_1.repo,
+        path: 'README.md',
+        ref: process.env['GITHUB_REF_NAME'],
+    });
+    // add autograding info
+    const newReadme = await addAutogradingInfo(readme);
+    // update readme
+    await octokit.repos.createOrUpdateFile({
+        owner: octokit_1.owner,
+        repo: octokit_1.repo,
+        path: 'README.md',
+        message: 'update readme',
+        content: Buffer.from(newReadme).toString('base64'),
+        sha,
+    });
+}
+async function addAutogradingInfo(readme) {
+    let readmeInfo = await promises_1.readFile(readmeInfoPath, 'utf8');
+    const infoRE = new RegExp(`[\n\r]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
+    // update results badge
+    readmeInfo = readmeInfo.replace(/^\[\!\[Results badge\]\(.*$/gm, `[![Results badge](../../blob/badges/.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg)](#repoWebUrl/actions)`);
+    // add repo link
+    readmeInfo = readmeInfo.replace(/#repoWebUrl/g, `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`);
+    // remove old info
+    readme = readme.replace(infoRE, '');
+    return `${readme}\n\r${infoDelimiters[0]}\n${readmeInfo}\n\r${infoDelimiters[1]}`;
+}
+exports.default = modifyReadme;
 
 
 /***/ }),
@@ -12289,6 +12332,50 @@ module.exports.toUnicode = function(domain_name, useSTD3) {
 };
 
 module.exports.PROCESSING_OPTIONS = PROCESSING_OPTIONS;
+
+
+/***/ }),
+
+/***/ 994:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+// @ts-nocheck
+const core = __importStar(__webpack_require__(470));
+const github = __importStar(__webpack_require__(469));
+let owner, repo;
+exports.owner = owner;
+exports.repo = repo;
+function createOctokit() {
+    var _a;
+    const token = process.env['GITHUB_TOKEN'] || core.getInput('token');
+    if (!token || token === '')
+        return;
+    // Create the octokit client
+    const octokit = github.getOctokit(token);
+    if (!octokit)
+        return;
+    // The environment contains a variable for current repository. The repository
+    // will be formatted as a name with owner (`nwo`); e.g., jeffrafter/example
+    // We'll split this into two separate variables for later use
+    const nwo = process.env['GITHUB_REPOSITORY'] || '/';
+    _a = nwo.split('/'), exports.owner = owner = _a[0], exports.repo = repo = _a[1];
+    if (!owner)
+        return;
+    if (!repo)
+        return;
+    return octokit;
+}
+exports.createOctokit = createOctokit;
 
 
 /***/ })

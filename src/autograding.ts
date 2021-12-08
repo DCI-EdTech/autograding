@@ -2,19 +2,21 @@ import * as core from '@actions/core'
 import path from 'path'
 import {Test, runAll} from './runner'
 import generateTestsList from './generateTestsList'
+import modifyReadme from './modifyReadme'
 
 const run = async (): Promise<void> => {
-  const event = process.env['GITHUB_EVENT_NAME']
-  if (event === 'create') {
-    //TODO: modify readme and package.json
-    console.log('inject')
-    return // stop autograding from running
-  }
-
   try {
     const cwd = process.env['GITHUB_WORKSPACE']
     if (!cwd) {
       throw new Error('No GITHUB_WORKSPACE')
+    }
+
+    const event = process.env['GITHUB_EVENT_NAME']
+    if (event === 'create') {
+      //TODO: modify readme and package.json
+      console.log('inject')
+      await modifyReadme()
+      return // stop autograding from running
     }
 
     // make test request to see if we can confirm that it's from github ci
