@@ -8721,6 +8721,7 @@ exports.runAll = async (tests, cwd) => {
         return 0;
     });
     console.log('RESULT', JSON.stringify(result));
+    console.log('ENV', process.env);
     // Restart command processing
     log('');
     log(`::${token}::`);
@@ -8739,6 +8740,7 @@ exports.runAll = async (tests, cwd) => {
         const text = `Points ${points}/${availablePoints}`;
         log(color.bold.bgCyan.black(text));
         core.setOutput('Points', `${points}/${availablePoints}`);
+        core.setOutput('env', `${process.env}`);
         await output_1.setCheckRunOutput(points, availablePoints, result);
     }
 };
@@ -10097,6 +10099,7 @@ const path_1 = __importDefault(__webpack_require__(622));
 const runner_1 = __webpack_require__(835);
 const generateTestsList_1 = __importDefault(__webpack_require__(569));
 const run = async () => {
+    //TODO: modify readme and package.json on first push or check for contents
     try {
         const cwd = process.env['GITHUB_WORKSPACE'];
         if (!cwd) {
