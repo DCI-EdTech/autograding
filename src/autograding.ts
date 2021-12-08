@@ -6,6 +6,8 @@ import generateTestsList from './generateTestsList'
 const run = async (): Promise<void> => {
   //TODO: modify readme and package.json on first push or check for contents
 
+  console.log('Running autograding', process.env)
+
   try {
     const cwd = process.env['GITHUB_WORKSPACE']
     if (!cwd) {
