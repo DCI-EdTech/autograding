@@ -233,6 +233,8 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
 
   console.log('RESULT', JSON.stringify(result))
 
+  console.log('ENV', process.env)
+
   // Restart command processing
   log('')
   log(`::${token}::`)
