@@ -10718,11 +10718,12 @@ async function modifyReadme() {
     if (!octokit)
         return;
     // get readme
-    const { sha, data: readme } = await octokit.rest.repos.getReadme({
+    const { data: { sha, content } } = await octokit.rest.repos.getReadme({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
         ref: process.env['GITHUB_REF_NAME'],
     });
+    const readme = Buffer.from(content, 'base64').toString('utf8');
     console.log('README', readme);
     // add autograding info
     const newReadme = await addAutogradingInfo(readme);
