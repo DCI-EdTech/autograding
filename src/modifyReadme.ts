@@ -1,6 +1,7 @@
 // @ts-nocheck
 import fs from 'fs';
 import { createOctokit, owner, repo } from './octokit';
+import readmeInfo from './markdownTemplate';
 
 const readmeInfoPath = `./AUTOGRADING.md`;
 const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
@@ -32,7 +33,6 @@ async function modifyReadme() {
 }
 
 async function addAutogradingInfo(readme) {
-  let readmeInfo = fs.readFileSync(readmeInfoPath, 'utf8');
   const infoRE = new RegExp(`[\n\r]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
 
   // update results badge
