@@ -10666,9 +10666,12 @@ exports.withCustomRequest = withCustomRequest;
 
 "use strict";
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
-const fs_1 = __webpack_require__(747);
+const fs_1 = __importDefault(__webpack_require__(747));
 const octokit_1 = __webpack_require__(994);
 const readmeInfoPath = `./AUTOGRADING.md`;
 const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
@@ -10696,7 +10699,7 @@ async function modifyReadme() {
     });
 }
 async function addAutogradingInfo(readme) {
-    let readmeInfo = fs_1.fs.readFileSync(readmeInfoPath, 'utf8');
+    let readmeInfo = fs_1.default.readFileSync(readmeInfoPath, 'utf8');
     const infoRE = new RegExp(`[\n\r]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
     // update results badge
     readmeInfo = readmeInfo.replace(/^\[\!\[Results badge\]\(.*$/gm, `[![Results badge](../../blob/badges/.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg)](#repoWebUrl/actions)`);

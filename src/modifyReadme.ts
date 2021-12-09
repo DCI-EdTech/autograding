@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { fs } from 'fs';
+import fs from 'fs';
 import { createOctokit, owner, repo } from './octokit';
 
 const readmeInfoPath = `./AUTOGRADING.md`;
