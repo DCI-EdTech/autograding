@@ -10677,7 +10677,7 @@ async function modifyReadme() {
     if (!octokit)
         return;
     // get readme
-    const { data: { sha, content: readme } } = await octokit.repos.getContents({
+    const { data: { sha, content: readme } } = await octokit.rest.repos.getContent({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
         path: 'README.md',
@@ -10686,7 +10686,7 @@ async function modifyReadme() {
     // add autograding info
     const newReadme = await addAutogradingInfo(readme);
     // update readme
-    await octokit.repos.createOrUpdateFile({
+    await octokit.rest.repos.createOrUpdateFileContents({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
         path: 'README.md',
