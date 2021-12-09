@@ -18,6 +18,8 @@ async function modifyReadme() {
     ref: process.env['GITHUB_REF_NAME'],
   })
 
+  console.log('README', readme)
+
   // add autograding info
   const newReadme = await addAutogradingInfo(readme)
 
