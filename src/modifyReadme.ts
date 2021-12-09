@@ -20,8 +20,6 @@ async function modifyReadme() {
 
   const readme = Buffer.from(content, 'base64').toString('utf8');
 
-  console.log('README', readme)
-
   // add autograding info
   const newReadme = await addAutogradingInfo(readme)
 
@@ -40,6 +38,7 @@ async function addAutogradingInfo(readme) {
   const infoRE = new RegExp(`[\n\r]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
 
   // update results badge
+  console.log('readme add badge of', process.env['GITHUB_REF_NAME'])
   readmeInfo = readmeInfo.replace(/^\[\!\[Results badge\]\(.*$/gm, `[![Results badge](../../blob/badges/.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg)](#repoWebUrl/actions)`)
 
   // add repo link

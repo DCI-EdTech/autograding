@@ -10723,7 +10723,6 @@ async function modifyReadme() {
         ref: process.env['GITHUB_REF_NAME'],
     });
     const readme = Buffer.from(content, 'base64').toString('utf8');
-    console.log('README', readme);
     // add autograding info
     const newReadme = await addAutogradingInfo(readme);
     // update readme
@@ -10739,6 +10738,7 @@ async function modifyReadme() {
 async function addAutogradingInfo(readme) {
     const infoRE = new RegExp(`[\n\r]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
     // update results badge
+    console.log('readme add badge of', process.env['GITHUB_REF_NAME']);
     markdownTemplate_1.default = markdownTemplate_1.default.replace(/^\[\!\[Results badge\]\(.*$/gm, `[![Results badge](../../blob/badges/.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg)](#repoWebUrl/actions)`);
     // add repo link
     markdownTemplate_1.default = markdownTemplate_1.default.replace(/#repoWebUrl/g, `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`);
