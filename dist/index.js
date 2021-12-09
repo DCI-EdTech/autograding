@@ -10118,8 +10118,8 @@ const run = async () => {
             owner: octokit_1.owner,
             repo: octokit_1.repo
         });
-        const created = new Date(data.created_at);
-        const pushed = new Date(data.pished_at);
+        const created = new Date(data['created_at']);
+        const pushed = new Date(data['pushed_at']);
         const age = pushed - created;
         console.log('AGE', age);
         // Only modify repo if repo or branch created
