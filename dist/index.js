@@ -10089,6 +10089,7 @@ module.exports = require("tty");
 
 "use strict";
 
+// @ts-nocheck
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -10117,8 +10118,8 @@ const run = async () => {
             owner: octokit_1.owner,
             repo: octokit_1.repo
         });
-        const created = Number(new Date(data.created_at));
-        const pushed = Number(new Date(data.pished_at));
+        const created = new Date(data.created_at);
+        const pushed = new Date(data.pished_at);
         const age = pushed - created;
         console.log('AGE', age);
         // Only modify repo if repo or branch created
