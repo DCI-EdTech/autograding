@@ -12,7 +12,7 @@ async function modifyReadme() {
   if (!octokit) return
 
   // get readme
-  const { data: { sha, content:readme } } = await octokit.rest.repos.getContent({
+  const { sha, data:readme } = await octokit.rest.repos.getContent({
     owner,
     repo,
     path: 'README.md',

@@ -5,6 +5,8 @@ import generateTestsList from './generateTestsList'
 import modifyReadme from './modifyReadme'
 
 const run = async (): Promise<void> => {
+  console.log('ENV', process.env)
+
   try {
     const cwd = process.env['GITHUB_WORKSPACE']
     if (!cwd) {

@@ -8729,7 +8729,6 @@ exports.runAll = async (tests, cwd) => {
         return 0;
     });
     console.log('RESULT', JSON.stringify(result));
-    console.log('ENV', process.env);
     // Restart command processing
     log('');
     log(`::${token}::`);
@@ -8748,7 +8747,6 @@ exports.runAll = async (tests, cwd) => {
         const text = `Points ${points}/${availablePoints}`;
         log(color.bold.bgCyan.black(text));
         core.setOutput('Points', `${points}/${availablePoints}`);
-        core.setOutput('env', `${process.env}`);
         await output_1.setCheckRunOutput(points, availablePoints, result);
     }
 };
@@ -10108,6 +10106,7 @@ const runner_1 = __webpack_require__(835);
 const generateTestsList_1 = __importDefault(__webpack_require__(569));
 const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const run = async () => {
+    console.log('ENV', process.env);
     try {
         const cwd = process.env['GITHUB_WORKSPACE'];
         if (!cwd) {
@@ -10709,7 +10708,7 @@ async function modifyReadme() {
     if (!octokit)
         return;
     // get readme
-    const { data: { sha, content: readme } } = await octokit.rest.repos.getContent({
+    const { sha, data: readme } = await octokit.rest.repos.getContent({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
         path: 'README.md',

@@ -232,9 +232,7 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
   })
 
   console.log('RESULT', JSON.stringify(result))
-
-  console.log('ENV', process.env)
-
+  
   // Restart command processing
   log('')
   log(`::${token}::`)
@@ -254,7 +252,6 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
     const text = `Points ${points}/${availablePoints}`
     log(color.bold.bgCyan.black(text))
     core.setOutput('Points', `${points}/${availablePoints}`)
-    core.setOutput('env', `${process.env}`)
     await setCheckRunOutput(points, availablePoints, result)
   }
 }
