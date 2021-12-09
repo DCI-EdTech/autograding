@@ -10118,7 +10118,7 @@ const run = async () => {
             repo: octokit_1.repo
         });
         console.log('CREATED', data['created_at']);
-        console.log('UPDATED', data['updated_at']);
+        console.log('PUSHED', data['pushed_at']);
         // Only modify repo if repo or branch created
         const event = process.env['GITHUB_EVENT_NAME'];
         if (event === 'create') {
@@ -10716,10 +10716,9 @@ async function modifyReadme() {
     if (!octokit)
         return;
     // get readme
-    const { sha, data: readme } = await octokit.rest.repos.getContent({
+    const { sha, data: readme } = await octokit.rest.repos.getReadme({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
-        path: 'README.md',
         ref: process.env['GITHUB_REF_NAME'],
     });
     // add autograding info
