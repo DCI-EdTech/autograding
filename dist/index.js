@@ -10701,6 +10701,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const octokit_1 = __webpack_require__(994);
 const markdownTemplate_1 = __importDefault(__webpack_require__(830));
+const helpers_1 = __webpack_require__(948);
 const readmeInfoPath = `./AUTOGRADING.md`;
 const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
 async function modifyReadme() {
@@ -10727,7 +10728,7 @@ async function modifyReadme() {
     });
 }
 async function addAutogradingInfo(readme) {
-    const infoRE = new RegExp(`[\n\r]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
+    const infoRE = new RegExp(`[\n\r]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
     // update results badge
     markdownTemplate_1.default = markdownTemplate_1.default.replace(/^\[\!\[Results badge\]\(.*$/gm, `[![Results badge](../../blob/badges/.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg)](#repoWebUrl/actions)`);
     // add repo link
@@ -12046,6 +12047,20 @@ module.exports.parseURL = function (input, options) {
 
 /***/ }),
 
+/***/ 948:
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "escapeRegExp", function() { return escapeRegExp; });
+const escapeRegExp = function(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
+
+
+/***/ }),
+
 /***/ 950:
 /***/ (function(__unusedmodule, exports) {
 
@@ -12421,6 +12436,28 @@ exports.createOctokit = createOctokit;
 /******/ 				get: function() { return module.i; }
 /******/ 			});
 /******/ 			return module;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getter */
+/******/ 	!function() {
+/******/ 		// define getter function for harmony exports
+/******/ 		var hasOwnProperty = Object.prototype.hasOwnProperty;
+/******/ 		__webpack_require__.d = function(exports, name, getter) {
+/******/ 			if(!hasOwnProperty.call(exports, name)) {
+/******/ 				Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 			}
 /******/ 		};
 /******/ 	}();
 /******/ 	

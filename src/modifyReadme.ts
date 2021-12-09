@@ -2,6 +2,7 @@
 import fs from 'fs';
 import { createOctokit, owner, repo } from './octokit';
 import readmeInfo from './markdownTemplate';
+import { escapeRegExp } from './lib/helpers';
 
 const readmeInfoPath = `./AUTOGRADING.md`;
 const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
