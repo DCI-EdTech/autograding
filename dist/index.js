@@ -216,6 +216,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         return;
     // Generate badge
     const badge = badge_1.default(results);
+    const badgePath = `.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg`;
     /*`<svg width="200.6" height="40" viewBox="0 0 1003 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points ${points}/${availablePoints}">
       <title>Points ${points}/${availablePoints}</title>
       <g>
@@ -232,7 +233,6 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     </svg>`*/
     // get last commit of main
     try {
-        const badgePath = `.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg`;
         const { data: [{ sha: lastCommitSHA }] } = await octokit.rest.repos.listCommits({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
