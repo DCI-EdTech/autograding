@@ -30,6 +30,7 @@ async function modifyReadme() {
     path: 'README.md',
     message: 'update readme',
     content: Buffer.from(newReadme).toString('base64'),
+    ref: process.env['GITHUB_REF_NAME'],
     sha,
   })
 }
