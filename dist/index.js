@@ -10107,7 +10107,6 @@ const generateTestsList_1 = __importDefault(__webpack_require__(569));
 const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const octokit_1 = __webpack_require__(994);
 const run = async () => {
-    console.log('ENV', process.env);
     try {
         const cwd = process.env['GITHUB_WORKSPACE'];
         if (!cwd) {
@@ -10118,7 +10117,8 @@ const run = async () => {
             owner: octokit_1.owner,
             repo: octokit_1.repo
         });
-        console.log('REPO', JSON.stringify(data));
+        console.log('CREATED', data['created_at']);
+        console.log('UPDATED', data['updated_at']);
         // Only modify repo if repo or branch created
         const event = process.env['GITHUB_EVENT_NAME'];
         if (event === 'create') {

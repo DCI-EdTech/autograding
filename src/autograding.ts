@@ -6,8 +6,6 @@ import modifyReadme from './modifyReadme'
 import { createOctokit, owner, repo } from './octokit';
 
 const run = async (): Promise<void> => {
-  console.log('ENV', process.env)
-
   try {
     const cwd = process.env['GITHUB_WORKSPACE']
     if (!cwd) {
@@ -20,7 +18,8 @@ const run = async (): Promise<void> => {
       repo
     })
 
-    console.log('REPO', JSON.stringify(data))
+    console.log('CREATED', data['created_at'])
+    console.log('UPDATED', data['updated_at'])
 
     // Only modify repo if repo or branch created
     const event = process.env['GITHUB_EVENT_NAME']
