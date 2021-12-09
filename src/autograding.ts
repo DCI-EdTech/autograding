@@ -20,8 +20,8 @@ const run = async (): Promise<void> => {
       repo
     })
 
-    const created = new Date(data.created_at)
-    const pushed = new Date(data.pished_at)
+    const created = new Date(data['created_at'])
+    const pushed = new Date(data['pushed_at'])
     const age = pushed - created
 
     console.log('AGE', age)
