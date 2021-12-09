@@ -10117,10 +10117,10 @@ const run = async () => {
             owner: octokit_1.owner,
             repo: octokit_1.repo
         });
-        const created = new Date(data.created_at);
-        const pushed = new Date(data.pished_at);
-        //const age = pushed - created
-        console.log(pushed, created);
+        const created = Number(new Date(data.created_at));
+        const pushed = Number(new Date(data.pished_at));
+        const age = pushed - created;
+        console.log('AGE', age);
         // Only modify repo if repo or branch created
         const event = process.env['GITHUB_EVENT_NAME'];
         if (event === 'create') {
