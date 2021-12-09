@@ -10105,6 +10105,7 @@ const path_1 = __importDefault(__webpack_require__(622));
 const runner_1 = __webpack_require__(835);
 const generateTestsList_1 = __importDefault(__webpack_require__(569));
 const modifyReadme_1 = __importDefault(__webpack_require__(905));
+const octokit_1 = __webpack_require__(994);
 const run = async () => {
     console.log('ENV', process.env);
     try {
@@ -10112,6 +10113,13 @@ const run = async () => {
         if (!cwd) {
             throw new Error('No GITHUB_WORKSPACE');
         }
+        const octokit = octokit_1.createOctokit();
+        const { data } = await octokit.rest.repos.get({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo
+        });
+        console.log('REPO', JSON.stringify(data));
+        // Only modify repo if repo or branch created
         const event = process.env['GITHUB_EVENT_NAME'];
         if (event === 'create') {
             //TODO: modify readme and package.json

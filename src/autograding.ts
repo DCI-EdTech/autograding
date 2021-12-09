@@ -3,6 +3,7 @@ import path from 'path'
 import {Test, runAll} from './runner'
 import generateTestsList from './generateTestsList'
 import modifyReadme from './modifyReadme'
+import { createOctokit, owner, repo } from './octokit';
 
 const run = async (): Promise<void> => {
   console.log('ENV', process.env)
@@ -13,6 +14,15 @@ const run = async (): Promise<void> => {
       throw new Error('No GITHUB_WORKSPACE')
     }
 
+    const octokit = createOctokit()
+    const { data } = await octokit.rest.repos.get({
+      owner,
+      repo
+    })
+
+    console.log('REPO', JSON.stringify(data))
+
+    // Only modify repo if repo or branch created
     const event = process.env['GITHUB_EVENT_NAME']
     if (event === 'create') {
       //TODO: modify readme and package.json
