@@ -20,9 +20,9 @@ const run = async (): Promise<void> => {
 
     const created = new Date(data.created_at)
     const pushed = new Date(data.pished_at)
-    const age = pushed.getTime() - created.getTime()
+    //const age = pushed - created
 
-    console.log('AGE', age)
+    console.log(pushed, created)
 
     // Only modify repo if repo or branch created
     const event = process.env['GITHUB_EVENT_NAME']
