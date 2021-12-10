@@ -8602,7 +8602,7 @@ const runSetup = async (test, cwd, timeout) => {
     await waitForExit(setup, timeout);
 };
 const runCommand = async (test, cwd, timeout) => {
-    let output;
+    let output = '';
     try {
         const child = child_process_1.spawn(test.run, {
             cwd,
@@ -8615,25 +8615,13 @@ const runCommand = async (test, cwd, timeout) => {
         // Start with a single new line
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
-            if (chunk.toString().charAt(0) === '{') {
-                let parsed;
-                try {
-                    output = JSON.parse(chunk.toString());
-                }
-                catch (e) {
-                    console.log(e, 'unable to parse string as JSON', chunk.toString());
-                }
-                output = parsed;
-            }
-            else {
-                process.stdout.write(indent(chunk));
-            }
+            output += chunk;
         });
         child.stderr.on('data', chunk => {
             process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
-        return output;
+        return JSON.parse(output);
     }
     catch (error) {
         error.result = output;

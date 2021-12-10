@@ -126,7 +126,7 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 }
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
-  let output
+  let output = ''
 
   try {
     const child = spawn(test.run, {
@@ -142,17 +142,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     process.stdout.write(indent('\n'))
   
     child.stdout.on('data', chunk => {
-      if(chunk.toString().charAt(0) === '{') {
-        let parsed
-        try {
-          output = JSON.parse(chunk.toString())
-        } catch (e) {
-          console.log(e, 'unable to parse string as JSON', chunk.toString())
-        }
-        output = parsed
-      } else {
-        process.stdout.write(indent(chunk))
-      }
+      output += chunk
     })
   
     child.stderr.on('data', chunk => {
@@ -160,7 +150,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     })
   
     await waitForExit(child, timeout)
-    return output
+    return JSON.parse(output)
   } catch (error) {
     error.result = output
     throw error
