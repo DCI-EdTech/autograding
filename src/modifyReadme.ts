@@ -1,11 +1,9 @@
 // @ts-nocheck
 import fs from 'fs';
 import { createOctokit, owner, repo } from './octokit';
-import readmeInfo from './markdownTemplate';
 import { escapeRegExp } from './lib/helpers';
 
 const readmeInfoPath = `./AUTOGRADING.md`;
-const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
 
 async function modifyReadme() {
   const octokit = createOctokit()
@@ -37,14 +35,30 @@ async function modifyReadme() {
 }
 
 async function addAutogradingInfo(readme) {
+  const branch = process.env['GITHUB_REF_NAME']
+  const repoURL = `${process.env['GITHUB_SERVER_URL']}/${owner}/${repo}`
+  const readmeInfo = `## Results
+  [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
+  
+  [Results Details](${repoURL}/actions)
+  
+  ### Debugging your code
+  > [reading the test outputs](https://github.com/DCI-EdTech/autograding-setup/wiki/Reading-test-outputs)
+  
+  There are two ways to see why tasks might not be completed:
+  #### 1. Running tests locally
+  - Run \`npm install\`
+  - Run \`npm test\` in the terminal. You will see where your solution differs from the expected result.
+  
+  #### 2. Inspecting the test output on GitHub
+  - Go to the [Actions tab of your exercise repo](${repoURL}/actions)
+  - You will see a list of the test runs. Click on the topmost one.
+  - Click on 'Autograding'
+  - Expand the item 'Run DCI-EdTech/autograding-action@main'
+  - Here you see all outputs from the test run`
+
+  const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
   const infoRE = new RegExp(`[\n\r]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
-
-  // update results badge
-  console.log('readme add badge of', process.env['GITHUB_REF_NAME'])
-  readmeInfo = readmeInfo.replace(/^\[\!\[Results badge\]\(.*$/gm, `[![Results badge](../../blob/badges/.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg)](#repoWebUrl/actions)`)
-
-  // add repo link
-  readmeInfo = readmeInfo.replace(/#repoWebUrl/g, `${process.env['GITHUB_SERVER_URL']}/${owner}/${repo}`);
 
   // remove old info
   readme = readme.replace(infoRE, '')

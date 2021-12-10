@@ -8489,35 +8489,6 @@ exports.createTokenAuth = createTokenAuth;
 
 /***/ }),
 
-/***/ 830:
-/***/ (function(__unusedmodule, exports) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = `## Results
-[![Results badge](../../blob/badges/.github/badges/badge.svg)](#repoWebUrl/actions)
-
-[Results Details](#repoWebUrl/actions)
-
-### Debugging your code
-> [reading the test outputs](https://github.com/DCI-EdTech/autograding-setup/wiki/Reading-test-outputs)
-
-There are two ways to see why tasks might not be completed:
-#### 1. Running tests locally
-- Run \`npm install\`
-- Run \`npm test\` in the terminal. You will see where your solution differs from the expected result.
-
-#### 2. Inspecting the test output on GitHub
-- Go to the [Actions tab of your exercise repo](#repoWebUrl/actions)
-- You will see a list of the test runs. Click on the topmost one.
-- Click on 'Autograding'
-- Expand the item 'Run DCI-EdTech/autograding-action@main'
-- Here you see all outputs from the test run`;
-
-
-/***/ }),
-
 /***/ 835:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -10703,15 +10674,10 @@ exports.withCustomRequest = withCustomRequest;
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const octokit_1 = __webpack_require__(994);
-const markdownTemplate_1 = __importDefault(__webpack_require__(830));
 const helpers_1 = __webpack_require__(948);
 const readmeInfoPath = `./AUTOGRADING.md`;
-const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
 async function modifyReadme() {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
@@ -10738,15 +10704,32 @@ async function modifyReadme() {
     });
 }
 async function addAutogradingInfo(readme) {
+    const branch = process.env['GITHUB_REF_NAME'];
+    const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
+    const readmeInfo = `## Results
+  [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
+  
+  [Results Details](${repoURL}/actions)
+  
+  ### Debugging your code
+  > [reading the test outputs](https://github.com/DCI-EdTech/autograding-setup/wiki/Reading-test-outputs)
+  
+  There are two ways to see why tasks might not be completed:
+  #### 1. Running tests locally
+  - Run \`npm install\`
+  - Run \`npm test\` in the terminal. You will see where your solution differs from the expected result.
+  
+  #### 2. Inspecting the test output on GitHub
+  - Go to the [Actions tab of your exercise repo](${repoURL}/actions)
+  - You will see a list of the test runs. Click on the topmost one.
+  - Click on 'Autograding'
+  - Expand the item 'Run DCI-EdTech/autograding-action@main'
+  - Here you see all outputs from the test run`;
+    const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
     const infoRE = new RegExp(`[\n\r]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
-    // update results badge
-    console.log('readme add badge of', process.env['GITHUB_REF_NAME']);
-    markdownTemplate_1.default = markdownTemplate_1.default.replace(/^\[\!\[Results badge\]\(.*$/gm, `[![Results badge](../../blob/badges/.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg)](#repoWebUrl/actions)`);
-    // add repo link
-    markdownTemplate_1.default = markdownTemplate_1.default.replace(/#repoWebUrl/g, `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`);
     // remove old info
     readme = readme.replace(infoRE, '');
-    return `${readme}\n\r${infoDelimiters[0]}\n${markdownTemplate_1.default}\n\r${infoDelimiters[1]}`;
+    return `${readme}\n\r${infoDelimiters[0]}\n${readmeInfo}\n\r${infoDelimiters[1]}`;
 }
 exports.default = modifyReadme;
 
