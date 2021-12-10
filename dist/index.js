@@ -8615,7 +8615,6 @@ const runCommand = async (test, cwd, timeout) => {
         // Start with a single new line
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
-            console.log('CHUNK', chunk.toString());
             if (chunk.toString().includes('{') || chunk.toString().includes('}')) {
                 output += chunk;
             }
@@ -8627,6 +8626,7 @@ const runCommand = async (test, cwd, timeout) => {
             process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
+        console.log('JSON', output);
         return JSON.parse(output);
     }
     catch (error) {

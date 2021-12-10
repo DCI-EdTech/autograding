@@ -142,7 +142,6 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     process.stdout.write(indent('\n'))
   
     child.stdout.on('data', chunk => {
-      console.log('CHUNK', chunk.toString())
       if(chunk.toString().includes('{') || chunk.toString().includes('}')) {
         output += chunk
       } else {
@@ -155,6 +154,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     })
   
     await waitForExit(child, timeout)
+    console.log('JSON', output)
     return JSON.parse(output)
   } catch (error) {
     error.result = output
