@@ -8615,7 +8615,12 @@ const runCommand = async (test, cwd, timeout) => {
         // Start with a single new line
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
-            output += chunk;
+            if (chunk.toString().includes('{') || chunk.toString().includes('}')) {
+                output += chunk;
+            }
+            else {
+                process.stdout.write(indent(chunk));
+            }
         });
         child.stderr.on('data', chunk => {
             process.stderr.write(indent(chunk));

@@ -142,7 +142,11 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     process.stdout.write(indent('\n'))
   
     child.stdout.on('data', chunk => {
-      output += chunk
+      if(chunk.toString().includes('{') || chunk.toString().includes('}')) {
+        output += chunk
+      } else {
+        process.stdout.write(indent(chunk))
+      }
     })
   
     child.stderr.on('data', chunk => {
