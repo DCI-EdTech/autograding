@@ -154,10 +154,9 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     })
   
     await waitForExit(child, timeout)
-    console.log('JSON', output)
     return JSON.parse(output)
   } catch (error) {
-    error.result = output
+    error.result = JSON.parse(output)
     throw error
   }
 }

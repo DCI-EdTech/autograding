@@ -8626,11 +8626,10 @@ const runCommand = async (test, cwd, timeout) => {
             process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
-        console.log('JSON', output);
         return JSON.parse(output);
     }
     catch (error) {
-        error.result = output;
+        error.result = JSON.parse(output);
         throw error;
     }
 };
