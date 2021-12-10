@@ -8616,7 +8616,14 @@ const runCommand = async (test, cwd, timeout) => {
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
             if (chunk.toString().charAt(0) === '{') {
-                output = JSON.parse(chunk.toString());
+                let parsed;
+                try {
+                    output = JSON.parse(chunk.toString());
+                }
+                catch (e) {
+                    console.error(e, 'unable to parse string as JSON', chunk.toString());
+                }
+                output = parsed;
             }
             else {
                 process.stdout.write(indent(chunk));
