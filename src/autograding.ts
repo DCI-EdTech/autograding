@@ -13,25 +13,8 @@ const run = async (): Promise<void> => {
     if (!cwd) {
       throw new Error('No GITHUB_WORKSPACE')
     }
-
-    const octokit = createOctokit()
-    const { data: { pushed_at, created_at} } = await octokit.rest.repos.get({
-      owner,
-      repo
-    })
-
-    const age = new Date(pushed_at) - new Date(created_at)
-
-    // Only modify repo if repo or branch created
-    const event = process.env['GITHUB_EVENT_NAME']
-    if (event === 'create' || age < 25000) {
-      //TODO: modify readme and package.json
-      console.log('inject')
-      await modifyReadme()
-
-      if(event === 'create')
-        return // stop autograding from running
-    }
+    
+    await modifyReadme()
 
     // make test request to see if we can confirm that it's from github ci
     

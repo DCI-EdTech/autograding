@@ -22,6 +22,10 @@ async function modifyReadme() {
   // add autograding info
   const newReadme = await addAutogradingInfo(readme)
 
+  // don't update if nothing changed
+  if(newReadme === readme)
+    return
+
   // update readme
   await octokit.rest.repos.createOrUpdateFileContents({
     owner,
@@ -34,7 +38,7 @@ async function modifyReadme() {
   })
 }
 
-async function addAutogradingInfo(readme) {
+async function addAutogradingInfo(fullReadme) {
   const branch = process.env['GITHUB_REF_NAME']
   const repoURL = `${process.env['GITHUB_SERVER_URL']}/${owner}/${repo}`
   const readmeInfo = `## Results
@@ -61,8 +65,8 @@ async function addAutogradingInfo(readme) {
   const infoRE = new RegExp(`[\n\r]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
 
   // remove old info
-  readme = readme.replace(infoRE, '')
-  return `${readme}\n\r${infoDelimiters[0]}\n${readmeInfo}\n\r${infoDelimiters[1]}`;
+  fullReadme = fullReadme.replace(infoRE, '')
+  return `${fullReadme}\n\r${infoDelimiters[0]}\n${readmeInfo}\n\r${infoDelimiters[1]}`;
 }
 
 export default modifyReadme;

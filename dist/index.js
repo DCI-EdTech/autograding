@@ -10077,28 +10077,13 @@ const path_1 = __importDefault(__webpack_require__(622));
 const runner_1 = __webpack_require__(835);
 const generateTestsList_1 = __importDefault(__webpack_require__(569));
 const modifyReadme_1 = __importDefault(__webpack_require__(905));
-const octokit_1 = __webpack_require__(994);
 const run = async () => {
     try {
         const cwd = process.env['GITHUB_WORKSPACE'];
         if (!cwd) {
             throw new Error('No GITHUB_WORKSPACE');
         }
-        const octokit = octokit_1.createOctokit();
-        const { data: { pushed_at, created_at } } = await octokit.rest.repos.get({
-            owner: octokit_1.owner,
-            repo: octokit_1.repo
-        });
-        const age = new Date(pushed_at) - new Date(created_at);
-        // Only modify repo if repo or branch created
-        const event = process.env['GITHUB_EVENT_NAME'];
-        if (event === 'create' || age < 25000) {
-            //TODO: modify readme and package.json
-            console.log('inject');
-            await modifyReadme_1.default();
-            if (event === 'create')
-                return; // stop autograding from running
-        }
+        await modifyReadme_1.default();
         // make test request to see if we can confirm that it's from github ci
         const tests = generateTestsList_1.default('__tests__', path_1.default.resolve(cwd, 'package.json'));
         await runner_1.runAll(tests, cwd);
@@ -10692,6 +10677,9 @@ async function modifyReadme() {
     const readme = Buffer.from(content, 'base64').toString('utf8');
     // add autograding info
     const newReadme = await addAutogradingInfo(readme);
+    // don't update if nothing changed
+    if (newReadme === readme)
+        return;
     // update readme
     await octokit.rest.repos.createOrUpdateFileContents({
         owner: octokit_1.owner,
@@ -10703,7 +10691,7 @@ async function modifyReadme() {
         sha,
     });
 }
-async function addAutogradingInfo(readme) {
+async function addAutogradingInfo(fullReadme) {
     const branch = process.env['GITHUB_REF_NAME'];
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
     const readmeInfo = `## Results
@@ -10728,8 +10716,8 @@ async function addAutogradingInfo(readme) {
     const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
     const infoRE = new RegExp(`[\n\r]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
     // remove old info
-    readme = readme.replace(infoRE, '');
-    return `${readme}\n\r${infoDelimiters[0]}\n${readmeInfo}\n\r${infoDelimiters[1]}`;
+    fullReadme = fullReadme.replace(infoRE, '');
+    return `${fullReadme}\n\r${infoDelimiters[0]}\n${readmeInfo}\n\r${infoDelimiters[1]}`;
 }
 exports.default = modifyReadme;
 
