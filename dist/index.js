@@ -8616,6 +8616,7 @@ const runCommand = async (test, cwd, timeout) => {
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
             if (chunk.toString().includes('{') || chunk.toString().includes('}')) {
+                console.log('CHUNK', chunk.toString());
                 output += chunk;
             }
             else {
