@@ -147,7 +147,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
         try {
           output = JSON.parse(chunk.toString())
         } catch (e) {
-          console.error(e, 'unable to parse string as JSON', chunk.toString())
+          console.log(e, 'unable to parse string as JSON', chunk.toString())
         }
         output = parsed
       } else {
