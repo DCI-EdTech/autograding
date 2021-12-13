@@ -10,6 +10,14 @@ export default function badge(results) {
   let testResults = results.testResults.reduce((acc, item) => {
     acc.push(...item.assertionResults)
     return acc
+  }, []).reduce((acc, item) => {
+    let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0])
+    if(arr) {
+      arr.push(item)
+    } else {
+      arr = [item]
+      acc.push(arr)
+    }
   }, [])
 
   console.log("FLAT ARRAY", testResults)
