@@ -12138,37 +12138,32 @@ function badge(results) {
         return acc;
     }, []);
     console.log("FLAT ARRAY", testResults);
-    /*results.testResults.forEach(test => {
-      lines++
-  
-      draw
-      .text({
-        x: 1,
-        y: lineHeight * lines,
-        'font-family': 'helvetica',
-        'font-size': 15,
-        fill: '#fff',
-      }, test.assertionResults[0].ancestorTitles[0]);
-  
-      test.assertionResults.forEach(result => {
-        lines++
-  
+    testResults.forEach(tests => {
+        lines++;
         draw
-        .text({
-          x: 4,
-          y: lineHeight * lines,
-          'font-family': 'helvetica',
-          'font-size': 15,
-          fill: '#fff',
-        }, (result.status === 'passed' ? '✅' : '❌') + ' ' + result.title);
-      })
-    })
-    
+            .text({
+            x: 1,
+            y: lineHeight * lines,
+            'font-family': 'helvetica',
+            'font-size': 15,
+            fill: '#fff',
+        }, tests[0].ancestorTitles[0]);
+        tests.forEach(result => {
+            lines++;
+            draw
+                .text({
+                x: 4,
+                y: lineHeight * lines,
+                'font-family': 'helvetica',
+                'font-size': 15,
+                fill: '#fff',
+            }, (result.status === 'passed' ? '✅' : '❌') + ' ' + result.title);
+        });
+    });
     draw
-    .width(450)
-    .height(lines * lineHeight + 10)
-    
-    return draw.render()*/
+        .width(450)
+        .height(lines * lineHeight + 10);
+    return draw.render();
 }
 exports.default = badge;
 

@@ -22,7 +22,7 @@ export default function badge(results) {
 
   console.log("FLAT ARRAY", testResults)
 
-  /*results.testResults.forEach(test => {
+  testResults.forEach(tests => {
     lines++
 
     draw
@@ -32,9 +32,9 @@ export default function badge(results) {
       'font-family': 'helvetica',
       'font-size': 15,
       fill: '#fff',
-    }, test.assertionResults[0].ancestorTitles[0]);
+    }, tests[0].ancestorTitles[0]);
 
-    test.assertionResults.forEach(result => {
+    tests.forEach(result => {
       lines++
 
       draw
@@ -52,5 +52,5 @@ export default function badge(results) {
   .width(450)
   .height(lines * lineHeight + 10)
   
-  return draw.render()*/
+  return draw.render()
 }
