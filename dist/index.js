@@ -8699,7 +8699,6 @@ exports.runAll = async (tests, cwd) => {
         }
         return 0;
     });
-    console.log('RESULT', JSON.stringify(result));
     // Restart command processing
     log('');
     log(`::${token}::`);
@@ -12137,7 +12136,6 @@ function badge(results) {
         }
         return acc;
     }, []);
-    console.log("FLAT ARRAY", testResults);
     testResults.forEach(tests => {
         lines++;
         draw

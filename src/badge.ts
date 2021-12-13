@@ -20,8 +20,6 @@ export default function badge(results) {
     return acc
   }, [])
 
-  console.log("FLAT ARRAY", testResults)
-
   testResults.forEach(tests => {
     lines++
 

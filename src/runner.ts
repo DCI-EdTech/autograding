@@ -230,8 +230,6 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
     }
     return 0
   })
-
-  console.log('RESULT', JSON.stringify(result))
   
   // Restart command processing
   log('')
