@@ -1,6 +1,6 @@
 // @ts-nocheck
 import svg from 'svg-builder'
-import { collection } from 'lodash'
+import { groupBy } from 'lodash/fp'
 
 export default function badge(results) {
   const lineHeight = 25
@@ -12,7 +12,7 @@ export default function badge(results) {
     return acc
   }, [])
 
-  testResults = collection.groupBy(testResults, item => item.ancestorTitles[0])
+  testResults = groupBy(testResults, item => item.ancestorTitles[0])
 
   console.log("RESULTS", testResults)
 
