@@ -1,5 +1,9 @@
-const escapeRegExp = function(text) {
+const escapeRegExp = (text) => {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }
 
-export { escapeRegExp }
+const xmlSecure = (str) => {
+  return str.replace(/[<>]/gm, '')
+}
+
+export { escapeRegExp, xmlSecure }

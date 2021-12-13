@@ -1,5 +1,6 @@
 // @ts-nocheck
 import svg from 'svg-builder'
+import { xmlSecure } from './lib/helpers'
 
 export default function badge(results) {
   const lineHeight = 25
@@ -30,7 +31,7 @@ export default function badge(results) {
       'font-family': 'helvetica',
       'font-size': 15,
       fill: '#fff',
-    }, tests[0].ancestorTitles[0]);
+    }, xmlSecure(tests[0].ancestorTitles[0]));
 
     tests.forEach(result => {
       lines++
@@ -42,7 +43,7 @@ export default function badge(results) {
         'font-family': 'helvetica',
         'font-size': 15,
         fill: '#fff',
-      }, (result.status === 'passed' ? '✅' : '❌') + ' ' + result.title);
+      }, (result.status === 'passed' ? '✅' : '❌') + ' ' + xmlSecure(result.title));
     })
   })
   

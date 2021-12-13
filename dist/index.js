@@ -12034,8 +12034,13 @@ module.exports.parseURL = function (input, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "escapeRegExp", function() { return escapeRegExp; });
-const escapeRegExp = function(text) {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xmlSecure", function() { return xmlSecure; });
+const escapeRegExp = (text) => {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
+const xmlSecure = (str) => {
+  return str.replace(/[<>]/gm, '')
 }
 
 
@@ -12118,6 +12123,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const svg_builder_1 = __importDefault(__webpack_require__(334));
+const helpers_1 = __webpack_require__(948);
 function badge(results) {
     const lineHeight = 25;
     let lines = 0;
@@ -12145,7 +12151,7 @@ function badge(results) {
             'font-family': 'helvetica',
             'font-size': 15,
             fill: '#fff',
-        }, tests[0].ancestorTitles[0]);
+        }, helpers_1.xmlSecure(tests[0].ancestorTitles[0]));
         tests.forEach(result => {
             lines++;
             draw
@@ -12155,7 +12161,7 @@ function badge(results) {
                 'font-family': 'helvetica',
                 'font-size': 15,
                 fill: '#fff',
-            }, (result.status === 'passed' ? '✅' : '❌') + ' ' + result.title);
+            }, (result.status === 'passed' ? '✅' : '❌') + ' ' + helpers_1.xmlSecure(result.title));
         });
     });
     draw
@@ -12417,23 +12423,6 @@ exports.createOctokit = createOctokit;
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ 	"use strict";
 /******/ 
-/******/ 	/* webpack/runtime/node module decorator */
-/******/ 	!function() {
-/******/ 		__webpack_require__.nmd = function(module) {
-/******/ 			module.paths = [];
-/******/ 			if (!module.children) module.children = [];
-/******/ 			Object.defineProperty(module, 'loaded', {
-/******/ 				enumerable: true,
-/******/ 				get: function() { return module.l; }
-/******/ 			});
-/******/ 			Object.defineProperty(module, 'id', {
-/******/ 				enumerable: true,
-/******/ 				get: function() { return module.i; }
-/******/ 			});
-/******/ 			return module;
-/******/ 		};
-/******/ 	}();
-/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	!function() {
 /******/ 		// define __esModule on exports
@@ -12453,6 +12442,23 @@ exports.createOctokit = createOctokit;
 /******/ 			if(!hasOwnProperty.call(exports, name)) {
 /******/ 				Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/node module decorator */
+/******/ 	!function() {
+/******/ 		__webpack_require__.nmd = function(module) {
+/******/ 			module.paths = [];
+/******/ 			if (!module.children) module.children = [];
+/******/ 			Object.defineProperty(module, 'loaded', {
+/******/ 				enumerable: true,
+/******/ 				get: function() { return module.l; }
+/******/ 			});
+/******/ 			Object.defineProperty(module, 'id', {
+/******/ 				enumerable: true,
+/******/ 				get: function() { return module.i; }
+/******/ 			});
+/******/ 			return module;
 /******/ 		};
 /******/ 	}();
 /******/ 	
