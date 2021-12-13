@@ -1,12 +1,22 @@
 // @ts-nocheck
 import svg from 'svg-builder'
+import { collection } from 'lodash'
 
 export default function badge(results) {
   const lineHeight = 25
   let lines = 0
   const draw = svg.newInstance()
 
-  results.testResults.forEach(test => {
+  let testResults = results.testResults.reduce((acc, item) => {
+    acc.push(...item.assertionResults)
+    return acc
+  }, [])
+
+  testResults = collection.groupBy(testResults, item => item.ancestorTitles[0])
+
+  console.log("RESULTS", testResults)
+
+  /*results.testResults.forEach(test => {
     lines++
 
     draw
@@ -36,5 +46,5 @@ export default function badge(results) {
   .width(450)
   .height(lines * lineHeight + 10)
   
-  return draw.render()
+  return draw.render()*/
 }
