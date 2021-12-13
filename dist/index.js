@@ -13238,6 +13238,7 @@ function badge(results) {
         acc.push(...item.assertionResults);
         return acc;
     }, []);
+    console.log("FLAT ARRAY", testResults);
     testResults = fp_1.groupBy(testResults, item => item.ancestorTitles[0]);
     console.log("RESULTS", testResults);
     /*results.testResults.forEach(test => {

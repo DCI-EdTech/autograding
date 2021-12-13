@@ -12,6 +12,8 @@ export default function badge(results) {
     return acc
   }, [])
 
+  console.log("FLAT ARRAY", testResults)
+
   testResults = groupBy(testResults, item => item.ancestorTitles[0])
 
   console.log("RESULTS", testResults)
