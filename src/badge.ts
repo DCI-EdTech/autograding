@@ -1,6 +1,5 @@
 // @ts-nocheck
 import svg from 'svg-builder'
-import { groupBy } from 'lodash/fp'
 
 export default function badge(results) {
   const lineHeight = 25
@@ -18,13 +17,10 @@ export default function badge(results) {
       arr = [item]
       acc.push(arr)
     }
+    return acc
   }, [])
 
   console.log("FLAT ARRAY", testResults)
-
-  testResults = groupBy(testResults, item => item.ancestorTitles[0])
-
-  console.log("RESULTS", testResults)
 
   /*results.testResults.forEach(test => {
     lines++
