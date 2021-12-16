@@ -3,7 +3,6 @@
 import * as core from '@actions/core'
 import path from 'path'
 import {Test, runAll} from './runner'
-import generateTestsList from './generateTestsList'
 import modifyReadme from './modifyReadme'
 import { createOctokit, owner, repo } from './octokit';
 
@@ -18,10 +17,7 @@ const run = async (): Promise<void> => {
 
     // make test request to see if we can confirm that it's from github ci
     
-
-    const tests = generateTestsList('__tests__', path.resolve(cwd, 'package.json'))
-
-    await runAll(tests as Array<Test>, cwd)
+    await runAll(cwd, path.resolve(cwd, 'package.json'))
   } catch (error) {
     // If there is any error we'll fail the action with the error message
     let errorMessage = "Failed";

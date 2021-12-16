@@ -6,6 +6,8 @@ import * as core from '@actions/core'
 import {setCheckRunOutput} from './output'
 import * as os from 'os'
 import chalk from 'chalk'
+import fs from 'fs'
+import path from 'path'
 
 const color = new chalk.Instance({level: 1})
 
@@ -19,7 +21,6 @@ export interface Test {
   readonly output?: string
   readonly timeout: number
   readonly points?: number
-  readonly comparison: TestComparison
 }
 
 export class TestError extends Error {
@@ -178,11 +179,23 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   }
 }
 
-export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => {
+export const runAll = async (cwd: string, packageJsonPath: string): Promise<void> => {
   let points = 0
-  let availablePoints = 0
-  let hasPoints = false
+  let availablePoints = 100
   let result
+  let packageJson = fs.readFileSync(packageJsonPath);
+  packageJson = Buffer.from(packageJson, 'base64').toString('utf8')
+  packageJson = JSON.parse(packageJson);
+  
+  
+  const additionalSetup = packageJson.autograding && packageJson.autograding.setup
+  const testOpts = packageJson.autograding && packageJson.autograding.testOpts
+  const test = {
+    "name": `Tests`,
+    "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
+    "run": `CI=true npm test -- "(src\/)?__tests__\/tasks\.(.*)\.js"${testOpts ? ' ' + testOpts : ''} --json --silent`,
+    "timeout": 10
+  }
 
   // https://help.github.com/en/actions/reference/development-tools-for-github-actions#stop-and-start-log-commands-stop-commands
   const token = uuidv4()
@@ -192,30 +205,26 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
 
   let failed = false
 
-  for (const test of tests) {
-    try {
-      if (test.points) {
-        hasPoints = true
-        availablePoints += test.points
-      }
-      log(color.cyan(`📝 ${test.name}`))
-      log('')
-      result = await run(test, cwd)
-      log('')
-      log(color.green(`✅ ${test.name}`))
-      log(``)
-      if (test.points) {
-        points += test.points
-      }
-    } catch (error) {
-      failed = true
-      log('')
-      log(color.red(`❌ ${test.name}`))
-      result = error.result
-      core.setFailed(error.message)
-    }
-    break
+  
+  try {
+    log(color.cyan(`📝 ${test.name}`))
+    log('')
+    result = await run(test, cwd)
+    log('')
+    log(color.green(`✅ ${test.name}`))
+    log(``)
+  } catch (error) {
+    failed = true
+    log('')
+    log(color.red(`❌ ${test.name}`))
+    result = error.result
+    core.setFailed(error.message)
   }
+
+  console.log(JSON.stringify(result, null, 2))
+
+  // calculate points
+  //points = 
 
   // sort results by filename
   result.testResults.sort((a, b) => {
@@ -246,10 +255,8 @@ export const runAll = async (tests: Array<Test>, cwd: string): Promise<void> => 
   }
 
   // Set the number of points
-  if (hasPoints) {
-    const text = `Points ${points}/${availablePoints}`
-    log(color.bold.bgCyan.black(text))
-    core.setOutput('Points', `${points}/${availablePoints}`)
-    await setCheckRunOutput(points, availablePoints, result)
-  }
+  const text = `Points ${points}/${availablePoints}`
+  log(color.bold.bgCyan.black(text))
+  core.setOutput('Points', `${points}/${availablePoints}`)
+  await setCheckRunOutput(points, availablePoints, result)
 }

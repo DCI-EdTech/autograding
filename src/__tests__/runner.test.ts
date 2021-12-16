@@ -181,43 +181,19 @@ describe('runner', () => {
 describe('runAll', () => {
   it('counts the points', async () => {
     const cwd = path.resolve(__dirname, 'shell')
-    const tests = [
-      {
-        name: 'Hello Test',
-        setup: '',
-        run: 'sh hello.sh',
-        input: undefined,
-        output: undefined,
-        comparison: 'exact' as TestComparison,
-        timeout: 1,
-        points: 7,
-      },
-    ]
 
     // Expect the points to be in the output
     const setOutputSpy = jest.spyOn(core, 'setOutput')
-    await expect(runAll(tests, cwd)).resolves.not.toThrow()
+    await expect(runAll(cwd, 'package.json')).resolves.not.toThrow()
     expect(setOutputSpy).toHaveBeenCalledWith('Points', '7/7')
   }, 10000)
 
   it('gets 0 points if it fails', async () => {
     const cwd = path.resolve(__dirname, 'shell')
-    const tests = [
-      {
-        name: 'Hello Test',
-        setup: '',
-        run: 'exit 1',
-        input: undefined,
-        output: undefined,
-        comparison: 'exact' as TestComparison,
-        timeout: 1,
-        points: 7,
-      },
-    ]
 
     // Expect the points to be in the output
     const setOutputSpy = jest.spyOn(core, 'setOutput')
-    await expect(runAll(tests, cwd)).resolves.not.toThrow()
+    await expect(runAll(cwd, 'package.json')).resolves.not.toThrow()
     expect(setOutputSpy).toHaveBeenCalledWith('Points', '0/7')
   }, 10000)
 })

@@ -6135,54 +6135,6 @@ exports.HttpClient = HttpClient;
 
 /***/ }),
 
-/***/ 569:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-// @ts-nocheck
-const fs_1 = __importDefault(__webpack_require__(747));
-const path = __webpack_require__(622);
-function default_1(testsDir, packageJsonPath) {
-    // read test folder contents  
-    // if testsDir does not exist, look in src folder
-    if (!fs_1.default.existsSync(testsDir)) {
-        testsDir = path.join('src', testsDir);
-    }
-    const testFiles = fs_1.default.readdirSync(testsDir);
-    let packageJson = fs_1.default.readFileSync(packageJsonPath);
-    packageJson = Buffer.from(packageJson, 'base64').toString('utf8');
-    packageJson = JSON.parse(packageJson);
-    // filer autograding test files
-    const autogradingTestFiles = testFiles.reduce((acc, file) => {
-        const taskName = path.basename(file).match(/^tasks\.(.*)\.js$/)[1];
-        if (taskName)
-            acc.push({ taskName, file });
-        return acc;
-    }, []);
-    const autogradingTests = autogradingTestFiles.map((item, i, list) => {
-        const pointsPerTask = Math.round(100 / list.length);
-        const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
-        const testOpts = packageJson.autograding && packageJson.autograding.testOpts;
-        return {
-            "name": `Task ${item.taskName}`,
-            "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
-            "run": `CI=true npm test -- "(src\/)?__tests__\/tasks\.(.*)\.js"${testOpts ? ' ' + testOpts : ''} --json --silent`,
-            "timeout": 10,
-            "points": i === list.length - 1 ? 100 - pointsPerTask * (list.length - 1) : pointsPerTask
-        };
-    });
-    return autogradingTests;
-}
-exports.default = default_1;
-
-
-/***/ }),
-
 /***/ 585:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -8515,6 +8467,7 @@ const core = __importStar(__webpack_require__(470));
 const output_1 = __webpack_require__(52);
 const os = __importStar(__webpack_require__(87));
 const chalk_1 = __importDefault(__webpack_require__(843));
+const fs_1 = __importDefault(__webpack_require__(747));
 const color = new chalk_1.default.Instance({ level: 1 });
 class TestError extends Error {
     constructor(message) {
@@ -8652,42 +8605,45 @@ exports.run = async (test, cwd) => {
         throw error;
     }
 };
-exports.runAll = async (tests, cwd) => {
+exports.runAll = async (cwd, packageJsonPath) => {
     let points = 0;
-    let availablePoints = 0;
-    let hasPoints = false;
+    let availablePoints = 100;
     let result;
+    let packageJson = fs_1.default.readFileSync(packageJsonPath);
+    packageJson = Buffer.from(packageJson, 'base64').toString('utf8');
+    packageJson = JSON.parse(packageJson);
+    const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
+    const testOpts = packageJson.autograding && packageJson.autograding.testOpts;
+    const test = {
+        "name": `Tests`,
+        "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
+        "run": `CI=true npm test -- "(src\/)?__tests__\/tasks\.(.*)\.js"${testOpts ? ' ' + testOpts : ''} --json --silent`,
+        "timeout": 10
+    };
     // https://help.github.com/en/actions/reference/development-tools-for-github-actions#stop-and-start-log-commands-stop-commands
     const token = uuid_1.v4();
     log('');
     log(`::stop-commands::${token}`);
     log('');
     let failed = false;
-    for (const test of tests) {
-        try {
-            if (test.points) {
-                hasPoints = true;
-                availablePoints += test.points;
-            }
-            log(color.cyan(`📝 ${test.name}`));
-            log('');
-            result = await exports.run(test, cwd);
-            log('');
-            log(color.green(`✅ ${test.name}`));
-            log(``);
-            if (test.points) {
-                points += test.points;
-            }
-        }
-        catch (error) {
-            failed = true;
-            log('');
-            log(color.red(`❌ ${test.name}`));
-            result = error.result;
-            core.setFailed(error.message);
-        }
-        break;
+    try {
+        log(color.cyan(`📝 ${test.name}`));
+        log('');
+        result = await exports.run(test, cwd);
+        log('');
+        log(color.green(`✅ ${test.name}`));
+        log(``);
     }
+    catch (error) {
+        failed = true;
+        log('');
+        log(color.red(`❌ ${test.name}`));
+        result = error.result;
+        core.setFailed(error.message);
+    }
+    console.log(JSON.stringify(result, null, 2));
+    // calculate points
+    //points = 
     // sort results by filename
     result.testResults.sort((a, b) => {
         const taskNameRegExp = /tasks\.(.*)\.js$/;
@@ -8715,12 +8671,10 @@ exports.runAll = async (tests, cwd) => {
         log('');
     }
     // Set the number of points
-    if (hasPoints) {
-        const text = `Points ${points}/${availablePoints}`;
-        log(color.bold.bgCyan.black(text));
-        core.setOutput('Points', `${points}/${availablePoints}`);
-        await output_1.setCheckRunOutput(points, availablePoints, result);
-    }
+    const text = `Points ${points}/${availablePoints}`;
+    log(color.bold.bgCyan.black(text));
+    core.setOutput('Points', `${points}/${availablePoints}`);
+    await output_1.setCheckRunOutput(points, availablePoints, result);
 };
 
 
@@ -10076,7 +10030,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const path_1 = __importDefault(__webpack_require__(622));
 const runner_1 = __webpack_require__(835);
-const generateTestsList_1 = __importDefault(__webpack_require__(569));
 const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const run = async () => {
     try {
@@ -10086,8 +10039,7 @@ const run = async () => {
         }
         await modifyReadme_1.default();
         // make test request to see if we can confirm that it's from github ci
-        const tests = generateTestsList_1.default('__tests__', path_1.default.resolve(cwd, 'package.json'));
-        await runner_1.runAll(tests, cwd);
+        await runner_1.runAll(cwd, path_1.default.resolve(cwd, 'package.json'));
     }
     catch (error) {
         // If there is any error we'll fail the action with the error message
