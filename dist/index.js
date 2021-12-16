@@ -8641,7 +8641,6 @@ exports.runAll = async (cwd, packageJsonPath) => {
         result = error.result;
         core.setFailed(error.message);
     }
-    console.log(JSON.stringify(result, null, 2));
     // calculate points
     points = Math.round(100 / result.numTotalTests * result.numPassedTests);
     // sort results by filename

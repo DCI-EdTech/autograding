@@ -221,8 +221,6 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     core.setFailed(error.message)
   }
 
-  console.log(JSON.stringify(result, null, 2))
-
   // calculate points
   points = Math.round(100 / result.numTotalTests * result.numPassedTests)
 
