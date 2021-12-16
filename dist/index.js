@@ -6166,6 +6166,7 @@ function default_1(testsDir, packageJsonPath) {
         const pointsPerTask = Math.round(100 / list.length);
         const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
         const testOpts = packageJson.autograding && packageJson.autograding.testOpts;
+        console.log('Install', `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`);
         return {
             "name": `Task ${item.taskName}`,
             "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
