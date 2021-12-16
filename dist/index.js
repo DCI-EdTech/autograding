@@ -6154,7 +6154,9 @@ function default_1(testsDir, packageJsonPath) {
         testsDir = path.join('src', testsDir);
     }
     const testFiles = fs_1.default.readdirSync(testsDir);
-    const packageJson = fs_1.default.readFileSync(packageJsonPath);
+    let packageJson = fs_1.default.readFileSync(packageJsonPath);
+    packageJson = Buffer.from(packageJson, 'base64').toString('utf8');
+    packageJson = JSON.parse(packageJson);
     // filer autograding test files
     const autogradingTestFiles = testFiles.reduce((acc, file) => {
         const taskName = path.basename(file).match(/^tasks\.(.*)\.js$/)[1];

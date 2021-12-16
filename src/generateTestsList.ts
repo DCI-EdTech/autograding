@@ -9,8 +9,9 @@ export default function(testsDir:string, packageJsonPath:string) {
     testsDir = path.join('src', testsDir);
   }
   const testFiles = fs.readdirSync(testsDir);
-  const packageJson = fs.readFileSync(packageJsonPath)
-  ;
+  let packageJson = fs.readFileSync(packageJsonPath);
+  packageJson = Buffer.from(packageJson, 'base64').toString('utf8')
+  packageJson = JSON.parse(packageJson);
 
   // filer autograding test files
   const autogradingTestFiles = testFiles.reduce((acc, file:string) => {
