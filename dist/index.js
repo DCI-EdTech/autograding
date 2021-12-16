@@ -8643,7 +8643,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     }
     console.log(JSON.stringify(result, null, 2));
     // calculate points
-    //points = 
+    points = Math.round(100 / result.numTotalTests * result.numPassedTests);
     // sort results by filename
     result.testResults.sort((a, b) => {
         const taskNameRegExp = /tasks\.(.*)\.js$/;
