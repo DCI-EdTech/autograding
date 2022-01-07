@@ -20,7 +20,14 @@ function createOctokit() {
   if (!owner) return
   if (!repo) return
 
+  // add commit method
+  octokit.commit = commit
+
   return octokit
+}
+
+async function commit(files, message) {
+  console.log(`Committing ${files.length} files with message: ${message}`)
 }
 
 export { createOctokit, owner, repo }

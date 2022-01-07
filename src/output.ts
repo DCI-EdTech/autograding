@@ -75,6 +75,9 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     branch: 'badges',
   })
 
+  // update status badges
+  await octokit.commit([1, 2], 'update results')
+
   // Fetch the workflow run
   const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
     owner,
