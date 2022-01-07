@@ -271,6 +271,8 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         sha: sha || '',
         branch: 'badges',
     });
+    // update status badges
+    await octokit.commit([1, 2], 'update results');
     // Fetch the workflow run
     const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
         owner: octokit_1.owner,
@@ -12365,9 +12367,14 @@ function createOctokit() {
         return;
     if (!repo)
         return;
+    // add commit method
+    octokit.commit = commit;
     return octokit;
 }
 exports.createOctokit = createOctokit;
+async function commit(files, message) {
+    console.log(`Committing ${files.length} files with message: ${message}`);
+}
 
 
 /***/ })
