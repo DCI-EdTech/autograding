@@ -12405,7 +12405,8 @@ function createOctokit() {
                         type: 'blob',
                         sha: blobs[index].data.sha
                     };
-                })
+                }),
+                base_tree: lastCommitSHA
             });
             console.log(`Created tree`);
             console.log(JSON.stringify(tree));
