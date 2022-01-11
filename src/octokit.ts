@@ -36,7 +36,7 @@ function createOctokit() {
       }))
 
       // create tree
-      const tree = await octokit.git.createTree({
+      const tree = await octokit.rest.git.createTree({
         owner,
         repo,
         tree: files.map((file, index) => {
@@ -50,7 +50,7 @@ function createOctokit() {
       })
 
       // create commit
-      const commit = await octokit.git.createCommit({
+      const commit = await octokit.rest.git.createCommit({
         owner,
         repo,
         message,
@@ -62,7 +62,7 @@ function createOctokit() {
       })
 
       // update head
-      await octokit.git.updateRef({
+      await octokit.rest.git.updateRef({
         owner,
         repo,
         ref: `heads/${branch}`,
