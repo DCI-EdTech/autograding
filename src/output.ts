@@ -76,7 +76,13 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
   })
 
   // update status badges
-  await octokit.commit([1, 2], 'update results')
+  await octokit.commit([{
+    path: 'file1.txt',
+    content: 'Hello World!'
+  }, {
+    path: 'file2.txt',
+    content: 'Hello World!'
+  }], 'badges', 'Update badge')
 
   // Fetch the workflow run
   const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({

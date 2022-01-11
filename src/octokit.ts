@@ -21,13 +21,61 @@ function createOctokit() {
   if (!repo) return
 
   // add commit method
+  async function commit(files, branch, message) {
+    console.log(`Committing ${files.length} files with message: ${message}`)
+    
+    try {
+      // create blobs
+      const blobs = await Promise.all(files.map(async (file) => {
+        await octokit.git.createBlob({
+          owner,
+          repo,
+          content: file.content,
+          encoding: 'utf-8'
+        })
+      }))
+
+      // create tree
+      const tree = await octokit.git.createTree({
+        owner,
+        repo,
+        tree: files.map((file, index) => {
+          return {
+            path: file.path,
+            mode: '100644',
+            type: 'blob',
+            sha: blobs[index].data.sha
+          }
+        })
+      })
+
+      // create commit
+      const commit = await octokit.git.createCommit({
+        owner,
+        repo,
+        message,
+        tree: tree.data.sha,
+        author: {
+          name: 'github-actions',
+          email: 'action@github.com'
+        },
+      })
+
+      // update head
+      await octokit.git.updateRef({
+        owner,
+        repo,
+        ref: `heads/${branch}`,
+        sha: commit.data.sha
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   octokit.commit = commit
 
   return octokit
-}
-
-async function commit(files, message) {
-  console.log(`Committing ${files.length} files with message: ${message}`)
 }
 
 export { createOctokit, owner, repo }
