@@ -12386,6 +12386,8 @@ function createOctokit() {
                     encoding: 'utf-8'
                 });
             }));
+            console.log(`Created ${blobs.length} blobs`);
+            console.log(JSON.stringify(blobs));
             // create tree
             const tree = await octokit.rest.git.createTree({
                 owner,
@@ -12399,6 +12401,8 @@ function createOctokit() {
                     };
                 })
             });
+            console.log(`Created tree`);
+            console.log(JSON.stringify(tree));
             // create commit
             const commit = await octokit.rest.git.createCommit({
                 owner,
@@ -12410,6 +12414,7 @@ function createOctokit() {
                     email: 'action@github.com'
                 },
             });
+            console.log(`Created commit ${commit.data.sha}`);
             // update head
             await octokit.rest.git.updateRef({
                 owner,
