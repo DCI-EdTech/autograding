@@ -12382,12 +12382,6 @@ function createOctokit() {
             repo,
             ref: branch,
         });
-        // get tree
-        const { data: { tree } } = await octokit.rest.git.getTree({
-            owner,
-            repo,
-            sha: lastCommitSHA,
-        });
         try {
             // create blobs
             const blobs = await Promise.all(files.map(async (file) => {
@@ -12412,7 +12406,7 @@ function createOctokit() {
                         sha: blobs[index].data.sha
                     };
                 }),
-                base_tree: tree.sha
+                base_tree: lastCommitSHA
             });
             console.log(`Created tree`);
             console.log(JSON.stringify(tree));
