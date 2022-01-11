@@ -66,6 +66,7 @@ function createOctokit() {
         repo,
         message,
         tree: tree.data.sha,
+        parents: [lastCommitSHA],
         author: {
           name: 'github-actions',
           email: 'action@github.com'
@@ -79,7 +80,8 @@ function createOctokit() {
         owner,
         repo,
         ref: `heads/${branch}`,
-        sha: commit.data.sha
+        sha: commit.data.sha,
+        force: true
       })
 
       console.log(`Updated ref`)
