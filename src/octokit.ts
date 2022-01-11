@@ -27,7 +27,7 @@ function createOctokit() {
     try {
       // create blobs
       const blobs = await Promise.all(files.map(async (file) => {
-        await octokit.git.createBlob({
+        await octokit.rest.git.createBlob({
           owner,
           repo,
           content: file.content,
