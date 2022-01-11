@@ -32,8 +32,6 @@ function createOctokit() {
         ref: branch,
       })
 
-      console.log(`Last commit tree`, lastCommitTree)
-
       // create blobs
       const blobs = await Promise.all(files.map(async (file) => {
         return await octokit.rest.git.createBlob({
