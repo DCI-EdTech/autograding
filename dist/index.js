@@ -12376,13 +12376,21 @@ function createOctokit() {
     // add commit method
     async function commit(files, branch, message) {
         console.log(`Committing ${files.length} files with message: ${message}`);
-        // get last commit of branch
-        const { data: [{ sha: lastCommitSHA }] } = await octokit.rest.repos.listCommits({
-            owner,
-            repo,
-            ref: branch,
-        });
         try {
+            // get last commit of branch
+            const { data: [{ sha: lastCommitSHA }] } = await octokit.rest.repos.listCommits({
+                owner,
+                repo,
+                ref: branch,
+            });
+            console.log(`Last commit SHA: ${lastCommitSHA}`);
+            // get tree
+            const { data: { tree: currentTree } } = await octokit.rest.git.getTree({
+                owner,
+                repo,
+                sha: lastCommitSHA
+            });
+            console.log(`Last commit tree: ${currentTree.sha}`);
             // create blobs
             const blobs = await Promise.all(files.map(async (file) => {
                 return await octokit.rest.git.createBlob({
@@ -12427,7 +12435,7 @@ function createOctokit() {
             await octokit.rest.git.updateRef({
                 owner,
                 repo,
-                ref: `refs/heads/${branch}`,
+                ref: `heads/${branch}`,
                 sha: commit.data.sha
             });
             console.log(`Updated ref`);
