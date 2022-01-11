@@ -23,6 +23,13 @@ function createOctokit() {
   // add commit method
   async function commit(files, branch, message) {
     console.log(`Committing ${files.length} files with message: ${message}`)
+
+    // get last commit of branch
+    const {data:[{sha:lastCommitSHA}]} = await octokit.rest.repos.listCommits({
+      owner,
+      repo,
+      ref: branch,
+    })
     
     try {
       // create blobs
@@ -61,6 +68,7 @@ function createOctokit() {
         repo,
         message,
         tree: tree.data.sha,
+        base_tree: lastCommitSHA,
         author: {
           name: 'github-actions',
           email: 'action@github.com'
