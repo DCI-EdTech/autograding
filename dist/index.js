@@ -12427,9 +12427,10 @@ function createOctokit() {
             await octokit.rest.git.updateRef({
                 owner,
                 repo,
-                ref: `heads/${branch}`,
+                ref: `refs/heads/${branch}`,
                 sha: commit.data.sha
             });
+            console.log(`Updated ref`);
         }
         catch (error) {
             console.log(error);
