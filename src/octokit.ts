@@ -42,9 +42,6 @@ function createOctokit() {
         })
       }))
 
-      console.log(`Created ${blobs.length} blobs`)
-      console.log(JSON.stringify(blobs))
-
       // create tree
       const tree = await octokit.rest.git.createTree({
         owner,
@@ -69,7 +66,6 @@ function createOctokit() {
         repo,
         message,
         tree: tree.data.sha,
-        parents: [lastCommitSHA],
         author: {
           name: 'github-actions',
           email: 'action@github.com'
