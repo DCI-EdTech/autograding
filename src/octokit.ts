@@ -26,13 +26,13 @@ function createOctokit() {
     
     try {
       // get ref
-      const {data:{object:{sha}}} = await octokit.rest.git.getRef({
+      const {data:{object:{sha}}, data: ref} = await octokit.rest.git.getRef({
         owner,
         repo,
         ref: `heads/${branch}`,
       })
 
-      console.log(`Got ref ${sha}`)
+      console.log(`Got ref`, ref)
 
       // get last commit of branch
       const {data:[{sha:lastCommitSHA}]} = await octokit.rest.repos.listCommits({
