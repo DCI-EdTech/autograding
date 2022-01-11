@@ -12377,6 +12377,13 @@ function createOctokit() {
     async function commit(files, branch, message) {
         console.log(`Committing ${files.length} files with message: ${message}`);
         try {
+            // get ref
+            const { data: { object: { sha } } } = await octokit.rest.git.getRef({
+                owner,
+                repo,
+                ref: `heads/${branch}`,
+            });
+            console.log(`Got ref ${sha}`);
             // get last commit of branch
             const { data: [{ sha: lastCommitSHA }] } = await octokit.rest.repos.listCommits({
                 owner,
@@ -12388,7 +12395,7 @@ function createOctokit() {
             const { data: { tree: currentTree } } = await octokit.rest.git.getTree({
                 owner,
                 repo,
-                sha: lastCommitSHA
+                sha: sha
             });
             console.log(`Last commit tree: ${currentTree.sha}`);
             // create blobs
