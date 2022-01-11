@@ -12415,7 +12415,7 @@ function createOctokit() {
                 repo,
                 message,
                 tree: tree.data.sha,
-                base_tree: lastCommitSHA,
+                parents: [lastCommitSHA],
                 author: {
                     name: 'github-actions',
                     email: 'action@github.com'
