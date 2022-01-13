@@ -38,6 +38,23 @@ async function modifyReadme() {
   })
 }
 
+function generateResult() {
+  let result = `# Results \`main\`
+
+  You have completed **5**/**10** tasks.
+  
+  ### 1. Lorem ipsum dolor, sit amet consectetur bat.
+
+|                 Status                  | Check                                                                                     |
+| :-------------------------------------: | :--------------------------------------------------------------------------------------- |
+| ![Test status](assets/icon_success.svg) | Placeat quam dolorum impedit voluptatum delectus, explicabo accusamus sapiente mollitia! |
+| ![Test status](assets/icon_failure.svg) | **Molestias aliquid dolore ab dolorum cumque repudiandae vero? Voluptate, ex.**          |
+| ![Test status](assets/icon_failure.svg) | **Consectetur, dicta esse soluta recusandae numquam animi iste aperiam rem!**            |
+  `
+
+  return result
+}
+
 async function addAutogradingInfo(fullReadme) {
   const branch = process.env['GITHUB_REF_NAME']
   const repoURL = `${process.env['GITHUB_SERVER_URL']}/${owner}/${repo}`

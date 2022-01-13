@@ -21,9 +21,7 @@ function createOctokit() {
   if (!repo) return
 
   // add commit method
-  async function commit(files, branch, message) {
-    console.log(`Committing ${files.length} files with message: ${message}`)
-    
+  async function commit(files, branch, message) {    
     try {
       // get last commit of branch
       const {data:[{sha:lastCommitSHA, commit: {tree: {sha: lastCommitTreeSHA}}}], data} = await octokit.rest.repos.listCommits({
@@ -57,9 +55,6 @@ function createOctokit() {
         base_tree: lastCommitTreeSHA
       })
 
-      console.log(`Created tree`)
-      console.log(JSON.stringify(tree))
-
       // create commit
       const commit = await octokit.rest.git.createCommit({
         owner,
@@ -73,8 +68,6 @@ function createOctokit() {
         },
       })
 
-      console.log(`Created commit ${commit.data.sha}`)
-
       // update head
       await octokit.rest.git.updateRef({
         owner,
@@ -83,8 +76,6 @@ function createOctokit() {
         sha: commit.data.sha,
         force: true
       })
-
-      console.log(`Updated ref`)
     } catch (error) {
       console.log(error)
     }
