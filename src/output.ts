@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { createOctokit, owner, repo } from './octokit'
 import createBadge from './badge'
+import { successIcon, failureIcon } from './statusIcons'
 
 export const setCheckRunOutput = async (points:number, availablePoints:number, results:Array): Promise<void> => {
   // If we have nothing to output, then bail
@@ -15,23 +16,9 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
   if (Number.isNaN(runId)) return
 
   // Generate badge
-  const badge = createBadge(results)
+  const badge = createBadge(results.testResults)
 
   const badgePath = `.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg`
-  /*`<svg width="200.6" height="40" viewBox="0 0 1003 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points ${points}/${availablePoints}">
-    <title>Points ${points}/${availablePoints}</title>
-    <g>
-      <rect fill="#2f496e" width="433" height="200"/>
-      <rect fill="#2988bc" x="433" width="570" height="200"/>
-    </g>
-    <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
-      <text x="60" y="148" textLength="333" fill="#000" opacity="0.1">Points</text>
-      <text x="50" y="138" textLength="333">Points</text>
-      <text x="488" y="148" textLength="470" fill="#000" opacity="0.1">${points}/${availablePoints}</text>
-      <text x="478" y="138" textLength="470">${points}/${availablePoints}</text>
-    </g>
-    
-  </svg>`*/
 
   // get last commit of main
   try {
@@ -74,6 +61,18 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     sha: sha || '',
     branch: 'badges',
   })
+
+  // generate status badges
+  const statusBadges = results.testResults.reduce((acc, testResult) => {
+    const badges = testResult.map((result, index) => {
+      return {path: `status${acc.length + index}.svg`, content: result.status === 'passed' ? successIcon : failureIcon}
+    });
+    acc.push(...badges);
+    return acc;
+  }, [])
+
+  console.log('GENERATED', statusBadges)
+
 
   // update status badges
   await octokit.commit([{

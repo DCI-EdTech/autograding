@@ -202,6 +202,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const octokit_1 = __webpack_require__(994);
 const badge_1 = __importDefault(__webpack_require__(952));
+const statusIcons_1 = __webpack_require__(529);
 exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // If we have nothing to output, then bail
     if (typeof points === undefined)
@@ -215,22 +216,8 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     if (Number.isNaN(runId))
         return;
     // Generate badge
-    const badge = badge_1.default(results);
+    const badge = badge_1.default(results.testResults);
     const badgePath = `.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg`;
-    /*`<svg width="200.6" height="40" viewBox="0 0 1003 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Points ${points}/${availablePoints}">
-      <title>Points ${points}/${availablePoints}</title>
-      <g>
-        <rect fill="#2f496e" width="433" height="200"/>
-        <rect fill="#2988bc" x="433" width="570" height="200"/>
-      </g>
-      <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
-        <text x="60" y="148" textLength="333" fill="#000" opacity="0.1">Points</text>
-        <text x="50" y="138" textLength="333">Points</text>
-        <text x="488" y="148" textLength="470" fill="#000" opacity="0.1">${points}/${availablePoints}</text>
-        <text x="478" y="138" textLength="470">${points}/${availablePoints}</text>
-      </g>
-      
-    </svg>`*/
     // get last commit of main
     try {
         const { data: [{ sha: lastCommitSHA }] } = await octokit.rest.repos.listCommits({
@@ -271,6 +258,15 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         sha: sha || '',
         branch: 'badges',
     });
+    // generate status badges
+    const statusBadges = results.testResults.reduce((acc, testResult) => {
+        const badges = testResult.map((result, index) => {
+            return { path: `status${acc.length + index}.svg`, content: result.status === 'passed' ? statusIcons_1.successIcon : statusIcons_1.failureIcon };
+        });
+        acc.push(...badges);
+        return acc;
+    }, []);
+    console.log('GENERATED', statusBadges);
     // update status badges
     await octokit.commit([{
             path: 'file1.txt',
@@ -5598,6 +5594,40 @@ module.exports.Collection = Hook.Collection
 
 /***/ }),
 
+/***/ 529:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const successIcon = `<?xml version="1.0" encoding="UTF-8"?>
+  <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>icon_success 2</title>
+      <g id="icon_success" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <rect id="Spacer" fill-opacity="0" fill="#D8D8D8" x="0" y="0" width="24" height="24"></rect>
+          <g id="Selection" transform="translate(5.000000, 8.000000)" stroke="#00E0A1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+              <line x1="0" y1="9.83706583" x2="5.13577848" y2="14.9728443" id="Line"></line>
+              <line x1="14.6158961" y1="0" x2="5.13577848" y2="14.9728443" id="Line"></line>
+          </g>
+      </g>
+  </svg>`;
+exports.successIcon = successIcon;
+const failureIcon = `<?xml version="1.0" encoding="UTF-8"?>
+  <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>icon_failure 2</title>
+      <g id="icon_failure" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <rect id="Spacer" fill-opacity="0" fill="#D8D8D8" x="0" y="0" width="24" height="24"></rect>
+          <g id="Failure" transform="translate(4.000000, 8.000000)" stroke="#EF065B" stroke-linecap="round" stroke-width="2">
+              <line x1="1" y1="1" x2="15" y2="15" id="Line"></line>
+              <line x1="15" y1="1" x2="1" y2="15" id="Line"></line>
+          </g>
+      </g>
+  </svg>`;
+exports.failureIcon = failureIcon;
+
+
+/***/ }),
+
 /***/ 539:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -8664,6 +8694,21 @@ exports.runAll = async (cwd, packageJsonPath) => {
         }
         return 0;
     });
+    // group results
+    result.testResults = result.testResults.reduce((acc, item) => {
+        acc.push(...item.assertionResults);
+        return acc;
+    }, []).reduce((acc, item) => {
+        let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0]);
+        if (arr) {
+            arr.push(item);
+        }
+        else {
+            arr = [item];
+            acc.push(arr);
+        }
+        return acc;
+    }, []);
     // Restart command processing
     log('');
     log(`::${token}::`);
@@ -10651,6 +10696,21 @@ async function modifyReadme() {
         sha,
     });
 }
+function generateResult() {
+    let result = `# Results \`main\`
+
+  You have completed **5**/**10** tasks.
+  
+  ### 1. Lorem ipsum dolor, sit amet consectetur bat.
+
+|                 Status                  | Check                                                                                     |
+| :-------------------------------------: | :--------------------------------------------------------------------------------------- |
+| ![Test status](assets/icon_success.svg) | Placeat quam dolorum impedit voluptatum delectus, explicabo accusamus sapiente mollitia! |
+| ![Test status](assets/icon_failure.svg) | **Molestias aliquid dolore ab dolorum cumque repudiandae vero? Voluptate, ex.**          |
+| ![Test status](assets/icon_failure.svg) | **Consectetur, dicta esse soluta recusandae numquam animi iste aperiam rem!**            |
+  `;
+    return result;
+}
 async function addAutogradingInfo(fullReadme) {
     const branch = process.env['GITHUB_REF_NAME'];
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
@@ -12085,24 +12145,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const svg_builder_1 = __importDefault(__webpack_require__(334));
 const helpers_1 = __webpack_require__(948);
-function badge(results) {
+function badge(testResults) {
     const lineHeight = 25;
     let lines = 0;
     const draw = svg_builder_1.default.newInstance();
-    let testResults = results.testResults.reduce((acc, item) => {
-        acc.push(...item.assertionResults);
-        return acc;
-    }, []).reduce((acc, item) => {
-        let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0]);
-        if (arr) {
-            arr.push(item);
-        }
-        else {
-            arr = [item];
-            acc.push(arr);
-        }
-        return acc;
-    }, []);
     testResults.forEach(tests => {
         lines++;
         draw
@@ -12375,7 +12421,6 @@ function createOctokit() {
         return;
     // add commit method
     async function commit(files, branch, message) {
-        console.log(`Committing ${files.length} files with message: ${message}`);
         try {
             // get last commit of branch
             const { data: [{ sha: lastCommitSHA, commit: { tree: { sha: lastCommitTreeSHA } } }], data } = await octokit.rest.repos.listCommits({
@@ -12406,8 +12451,6 @@ function createOctokit() {
                 }),
                 base_tree: lastCommitTreeSHA
             });
-            console.log(`Created tree`);
-            console.log(JSON.stringify(tree));
             // create commit
             const commit = await octokit.rest.git.createCommit({
                 owner,
@@ -12420,7 +12463,6 @@ function createOctokit() {
                     email: 'action@github.com'
                 },
             });
-            console.log(`Created commit ${commit.data.sha}`);
             // update head
             await octokit.rest.git.updateRef({
                 owner,
@@ -12429,7 +12471,6 @@ function createOctokit() {
                 sha: commit.data.sha,
                 force: true
             });
-            console.log(`Updated ref`);
         }
         catch (error) {
             console.log(error);

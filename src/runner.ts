@@ -237,6 +237,21 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     }
     return 0
   })
+
+  // group results
+  result.testResults = result.testResults.reduce((acc, item) => {
+    acc.push(...item.assertionResults)
+    return acc
+  }, []).reduce((acc, item) => {
+    let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0])
+    if(arr) {
+      arr.push(item)
+    } else {
+      arr = [item]
+      acc.push(arr)
+    }
+    return acc
+  }, [])
   
   // Restart command processing
   log('')

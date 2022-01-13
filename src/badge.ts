@@ -2,24 +2,10 @@
 import svg from 'svg-builder'
 import { xmlSecure } from './lib/helpers'
 
-export default function badge(results) {
+export default function badge(testResults) {
   const lineHeight = 25
   let lines = 0
   const draw = svg.newInstance()
-
-  let testResults = results.testResults.reduce((acc, item) => {
-    acc.push(...item.assertionResults)
-    return acc
-  }, []).reduce((acc, item) => {
-    let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0])
-    if(arr) {
-      arr.push(item)
-    } else {
-      arr = [item]
-      acc.push(arr)
-    }
-    return acc
-  }, [])
 
   testResults.forEach(tests => {
     lines++
