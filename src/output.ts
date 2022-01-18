@@ -15,10 +15,12 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
   const runId = parseInt(process.env['GITHUB_RUN_ID'] || '')
   if (Number.isNaN(runId)) return
 
+  const currentBranch = process.env['GITHUB_REF_NAME']
+
   // Generate badge
   const badge = createBadge(results.testResults)
 
-  const badgePath = `.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg`
+  const badgePath = `.github/badges/${currentBranch}/badge.svg`
 
   // get last commit of main
   try {
@@ -65,7 +67,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
   // generate status badges
   const statusBadges = results.testResults.reduce((acc, testResult) => {
     const badges = testResult.map((result, index) => {
-      return {path: `status${acc.length + index}.svg`, content: result.status === 'passed' ? successIcon : failureIcon}
+      return {path: `${currentBranch}/status${acc.length + index}.svg`, content: result.status === 'passed' ? successIcon : failureIcon}
     });
     acc.push(...badges);
     return acc;

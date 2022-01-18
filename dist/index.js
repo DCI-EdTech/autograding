@@ -215,9 +215,10 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     const runId = parseInt(process.env['GITHUB_RUN_ID'] || '');
     if (Number.isNaN(runId))
         return;
+    const currentBranch = process.env['GITHUB_REF_NAME'];
     // Generate badge
     const badge = badge_1.default(results.testResults);
-    const badgePath = `.github/badges/${process.env['GITHUB_REF_NAME']}/badge.svg`;
+    const badgePath = `.github/badges/${currentBranch}/badge.svg`;
     // get last commit of main
     try {
         const { data: [{ sha: lastCommitSHA }] } = await octokit.rest.repos.listCommits({
@@ -261,7 +262,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // generate status badges
     const statusBadges = results.testResults.reduce((acc, testResult) => {
         const badges = testResult.map((result, index) => {
-            return { path: `status${acc.length + index}.svg`, content: result.status === 'passed' ? statusIcons_1.successIcon : statusIcons_1.failureIcon };
+            return { path: `${currentBranch}/status${acc.length + index}.svg`, content: result.status === 'passed' ? statusIcons_1.successIcon : statusIcons_1.failureIcon };
         });
         acc.push(...badges);
         return acc;
