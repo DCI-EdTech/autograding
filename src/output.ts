@@ -73,9 +73,6 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     return acc;
   }, [])
 
-  console.log('GENERATED', statusBadges)
-
-
   // update status badges
   await octokit.commit(statusBadges, 'badges', 'Update status badges')
 

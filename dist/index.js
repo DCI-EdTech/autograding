@@ -267,7 +267,6 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         acc.push(...badges);
         return acc;
     }, []);
-    console.log('GENERATED', statusBadges);
     // update status badges
     await octokit.commit(statusBadges, 'badges', 'Update status badges');
     // Fetch the workflow run
