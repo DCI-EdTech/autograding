@@ -12464,7 +12464,6 @@ function createOctokit() {
                 repo,
                 ref: `heads/${branch}`,
                 sha: commit.data.sha,
-                force: true
             });
         }
         catch (error) {
