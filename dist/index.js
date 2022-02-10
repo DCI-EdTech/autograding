@@ -262,7 +262,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // generate status badges
     const statusBadges = results.testResults.reduce((acc, testResult) => {
         const badges = testResult.map((result, index) => {
-            return { path: `${currentBranch}/status${acc.length + index}.svg`, content: result.status === 'passed' ? statusIcons_1.successIcon : statusIcons_1.failureIcon };
+            return { path: `.github/badges/${currentBranch}/status${acc.length + index}.svg`, content: result.status === 'passed' ? statusIcons_1.successIcon : statusIcons_1.failureIcon };
         });
         acc.push(...badges);
         return acc;
