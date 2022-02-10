@@ -24,15 +24,11 @@ function createOctokit() {
   async function commit(files, branch, message) {    
     try {
       // get last commit of branch
-      const {data: lastCommit, data:[{sha:lastCommitSHA, commit: {tree: {sha: lastCommitTreeSHA}}}], data} = await octokit.rest.repos.listCommits({
+      const {data:[{sha:lastCommitSHA, commit: {tree: {sha: lastCommitTreeSHA}}}], data} = await octokit.rest.repos.listCommits({
         owner,
         repo,
         sha: branch,
       })
-
-      console.log('last commit of', branch, JSON.stringify(lastCommit))
-
-      console.log('tree SHA from last commit', lastCommitTreeSHA)
 
       // get tree
       const {data: treeData} = await octokit.rest.git.getTree({
@@ -40,8 +36,6 @@ function createOctokit() {
         repo,
         tree_sha: lastCommitTreeSHA
       })
-
-      console.log('tree data', treeData)
 
       // create blobs
       const blobs = await Promise.all(files.map(async (file) => {
