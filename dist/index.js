@@ -10690,7 +10690,7 @@ async function modifyReadme() {
         sha,
     });
 }
-function generateResult() {
+function generateResult(branch) {
     let result = `# Results \`main\`
 
   You have completed **5**/**10** tasks.
@@ -10699,9 +10699,9 @@ function generateResult() {
 
 |                 Status                  | Check                                                                                    |
 | :-------------------------------------: | :--------------------------------------------------------------------------------------- |
-| ![Test status](assets/icon_success.svg) | Placeat quam dolorum impedit voluptatum delectus, explicabo accusamus sapiente mollitia! |
-| ![Test status](assets/icon_failure.svg) | **Molestias aliquid dolore ab dolorum cumque repudiandae vero? Voluptate, ex.**          |
-| ![Test status](assets/icon_failure.svg) | **Consectetur, dicta esse soluta recusandae numquam animi iste aperiam rem!**            |
+| ![Test status](../../blob/badges/.github/badges/${branch}/status0.svg) | Placeat quam dolorum impedit voluptatum delectus, explicabo accusamus sapiente mollitia! |
+| ![Test status](../../blob/badges/.github/badges/${branch}/status1.svg) | **Molestias aliquid dolore ab dolorum cumque repudiandae vero? Voluptate, ex.**          |
+| ![Test status](../../blob/badges/.github/badges/${branch}/status2.svg) | **Consectetur, dicta esse soluta recusandae numquam animi iste aperiam rem!**            |
   `;
     return result;
 }
@@ -10711,7 +10711,7 @@ async function addAutogradingInfo(fullReadme) {
     const readmeInfo = `## Results
   [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
 
-  ${generateResult()}
+  ${generateResult(branch)}
   
   [Results Details](${repoURL}/actions)
   
