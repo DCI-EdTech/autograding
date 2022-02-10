@@ -45,7 +45,7 @@ function generateResult() {
   
   ### 1. Lorem ipsum dolor, sit amet consectetur bat.
 
-|                 Status                  | Check                                                                                     |
+|                 Status                  | Check                                                                                    |
 | :-------------------------------------: | :--------------------------------------------------------------------------------------- |
 | ![Test status](assets/icon_success.svg) | Placeat quam dolorum impedit voluptatum delectus, explicabo accusamus sapiente mollitia! |
 | ![Test status](assets/icon_failure.svg) | **Molestias aliquid dolore ab dolorum cumque repudiandae vero? Voluptate, ex.**          |
@@ -60,6 +60,8 @@ async function addAutogradingInfo(fullReadme) {
   const repoURL = `${process.env['GITHUB_SERVER_URL']}/${owner}/${repo}`
   const readmeInfo = `## Results
   [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
+
+  ${generateResult()}
   
   [Results Details](${repoURL}/actions)
   
