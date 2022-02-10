@@ -24,15 +24,13 @@ function createOctokit() {
   async function commit(files, branch, message) {    
     try {
       // get last commit of branch
-      const {data: commitData, data: lastCommit, data:[{sha:lastCommitSHA, commit: {tree: {sha: lastCommitTreeSHA}}}], data} = await octokit.rest.repos.listCommits({
+      const {data: lastCommit, data:[{sha:lastCommitSHA, commit: {tree: {sha: lastCommitTreeSHA}}}], data} = await octokit.rest.repos.listCommits({
         owner,
         repo,
-        ref: branch,
+        sha: branch,
       })
 
-      console.log('last commit of', branch, lastCommit)
-
-      console.log('commit data', JSON.stringify(commitData))
+      console.log('last commit of', branch, JSON.stringify(lastCommit))
 
       console.log('tree SHA from last commit', lastCommitTreeSHA)
 
