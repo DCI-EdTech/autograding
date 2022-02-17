@@ -10680,43 +10680,43 @@ async function modifyReadme(results) {
 function generateResult(results) {
     return `# Results
 
-    ${results.testResults.reduce((acc, testResult) => {
+${results.testResults.reduce((acc, testResult) => {
         acc += `
-      ### ${testResult[0].ancestorTitles[0]}
+  ### ${testResult[0].ancestorTitles[0]}
 
-      |                 Status                  | Check                                                                                    |
-      | :-------------------------------------: | :--------------------------------------------------------------------------------------- |
-      `;
+  |                 Status                  | Check                                                                                    |
+  | :-------------------------------------: | :--------------------------------------------------------------------------------------- |
+  `;
         const lines = testResult.map((result) => {
-            return `| ![Status](../../blob/badges/${result.statusBadgePath}) | ${result.title} |`;
+            return `| ![Status](../../blob/badges/${result.statusBadgePath}) | ${result.title} |\n`;
         });
         return acc.concat(...lines);
     }, '')}
-  `;
+`;
 }
 async function addAutogradingInfo(fullReadme, results) {
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
     const readmeInfo = `## Results
-  [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
+[![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
 
-  ${generateResult(results)}
-  
-  [Results Details](${repoURL}/actions)
-  
-  ### Debugging your code
-  > [reading the test outputs](https://github.com/DCI-EdTech/autograding-setup/wiki/Reading-test-outputs)
-  
-  There are two ways to see why tasks might not be completed:
-  #### 1. Running tests locally
-  - Run \`npm install\`
-  - Run \`npm test\` in the terminal. You will see where your solution differs from the expected result.
-  
-  #### 2. Inspecting the test output on GitHub
-  - Go to the [Actions tab of your exercise repo](${repoURL}/actions)
-  - You will see a list of the test runs. Click on the topmost one.
-  - Click on 'Autograding'
-  - Expand the item 'Run DCI-EdTech/autograding-action@main'
-  - Here you see all outputs from the test run`;
+${generateResult(results)}
+
+[Results Details](${repoURL}/actions)
+
+### Debugging your code
+> [reading the test outputs](https://github.com/DCI-EdTech/autograding-setup/wiki/Reading-test-outputs)
+
+There are two ways to see why tasks might not be completed:
+#### 1. Running tests locally
+- Run \`npm install\`
+- Run \`npm test\` in the terminal. You will see where your solution differs from the expected result.
+
+#### 2. Inspecting the test output on GitHub
+- Go to the [Actions tab of your exercise repo](${repoURL}/actions)
+- You will see a list of the test runs. Click on the topmost one.
+- Click on 'Autograding'
+- Expand the item 'Run DCI-EdTech/autograding-action@main'
+- Here you see all outputs from the test run`;
     const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
     const infoRE = new RegExp(`[\n\r]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
     // remove old info
