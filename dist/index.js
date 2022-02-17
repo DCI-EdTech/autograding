@@ -10681,7 +10681,7 @@ function generateResult(results) {
       |                 Status                  | Check                                                                                    |
       | :-------------------------------------: | :--------------------------------------------------------------------------------------- |
       `;
-        const badges = testResult.map((result) => {
+        const lines = testResult.map((result) => {
             return `| ![Status](../../blob/badges/${result.statusBadgePath}) | ${result.title} |`;
         });
         return acc.concat(...lines);
