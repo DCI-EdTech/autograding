@@ -39,7 +39,7 @@ async function modifyReadme() {
 }
 
 function generateResult(branch) {
-  let result = `# Results \`main\`
+  let result = `# Results
 
   You have completed **5**/**10** tasks.
   

@@ -3,7 +3,6 @@
 import * as core from '@actions/core'
 import path from 'path'
 import {Test, runAll} from './runner'
-import modifyReadme from './modifyReadme'
 import { createOctokit, owner, repo } from './octokit';
 
 const run = async (): Promise<void> => {
@@ -12,12 +11,9 @@ const run = async (): Promise<void> => {
     if (!cwd) {
       throw new Error('No GITHUB_WORKSPACE')
     }
-    
-    await modifyReadme()
 
-    // make test request to see if we can confirm that it's from github ci
-    
     await runAll(cwd, path.resolve(cwd, 'package.json'))
+    
   } catch (error) {
     // If there is any error we'll fail the action with the error message
     let errorMessage = "Failed";

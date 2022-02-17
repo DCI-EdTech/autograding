@@ -8500,6 +8500,8 @@ const output_1 = __webpack_require__(52);
 const os = __importStar(__webpack_require__(87));
 const chalk_1 = __importDefault(__webpack_require__(843));
 const fs_1 = __importDefault(__webpack_require__(747));
+const modifyReadme_1 = __importDefault(__webpack_require__(905));
+const updateBadges_1 = __importDefault(__webpack_require__(860));
 const color = new chalk_1.default.Instance({ level: 1 });
 class TestError extends Error {
     constructor(message) {
@@ -8693,6 +8695,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
         acc.push(...item.assertionResults);
         return acc;
     }, []).reduce((acc, item) => {
+        console.log("item", item);
         let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0]);
         if (arr) {
             arr.push(item);
@@ -8719,6 +8722,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     // Set the number of points
     const text = `Points ${points}/${availablePoints}`;
     log(color.bold.bgCyan.black(text));
+    await Promise.all(modifyReadme_1.default(result), updateBadges_1.default(result));
     core.setOutput('Points', `${points}/${availablePoints}`);
     await output_1.setCheckRunOutput(points, availablePoints, result);
 };
@@ -10023,6 +10027,19 @@ module.exports = exports.default;
 
 /***/ }),
 
+/***/ 860:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+async function updateBadges() {
+}
+exports.default = updateBadges;
+
+
+/***/ }),
+
 /***/ 866:
 /***/ (function(module) {
 
@@ -10076,15 +10093,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const path_1 = __importDefault(__webpack_require__(622));
 const runner_1 = __webpack_require__(835);
-const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const run = async () => {
     try {
         const cwd = process.env['GITHUB_WORKSPACE'];
         if (!cwd) {
             throw new Error('No GITHUB_WORKSPACE');
         }
-        await modifyReadme_1.default();
-        // make test request to see if we can confirm that it's from github ci
         await runner_1.runAll(cwd, path_1.default.resolve(cwd, 'package.json'));
     }
     catch (error) {
@@ -10691,7 +10705,7 @@ async function modifyReadme() {
     });
 }
 function generateResult(branch) {
-    let result = `# Results \`main\`
+    let result = `# Results
 
   You have completed **5**/**10** tasks.
   

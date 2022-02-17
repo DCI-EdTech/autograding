@@ -8,6 +8,8 @@ import * as os from 'os'
 import chalk from 'chalk'
 import fs from 'fs'
 import path from 'path'
+import modifyReadme from './modifyReadme'
+import updateBadges from './updateBadges'
 
 const color = new chalk.Instance({level: 1})
 
@@ -243,6 +245,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     acc.push(...item.assertionResults)
     return acc
   }, []).reduce((acc, item) => {
+    console.log("item", item)
     let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0])
     if(arr) {
       arr.push(item)
@@ -270,6 +273,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   // Set the number of points
   const text = `Points ${points}/${availablePoints}`
   log(color.bold.bgCyan.black(text))
+  await Promise.all(modifyReadme(result), updateBadges(result))
   core.setOutput('Points', `${points}/${availablePoints}`)
   await setCheckRunOutput(points, availablePoints, result)
 }
