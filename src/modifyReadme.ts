@@ -10,33 +10,38 @@ async function modifyReadme(results) {
   const octokit = createOctokit()
   if (!octokit) return
 
-  // get readme
-  const { data: { sha, content} } = await octokit.rest.repos.getContent({
-    owner,
-    repo,
-    path: 'README.md',
-    ref: process.env['GITHUB_REF_NAME'],
-  })
+  try {
+    // get readme
+    const { data: { sha, content} } = await octokit.rest.repos.getContent({
+      owner,
+      repo,
+      path: 'README.md',
+      ref: process.env['GITHUB_REF_NAME'],
+    })
 
-  const readme = Buffer.from(content, 'base64').toString('utf8');
+    const readme = Buffer.from(content, 'base64').toString('utf8');
 
-  // add autograding info
-  const newReadme = readme //await addAutogradingInfo(readme, results)
+    // add autograding info
+    const newReadme = await addAutogradingInfo(readme, results)
 
-  // don't update if nothing changed
-  if(newReadme === readme)
-    return
+    // don't update if nothing changed
+    if(newReadme === readme)
+      return
 
-  // update readme
-  await octokit.rest.repos.createOrUpdateFileContents({
-    owner,
-    repo,
-    path: 'README.md',
-    message: 'update readme',
-    content: Buffer.from(newReadme).toString('base64'),
-    branch: process.env['GITHUB_REF_NAME'],
-    sha,
-  })
+    // update readme
+    await octokit.rest.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path: 'README.md',
+      message: 'update readme',
+      content: Buffer.from(newReadme).toString('base64'),
+      branch: process.env['GITHUB_REF_NAME'],
+      sha,
+    })
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
 }
 
 function generateResult(results) {
