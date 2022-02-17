@@ -195,14 +195,9 @@ function onceStrict (fn) {
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const octokit_1 = __webpack_require__(994);
-const badge_1 = __importDefault(__webpack_require__(952));
-const statusIcons_1 = __webpack_require__(529);
 exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // If we have nothing to output, then bail
     if (typeof points === undefined)
@@ -215,60 +210,6 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     const runId = parseInt(process.env['GITHUB_RUN_ID'] || '');
     if (Number.isNaN(runId))
         return;
-    const currentBranch = process.env['GITHUB_REF_NAME'];
-    // Generate badge
-    const badge = badge_1.default(results.testResults);
-    const badgePath = `.github/badges/${currentBranch}/badge.svg`;
-    // get last commit of main
-    try {
-        const { data: [{ sha: lastCommitSHA }] } = await octokit.rest.repos.listCommits({
-            owner: octokit_1.owner,
-            repo: octokit_1.repo,
-        });
-        // create badges brach
-        await octokit.rest.git.createRef({
-            owner: octokit_1.owner,
-            repo: octokit_1.repo,
-            ref: `refs/heads/badges`,
-            sha: lastCommitSHA,
-        });
-    }
-    catch (error) {
-        // branch already exists
-    }
-    // Get badge sha
-    let sha;
-    try {
-        ({ data: { sha } } = await octokit.rest.repos.getContent({
-            owner: octokit_1.owner,
-            repo: octokit_1.repo,
-            path: badgePath,
-            ref: "badges"
-        }));
-    }
-    catch (error) {
-        // branch doesn't exist yet
-    }
-    // upload badge to repository
-    await octokit.rest.repos.createOrUpdateFileContents({
-        owner: octokit_1.owner,
-        repo: octokit_1.repo,
-        path: badgePath,
-        message: 'Update badge',
-        content: Buffer.from(badge).toString('base64'),
-        sha: sha || '',
-        branch: 'badges',
-    });
-    // generate status badges
-    const statusBadges = results.testResults.reduce((acc, testResult) => {
-        const badges = testResult.map((result, index) => {
-            return { path: `.github/badges/${currentBranch}/status${acc.length + index}.svg`, content: result.status === 'passed' ? statusIcons_1.successIcon : statusIcons_1.failureIcon };
-        });
-        acc.push(...badges);
-        return acc;
-    }, []);
-    // update status badges
-    await octokit.commit(statusBadges, 'badges', 'Update status badges');
     // Fetch the workflow run
     const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
         owner: octokit_1.owner,
@@ -8697,7 +8638,6 @@ exports.runAll = async (cwd, packageJsonPath) => {
         return acc;
     }, []).reduce((acc, item, index) => {
         item.statusBadgePath = `.github/badges/${currentBranch}/status${index}.svg`;
-        console.log("item", item);
         let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0]);
         if (arr) {
             arr.push(item);
@@ -10030,12 +9970,36 @@ module.exports = exports.default;
 /***/ }),
 
 /***/ 860:
-/***/ (function(__unusedmodule, exports) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-async function updateBadges() {
+// @ts-nocheck
+const octokit_1 = __webpack_require__(994);
+const badge_1 = __importDefault(__webpack_require__(952));
+const statusIcons_1 = __webpack_require__(529);
+async function updateBadges(results) {
+    const octokit = octokit_1.createOctokit();
+    if (!octokit)
+        return;
+    const currentBranch = process.env['GITHUB_REF_NAME'];
+    const badgePath = `.github/badges/${currentBranch}/badge.svg`;
+    // generate status badges
+    const badges = results.testResults.reduce((acc, testResult) => {
+        const statusBadges = testResult.map((result, index) => {
+            return { path: result.statusBadgePath, content: result.status === 'passed' ? statusIcons_1.successIcon : statusIcons_1.failureIcon };
+        });
+        acc.push(...statusBadges);
+        return acc;
+    }, []);
+    // add main badge
+    badges.push({ path: badgePath, content: badge_1.default(results.testResults) });
+    // update status badges
+    await octokit.commit(badges, 'badges', 'Update badges');
 }
 exports.default = updateBadges;
 
@@ -10677,8 +10641,9 @@ exports.withCustomRequest = withCustomRequest;
 Object.defineProperty(exports, "__esModule", { value: true });
 const octokit_1 = __webpack_require__(994);
 const helpers_1 = __webpack_require__(948);
+const branch = process.env['GITHUB_REF_NAME'];
 const readmeInfoPath = `./AUTOGRADING.md`;
-async function modifyReadme() {
+async function modifyReadme(results) {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
         return;
@@ -10706,28 +10671,30 @@ async function modifyReadme() {
         sha,
     });
 }
-function generateResult(branch) {
+function generateResult() {
     let result = `# Results
 
-  You have completed **5**/**10** tasks.
-  
-  ### 1. Lorem ipsum dolor, sit amet consectetur bat.
+    ${results.testResults.reduce((acc, testResult) => {
+        acc += `
+      ### ${testResult[0].ancestorTitles[0]}
 
-|                 Status                  | Check                                                                                    |
-| :-------------------------------------: | :--------------------------------------------------------------------------------------- |
-| ![Test status](../../blob/badges/.github/badges/${branch}/status0.svg) | Placeat quam dolorum impedit voluptatum delectus, explicabo accusamus sapiente mollitia! |
-| ![Test status](../../blob/badges/.github/badges/${branch}/status1.svg) | **Molestias aliquid dolore ab dolorum cumque repudiandae vero? Voluptate, ex.**          |
-| ![Test status](../../blob/badges/.github/badges/${branch}/status2.svg) | **Consectetur, dicta esse soluta recusandae numquam animi iste aperiam rem!**            |
+      |                 Status                  | Check                                                                                    |
+      | :-------------------------------------: | :--------------------------------------------------------------------------------------- |
+      `;
+        const badges = testResult.map((result) => {
+            return `| ![Status](../../blob/badges/${result.statusBadgePath}) | ${result.title} |`;
+        });
+        return acc.concat(...lines);
+    }, '')}
   `;
     return result;
 }
 async function addAutogradingInfo(fullReadme) {
-    const branch = process.env['GITHUB_REF_NAME'];
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
     const readmeInfo = `## Results
   [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
 
-  ${generateResult(branch)}
+  ${generateResult()}
   
   [Results Details](${repoURL}/actions)
   
@@ -12505,6 +12472,23 @@ exports.createOctokit = createOctokit;
 /******/ function(__webpack_require__) { // webpackRuntimeModules
 /******/ 	"use strict";
 /******/ 
+/******/ 	/* webpack/runtime/node module decorator */
+/******/ 	!function() {
+/******/ 		__webpack_require__.nmd = function(module) {
+/******/ 			module.paths = [];
+/******/ 			if (!module.children) module.children = [];
+/******/ 			Object.defineProperty(module, 'loaded', {
+/******/ 				enumerable: true,
+/******/ 				get: function() { return module.l; }
+/******/ 			});
+/******/ 			Object.defineProperty(module, 'id', {
+/******/ 				enumerable: true,
+/******/ 				get: function() { return module.i; }
+/******/ 			});
+/******/ 			return module;
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	!function() {
 /******/ 		// define __esModule on exports
@@ -12524,23 +12508,6 @@ exports.createOctokit = createOctokit;
 /******/ 			if(!hasOwnProperty.call(exports, name)) {
 /******/ 				Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 			}
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/node module decorator */
-/******/ 	!function() {
-/******/ 		__webpack_require__.nmd = function(module) {
-/******/ 			module.paths = [];
-/******/ 			if (!module.children) module.children = [];
-/******/ 			Object.defineProperty(module, 'loaded', {
-/******/ 				enumerable: true,
-/******/ 				get: function() { return module.l; }
-/******/ 			});
-/******/ 			Object.defineProperty(module, 'id', {
-/******/ 				enumerable: true,
-/******/ 				get: function() { return module.i; }
-/******/ 			});
-/******/ 			return module;
 /******/ 		};
 /******/ 	}();
 /******/ 	

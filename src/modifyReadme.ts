@@ -3,9 +3,10 @@ import fs from 'fs';
 import { createOctokit, owner, repo } from './octokit';
 import { escapeRegExp } from './lib/helpers';
 
+const branch = process.env['GITHUB_REF_NAME']
 const readmeInfoPath = `./AUTOGRADING.md`;
 
-async function modifyReadme() {
+async function modifyReadme(results) {
   const octokit = createOctokit()
   if (!octokit) return
 
@@ -38,30 +39,32 @@ async function modifyReadme() {
   })
 }
 
-function generateResult(branch) {
+function generateResult() {
   let result = `# Results
 
-  You have completed **5**/**10** tasks.
-  
-  ### 1. Lorem ipsum dolor, sit amet consectetur bat.
+    ${results.testResults.reduce((acc, testResult) => {
+      acc += `
+      ### ${testResult[0].ancestorTitles[0]}
 
-|                 Status                  | Check                                                                                    |
-| :-------------------------------------: | :--------------------------------------------------------------------------------------- |
-| ![Test status](../../blob/badges/.github/badges/${branch}/status0.svg) | Placeat quam dolorum impedit voluptatum delectus, explicabo accusamus sapiente mollitia! |
-| ![Test status](../../blob/badges/.github/badges/${branch}/status1.svg) | **Molestias aliquid dolore ab dolorum cumque repudiandae vero? Voluptate, ex.**          |
-| ![Test status](../../blob/badges/.github/badges/${branch}/status2.svg) | **Consectetur, dicta esse soluta recusandae numquam animi iste aperiam rem!**            |
+      |                 Status                  | Check                                                                                    |
+      | :-------------------------------------: | :--------------------------------------------------------------------------------------- |
+      `
+      const badges = testResult.map((result) => {
+        return `| ![Status](../../blob/badges/${result.statusBadgePath}) | ${result.title} |`
+      });
+      return acc.concat(...lines);
+    }, '')}
   `
 
   return result
 }
 
 async function addAutogradingInfo(fullReadme) {
-  const branch = process.env['GITHUB_REF_NAME']
   const repoURL = `${process.env['GITHUB_SERVER_URL']}/${owner}/${repo}`
   const readmeInfo = `## Results
   [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
 
-  ${generateResult(branch)}
+  ${generateResult()}
   
   [Results Details](${repoURL}/actions)
   

@@ -247,7 +247,6 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     return acc
   }, []).reduce((acc, item, index) => {
     item.statusBadgePath = `.github/badges/${currentBranch}/status${index}.svg`
-    console.log("item", item)
     let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0])
     if(arr) {
       arr.push(item)
