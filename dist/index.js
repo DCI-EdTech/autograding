@@ -7783,6 +7783,7 @@ const output_1 = __webpack_require__(52);
 const os = __importStar(__webpack_require__(87));
 const chalk_1 = __importDefault(__webpack_require__(843));
 const fs_1 = __importDefault(__webpack_require__(747));
+const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 class TestError extends Error {
@@ -8004,7 +8005,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     // Set the number of points
     const text = `Points ${points}/${availablePoints}`;
     log(color.bold.bgCyan.black(text));
-    //await Promise.all(modifyReadme(result), updateBadges(result))
+    await Promise.all(modifyReadme_1.default(result) /*, updateBadges(result)*/);
     core.setOutput('Points', `${points}/${availablePoints}`);
     await output_1.setCheckRunOutput(points, availablePoints, result);
 };
@@ -9790,6 +9791,95 @@ exports.withCustomRequest = withCustomRequest;
 
 /***/ }),
 
+/***/ 905:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const octokit_1 = __webpack_require__(994);
+const helpers_1 = __webpack_require__(948);
+const branch = process.env['GITHUB_REF_NAME'];
+const readmeInfoPath = `./AUTOGRADING.md`;
+async function modifyReadme(results) {
+    const octokit = octokit_1.createOctokit();
+    if (!octokit)
+        return;
+    // get readme
+    const { data: { sha, content } } = await octokit.rest.repos.getContent({
+        owner: octokit_1.owner,
+        repo: octokit_1.repo,
+        path: 'README.md',
+        ref: process.env['GITHUB_REF_NAME'],
+    });
+    const readme = Buffer.from(content, 'base64').toString('utf8');
+    // add autograding info
+    const newReadme = await addAutogradingInfo(readme, results);
+    // don't update if nothing changed
+    if (newReadme === readme)
+        return;
+    // update readme
+    await octokit.rest.repos.createOrUpdateFileContents({
+        owner: octokit_1.owner,
+        repo: octokit_1.repo,
+        path: 'README.md',
+        message: 'update readme',
+        content: Buffer.from(newReadme).toString('base64'),
+        branch: process.env['GITHUB_REF_NAME'],
+        sha,
+    });
+}
+function generateResult(results) {
+    return `# Results
+
+    ${results.testResults.reduce((acc, testResult) => {
+        acc += `
+      ### ${testResult[0].ancestorTitles[0]}
+
+      |                 Status                  | Check                                                                                    |
+      | :-------------------------------------: | :--------------------------------------------------------------------------------------- |
+      `;
+        const lines = testResult.map((result) => {
+            return `| ![Status](../../blob/badges/${result.statusBadgePath}) | ${result.title} |`;
+        });
+        return acc.concat(...lines);
+    }, '')}
+  `;
+}
+async function addAutogradingInfo(fullReadme, results) {
+    const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
+    const readmeInfo = `## Results
+  [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
+
+  ${generateResult(results)}
+  
+  [Results Details](${repoURL}/actions)
+  
+  ### Debugging your code
+  > [reading the test outputs](https://github.com/DCI-EdTech/autograding-setup/wiki/Reading-test-outputs)
+  
+  There are two ways to see why tasks might not be completed:
+  #### 1. Running tests locally
+  - Run \`npm install\`
+  - Run \`npm test\` in the terminal. You will see where your solution differs from the expected result.
+  
+  #### 2. Inspecting the test output on GitHub
+  - Go to the [Actions tab of your exercise repo](${repoURL}/actions)
+  - You will see a list of the test runs. Click on the topmost one.
+  - Click on 'Autograding'
+  - Expand the item 'Run DCI-EdTech/autograding-action@main'
+  - Here you see all outputs from the test run`;
+    const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
+    const infoRE = new RegExp(`[\n\r]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
+    // remove old info
+    fullReadme = fullReadme.replace(infoRE, '');
+    return `${fullReadme}\n\r${infoDelimiters[0]}\n${readmeInfo}\n\r${infoDelimiters[1]}`;
+}
+exports.default = modifyReadme;
+
+
+/***/ }),
+
 /***/ 936:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -11095,6 +11185,25 @@ module.exports.parseURL = function (input, options) {
 
 /***/ }),
 
+/***/ 948:
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "escapeRegExp", function() { return escapeRegExp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xmlSecure", function() { return xmlSecure; });
+const escapeRegExp = (text) => {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
+const xmlSecure = (str) => {
+  return str.replace(/[<>]/gm, '')
+}
+
+
+
+/***/ }),
+
 /***/ 950:
 /***/ (function(__unusedmodule, exports) {
 
@@ -11486,6 +11595,28 @@ exports.createOctokit = createOctokit;
 /******/ 				get: function() { return module.i; }
 /******/ 			});
 /******/ 			return module;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getter */
+/******/ 	!function() {
+/******/ 		// define getter function for harmony exports
+/******/ 		var hasOwnProperty = Object.prototype.hasOwnProperty;
+/******/ 		__webpack_require__.d = function(exports, name, getter) {
+/******/ 			if(!hasOwnProperty.call(exports, name)) {
+/******/ 				Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 			}
 /******/ 		};
 /******/ 	}();
 /******/ 	
