@@ -10656,7 +10656,7 @@ async function modifyReadme(results) {
     });
     const readme = Buffer.from(content, 'base64').toString('utf8');
     // add autograding info
-    const newReadme = await addAutogradingInfo(readme);
+    const newReadme = await addAutogradingInfo(readme, results);
     // don't update if nothing changed
     if (newReadme === readme)
         return;
@@ -10671,8 +10671,8 @@ async function modifyReadme(results) {
         sha,
     });
 }
-function generateResult() {
-    let result = `# Results
+function generateResult(results) {
+    return `# Results
 
     ${results.testResults.reduce((acc, testResult) => {
         acc += `
@@ -10687,14 +10687,13 @@ function generateResult() {
         return acc.concat(...lines);
     }, '')}
   `;
-    return result;
 }
-async function addAutogradingInfo(fullReadme) {
+async function addAutogradingInfo(fullReadme, results) {
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
     const readmeInfo = `## Results
   [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
 
-  ${generateResult()}
+  ${generateResult(results)}
   
   [Results Details](${repoURL}/actions)
   
