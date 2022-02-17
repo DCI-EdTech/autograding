@@ -8502,6 +8502,7 @@ const chalk_1 = __importDefault(__webpack_require__(843));
 const fs_1 = __importDefault(__webpack_require__(747));
 const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const updateBadges_1 = __importDefault(__webpack_require__(860));
+const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 class TestError extends Error {
     constructor(message) {
@@ -8694,7 +8695,8 @@ exports.runAll = async (cwd, packageJsonPath) => {
     result.testResults = result.testResults.reduce((acc, item) => {
         acc.push(...item.assertionResults);
         return acc;
-    }, []).reduce((acc, item) => {
+    }, []).reduce((acc, item, index) => {
+        item.statusBadgePath = `.github/badges/${currentBranch}/status${index}.svg`;
         console.log("item", item);
         let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0]);
         if (arr) {

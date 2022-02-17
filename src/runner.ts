@@ -11,6 +11,7 @@ import path from 'path'
 import modifyReadme from './modifyReadme'
 import updateBadges from './updateBadges'
 
+const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
 
 export type TestComparison = 'exact' | 'included' | 'regex'
@@ -244,7 +245,8 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   result.testResults = result.testResults.reduce((acc, item) => {
     acc.push(...item.assertionResults)
     return acc
-  }, []).reduce((acc, item) => {
+  }, []).reduce((acc, item, index) => {
+    item.statusBadgePath = `.github/badges/${currentBranch}/status${index}.svg`
     console.log("item", item)
     let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0])
     if(arr) {
