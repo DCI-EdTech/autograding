@@ -9851,7 +9851,6 @@ async function addAutogradingInfo(fullReadme, results) {
     const readmeInfo = `## Results
   [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
 
-  ${generateResult(results)}
   
   [Results Details](${repoURL}/actions)
   
