@@ -100,47 +100,6 @@ eval("require")("encoding");
 
 /***/ }),
 
-/***/ 31:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'text';
-
-        this.permittedContent = [
-            'animation',
-            'descriptive',
-            'textcontentchild',
-            'container a'
-        ];
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-
-        Element.constructor.apply(this, arguments);
-    }
-
-});
-
-/***/ }),
-
 /***/ 49:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -374,46 +333,6 @@ exports.toCommandProperties = toCommandProperties;
 /***/ (function(module) {
 
 module.exports = require("os");
-
-/***/ }),
-
-/***/ 99:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'circle';
-
-        this.permittedContent = [
-            'animation',
-            'descriptive'
-        ];
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-
-        Element.constructor.apply(this, arguments);
-
-    }
-
-});
 
 /***/ }),
 
@@ -1172,43 +1091,6 @@ exports.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHand
 
 /***/ }),
 
-/***/ 229:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'a';
-
-        this.permittedContent = 'any';
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-
-        Element.constructor.apply(this, arguments);
-
-    }
-
-});
-
-/***/ }),
-
 /***/ 247:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -1763,168 +1645,6 @@ function register(state, name, method, options) {
 
 /***/ }),
 
-/***/ 283:
-/***/ (function(module) {
-
-"use strict";
-
-
-module.exports = {
-    animationevent: [
-        'onbegin',
-        'onend',
-        'onload',
-        'onrepeat'
-    ],
-    animationattributetarget: [
-        'attributeType',
-        'attributeName'
-    ],
-    animationtiming: [
-        'begin',
-        'dur',
-        'end',
-        'min',
-        'max',
-        'restart',
-        'repeatCount',
-        'repeatDur',
-        'fill'
-    ],
-    animationvalue: [
-        'calcMode',
-        'values',
-        'keyTimes',
-        'keySplines',
-        'from',
-        'to',
-        'by'
-    ],
-    animationaddition: [
-        'additive',
-        'accumulate'
-    ],
-    conditionalprocessing: [
-        'requiredExtensions',
-        'requiredFeatures',
-        'systemLanguage'
-    ],
-    core: [
-        'id',
-        'xml:base',
-        'xml:lang',
-        'xml:space'
-    ],
-    documentevent: [
-        'onabort',
-        'onerror',
-        'onresize',
-        'onscroll',
-        'onunload',
-        'onzoom'
-    ],
-    filterprimitive: [
-        'height',
-        'result',
-        'width',
-        'x',
-        'y'
-    ],
-    graphicalevent: [
-        'onactivate',
-        'onclick',
-        'onfocusin',
-        'onfocusout',
-        'onload',
-        'onmousedown',
-        'onmousemove',
-        'onmouseout',
-        'onmouseover',
-        'onmouseup'
-    ],
-    presentation: [
-        'alignment-baseline',
-        'baseline-shift',
-        'clip',
-        'clip-path',
-        'clip-rule',
-        'color',
-        'color-interpolation',
-        'color-interpolation-filters',
-        'color-profile',
-        'color-rendering',
-        'cursor',
-        'direction',
-        'display',
-        'dominant-baseline',
-        'enable-background',
-        'fill',
-        'fill-opacity',
-        'fill-rule',
-        'filter',
-        'flood-color',
-        'flood-opacity',
-        'font-family',
-        'font-size',
-        'font-size-adjust',
-        'font-stretch',
-        'font-style',
-        'font-variant',
-        'font-weight',
-        'glyph-orientation-horizontal',
-        'glyph-orientation-vertical',
-        'image-rendering',
-        'kerning',
-        'letter-spacing',
-        'lighting-color',
-        'marker-end',
-        'marker-mid',
-        'marker-start',
-        'mask',
-        'opacity',
-        'overflow',
-        'pointer-events',
-        'shape-rendering',
-        'stop-color',
-        'stop-opacity',
-        'stroke',
-        'stroke-dasharray',
-        'stroke-dashoffset',
-        'stroke-linecap',
-        'stroke-linejoin',
-        'stroke-miterlimit',
-        'stroke-opacity',
-        'stroke-width',
-        'text-anchor',
-        'text-decoration',
-        'text-rendering',
-        'unicode-bidi',
-        'visibility',
-        'word-spacing',
-        'writing-mode'
-    ],
-    transferfunction: [
-        'type',
-        'tableValues',
-        'slope',
-        'intercept',
-        'amplitude',
-        'exponent',
-        'offset'
-    ],
-    xlink: [
-        'xlink:href',
-        'xlink:type',
-        'xlink:role',
-        'xlink:arcrole',
-        'xlink:title',
-        'xlink:show',
-        'xlink:actuate'
-    ]
-};
-
-/***/ }),
-
 /***/ 299:
 /***/ (function(__unusedmodule, exports) {
 
@@ -2150,111 +1870,6 @@ exports.paginatingEndpoints = paginatingEndpoints;
 
 /***/ }),
 
-/***/ 334:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var elements = __webpack_require__(717);
-
-function SvgBuilder() {
-
-    this.root = '<svg height="100" width="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">';
-    this.elements = [];
-
-    function formatRoot(name, value) {
-      /* jshint -W040 */
-        var formatted = this.root,
-            regexp = new RegExp(name + '([^=,]*)=("[^"]*"|[^,"]*)');
-        return formatted.replace(regexp, name + '="' + value + '"');
-      /* jshint +W040 */
-    }
-
-    this.closeTag = function closeTag(name) {
-        return '</' + name + '>';
-    };
-
-    this.width = function width(value) {
-        this.root = formatRoot.call(this, 'width', value);
-        return this;
-    };
-
-    this.height = function height(value) {
-        this.root = formatRoot.call(this, 'height', value);
-        return this;
-    };
-
-    this.addElement = function addElement(element) {
-        if (!element.content) {
-            element.node += this.closeTag(element.name);
-            this.elements.push(element.node);
-        } else if (typeof element.content === 'string' && element.name === 'text') {
-            element.node += element.content + this.closeTag(element.name);
-            this.elements.push(element.node);
-        } else if (typeof element.content === 'object') {
-            var elements = this.elements.join('');
-            this.elements = [];
-            this.elements.unshift(element.node, elements);
-            this.elements.push(this.closeTag(element.name));
-        }
-    };
-
-}
-SvgBuilder.prototype.newInstance = function() {
-  return new SvgBuilder();
-};
-
-SvgBuilder.prototype.reset = function() {
-  this.elements = [];
-  return this;
-};
-
-SvgBuilder.prototype.render = function render() {
-    return this.root + this.elements.join('') + this.closeTag('svg');
-};
-
-SvgBuilder.prototype.a = function anchor(attrs, content) {
-    this.addElement(new elements.A(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.circle = function circle(attrs, content) {
-    this.addElement(new elements.Circle(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.text = function link(attrs, content) {
-    this.addElement(new elements.Text(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.foreignObject = function foreignObject(attrs, content) {
-    this.addElement(new elements.ForeignObject(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.line = function line(attrs, content) {
-    this.addElement(new elements.Line(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.rect = function rect(attrs, content) {
-    this.addElement(new elements.Rect(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.path = function line(attrs, content) {
-    this.addElement(new elements.Path(attrs, content));
-    return this;
-};
-
-module.exports = new SvgBuilder();
-
-
-
-/***/ }),
-
 /***/ 356:
 /***/ (function(__unusedmodule, exports) {
 
@@ -2320,47 +1935,6 @@ module.exports = (flag, argv = process.argv) => {
 	const terminatorPosition = argv.indexOf('--');
 	return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
 };
-
-
-/***/ }),
-
-/***/ 366:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'path';
-
-        this.permittedContent = [
-            'animation',
-            'descriptive'
-        ];
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-
-        Element.constructor.apply(this, arguments);
-
-    }
-
-});
 
 
 /***/ }),
@@ -4805,70 +4379,6 @@ exports.FetchError = FetchError;
 
 /***/ }),
 
-/***/ 461:
-/***/ (function(module) {
-
-"use strict";
-
-
-module.exports = {
-    animation: [
-        'animate',
-        'animatecolor',
-        'animatemotion',
-        'animatetransform',
-        'mapath',
-        'set'
-    ],
-    basicshapes: [
-        'circle',
-        'ellipse',
-        'line',
-        'polygon',
-        'polyline',
-        'rect'
-    ],
-    container: [
-        'a',
-        'defs',
-        'glyph',
-        'g',
-        'marker',
-        'mask',
-        'missing-glyph',
-        'pattern',
-        'svg',
-        'switch',
-        'symbol'
-    ],
-    descriptive: [
-        'desc',
-        'metadata',
-        'title'
-    ],
-    textcontent: [
-        'altglyph',
-        'altglyphdef',
-        'altglyphitem',
-        'glyph',
-        'glyphref',
-        'text',
-        'textpath',
-        'tref',
-        'tspan'
-    ],
-    textcontentchild: [
-        'altglyph',
-        'textpath',
-        'tref',
-        'tspan'
-    ]
-
-};
-
-
-/***/ }),
-
 /***/ 463:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -5529,40 +5039,6 @@ module.exports.Collection = Hook.Collection
 
 /***/ }),
 
-/***/ 529:
-/***/ (function(__unusedmodule, exports) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const successIcon = `<?xml version="1.0" encoding="UTF-8"?>
-  <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-      <title>icon_success 2</title>
-      <g id="icon_success" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-          <rect id="Spacer" fill-opacity="0" fill="#D8D8D8" x="0" y="0" width="24" height="24"></rect>
-          <g id="Selection" transform="translate(5.000000, 8.000000)" stroke="#00E0A1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-              <line x1="0" y1="9.83706583" x2="5.13577848" y2="14.9728443" id="Line"></line>
-              <line x1="14.6158961" y1="0" x2="5.13577848" y2="14.9728443" id="Line"></line>
-          </g>
-      </g>
-  </svg>`;
-exports.successIcon = successIcon;
-const failureIcon = `<?xml version="1.0" encoding="UTF-8"?>
-  <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-      <title>icon_failure 2</title>
-      <g id="icon_failure" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-          <rect id="Spacer" fill-opacity="0" fill="#D8D8D8" x="0" y="0" width="24" height="24"></rect>
-          <g id="Failure" transform="translate(4.000000, 8.000000)" stroke="#EF065B" stroke-linecap="round" stroke-width="2">
-              <line x1="1" y1="1" x2="15" y2="15" id="Line"></line>
-              <line x1="15" y1="1" x2="1" y2="15" id="Line"></line>
-          </g>
-      </g>
-  </svg>`;
-exports.failureIcon = failureIcon;
-
-
-/***/ }),
-
 /***/ 539:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -6104,46 +5580,6 @@ class HttpClient {
     }
 }
 exports.HttpClient = HttpClient;
-
-
-/***/ }),
-
-/***/ 585:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'line';
-
-        this.permittedContent = [
-            'animation',
-            'descriptive'
-        ];
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-        Element.constructor.apply(this, arguments);
-
-    }
-
-});
 
 
 /***/ }),
@@ -7252,43 +6688,6 @@ module.exports = require("net");
 
 /***/ }),
 
-/***/ 632:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'foreignObject';
-
-        this.permittedContent = 'any';
-
-        this.permittedAttributes = [
-            'filterprimitive',
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ]
-
-        Element.constructor.apply(this, arguments);
-    }
-
-});
-
-/***/ }),
-
 /***/ 649:
 /***/ (function(module) {
 
@@ -7520,63 +6919,6 @@ class Deprecation extends Error {
 }
 
 exports.Deprecation = Deprecation;
-
-
-/***/ }),
-
-/***/ 717:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports.A = __webpack_require__(229);
-module.exports.Circle = __webpack_require__(99);
-module.exports.Text = __webpack_require__(31);
-module.exports.ForeignObject = __webpack_require__(632);
-module.exports.Line = __webpack_require__(585);
-module.exports.Rect = __webpack_require__(727);
-module.exports.Path = __webpack_require__(366);
-
-
-/***/ }),
-
-/***/ 727:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'rect';
-
-        this.permittedContent = [
-            'animation',
-            'descriptive'
-        ];
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-        Element.constructor.apply(this, arguments);
-
-    }
-
-});
 
 
 /***/ }),
@@ -8441,8 +7783,6 @@ const output_1 = __webpack_require__(52);
 const os = __importStar(__webpack_require__(87));
 const chalk_1 = __importDefault(__webpack_require__(843));
 const fs_1 = __importDefault(__webpack_require__(747));
-const modifyReadme_1 = __importDefault(__webpack_require__(905));
-const updateBadges_1 = __importDefault(__webpack_require__(860));
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 class TestError extends Error {
@@ -8664,7 +8004,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     // Set the number of points
     const text = `Points ${points}/${availablePoints}`;
     log(color.bold.bgCyan.black(text));
-    await Promise.all(modifyReadme_1.default(result), updateBadges_1.default(result));
+    //await Promise.all(modifyReadme(result), updateBadges(result))
     core.setOutput('Points', `${points}/${availablePoints}`);
     await output_1.setCheckRunOutput(points, availablePoints, result);
 };
@@ -9969,43 +9309,6 @@ module.exports = exports.default;
 
 /***/ }),
 
-/***/ 860:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-// @ts-nocheck
-const octokit_1 = __webpack_require__(994);
-const badge_1 = __importDefault(__webpack_require__(952));
-const statusIcons_1 = __webpack_require__(529);
-async function updateBadges(results) {
-    const octokit = octokit_1.createOctokit();
-    if (!octokit)
-        return;
-    const currentBranch = process.env['GITHUB_REF_NAME'];
-    const badgePath = `.github/badges/${currentBranch}/badge.svg`;
-    // generate status badges
-    const badges = results.testResults.reduce((acc, testResult) => {
-        const statusBadges = testResult.map((result, index) => {
-            return { path: result.statusBadgePath, content: result.status === 'passed' ? statusIcons_1.successIcon : statusIcons_1.failureIcon };
-        });
-        acc.push(...statusBadges);
-        return acc;
-    }, []);
-    // add main badge
-    badges.push({ path: badgePath, content: badge_1.default(results.testResults) });
-    // update status badges
-    await octokit.commit(badges, 'badges', 'Update badges');
-}
-exports.default = updateBadges;
-
-
-/***/ }),
-
 /***/ 866:
 /***/ (function(module) {
 
@@ -10083,152 +9386,6 @@ if (process.env['NODE_ENV'] !== 'test') {
 }
 exports.default = run;
 
-
-/***/ }),
-
-/***/ 883:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var prop = Object.defineProperty,
-    getPropDesc = Object.getOwnPropertyDescriptor,
-    permittedContent = __webpack_require__(461),
-    permittedAttributes = __webpack_require__(283),
-    Element = {
-
-        globalAttributes: [
-            'conditionalprocessing',
-            'core'
-        ],
-
-        constructor: function (attrs, content) {
-            this.attributes = attrs;
-            this.content = content;
-            this.defineAttributes();
-            this.defineContent();
-            this.checkAttributes();
-            this.checkContent();
-            this.make(attrs, content);
-        },
-
-        checkAny: function concatenateList(list) {
-            return (list === 'any');
-        },
-
-        defineContent: function contentList() {
-            if (this.checkAny(this.permittedContent)) return;
-            this.permittedContent.forEach(function (item, index) {
-                this.permittedContent = this.permittedContent.concat(permittedContent[item]);
-            }, this);
-        },
-
-        defineAttributes: function attrsList() {
-            if (this.checkAny(this.permittedAttributes)) return;
-            var args = this.permittedAttributes.concat(this.globalAttributes);
-            args.forEach(function (item, index) {
-                this.permittedAttributes = args.concat(permittedContent[item]);
-            }, this);
-        },
-
-        getElementName: function getElementName(element) {
-            return element.match(/(\w+)/)[0];
-        },
-
-        checkAttributes: function checkAttributes() {
-            for (var attr in this.attributes) {
-                if (this.permittedAttributes.indexOf(attr) !== -1) {
-                    throw new Error(attr + ' is not permitted on ' + this.name + ' elements.');
-                }
-            }
-        },
-
-        checkContent: function checkContent() {
-            if (this.content) {
-                if (typeof this.content === 'string' && this.name !== 'text') {
-                    throw new Error('Content cannot be a string.');
-
-                } else if (this.content.elements && this.permittedContent !== 'any') {
-                    this.content.elements.forEach(function (element) {
-                        var name = this.getElementName(element);
-                        if (this.permittedContent.indexOf(name) === -1) {
-                            throw new Error(this.name + ' cannot contain ' + name + ' elements.');
-                        }
-                    }.bind(this));
-                }
-            }
-        },
-
-        make: function makeElement(attrs, content) {
-            if (!attrs || Object.keys(attrs).length === 0) {
-                throw new Error('An element must have attributes');
-            }
-            var element = '<' + this.name,
-                prop;
-            for (prop in attrs) {
-                element += (' ' + prop + '="' + attrs[prop]) + '"';
-            }
-            element += '>';
-            this.node = element;
-        }
-
-    };
-
-function extendProps(onto, from) {
-    var props = Object.getOwnPropertyNames(from),
-        replace,
-        i;
-    for (i = 0; i < props.length; ++i) {
-        replace = getPropDesc(onto, props[i]);
-        if (!(props[i] in Function) && (!replace || replace.writable)) {
-            prop(onto, props[i], getPropDesc(from, props[i]));
-        }
-    }
-}
-
-function extend(parent, protoProps, staticProps) {
-    var child;
-
-    if (protoProps && protoProps.hasOwnProperty('constructor')) {
-        child = protoProps.constructor;
-    } else {
-        child = function subClass() {
-            return child.super.apply(this, arguments);
-        };
-    }
-
-    prop(child, 'super', { value: parent });
-
-    extendProps(child, parent);
-    if (staticProps) {
-        extendProps(child, staticProps);
-    }
-
-    child.prototype = Object.create(parent, {
-        constructor: {
-            value: child,
-            enumerable: false,
-            writable: true,
-            configurable: true
-        },
-    });
-
-    if (protoProps) {
-        extendProps(child.prototype, protoProps);
-    }
-    return child;
-}
-
-prop(Element, 'extend', {
-    configurable: true,
-    writable: true,
-    value: function ElementExtend(protoProps, staticProps) {
-        return extend(this, protoProps, staticProps);
-    },
-});
-
-module.exports = Element
 
 /***/ }),
 
@@ -10629,95 +9786,6 @@ exports.GraphqlResponseError = GraphqlResponseError;
 exports.graphql = graphql$1;
 exports.withCustomRequest = withCustomRequest;
 //# sourceMappingURL=index.js.map
-
-
-/***/ }),
-
-/***/ 905:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const octokit_1 = __webpack_require__(994);
-const helpers_1 = __webpack_require__(948);
-const branch = process.env['GITHUB_REF_NAME'];
-const readmeInfoPath = `./AUTOGRADING.md`;
-async function modifyReadme(results) {
-    const octokit = octokit_1.createOctokit();
-    if (!octokit)
-        return;
-    // get readme
-    const { data: { sha, content } } = await octokit.rest.repos.getContent({
-        owner: octokit_1.owner,
-        repo: octokit_1.repo,
-        path: 'README.md',
-        ref: process.env['GITHUB_REF_NAME'],
-    });
-    const readme = Buffer.from(content, 'base64').toString('utf8');
-    // add autograding info
-    const newReadme = await addAutogradingInfo(readme, results);
-    // don't update if nothing changed
-    if (newReadme === readme)
-        return;
-    // update readme
-    await octokit.rest.repos.createOrUpdateFileContents({
-        owner: octokit_1.owner,
-        repo: octokit_1.repo,
-        path: 'README.md',
-        message: 'update readme',
-        content: Buffer.from(newReadme).toString('base64'),
-        branch: process.env['GITHUB_REF_NAME'],
-        sha,
-    });
-}
-function generateResult(results) {
-    return `# Results
-
-    ${results.testResults.reduce((acc, testResult) => {
-        acc += `
-      ### ${testResult[0].ancestorTitles[0]}
-
-      |                 Status                  | Check                                                                                    |
-      | :-------------------------------------: | :--------------------------------------------------------------------------------------- |
-      `;
-        const lines = testResult.map((result) => {
-            return `| ![Status](../../blob/badges/${result.statusBadgePath}) | ${result.title} |`;
-        });
-        return acc.concat(...lines);
-    }, '')}
-  `;
-}
-async function addAutogradingInfo(fullReadme, results) {
-    const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
-    const readmeInfo = `## Results
-  [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
-
-  ${generateResult(results)}
-  
-  [Results Details](${repoURL}/actions)
-  
-  ### Debugging your code
-  > [reading the test outputs](https://github.com/DCI-EdTech/autograding-setup/wiki/Reading-test-outputs)
-  
-  There are two ways to see why tasks might not be completed:
-  #### 1. Running tests locally
-  - Run \`npm install\`
-  - Run \`npm test\` in the terminal. You will see where your solution differs from the expected result.
-  
-  #### 2. Inspecting the test output on GitHub
-  - Go to the [Actions tab of your exercise repo](${repoURL}/actions)
-  - You will see a list of the test runs. Click on the topmost one.
-  - Click on 'Autograding'
-  - Expand the item 'Run DCI-EdTech/autograding-action@main'
-  - Here you see all outputs from the test run`;
-    const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
-    const infoRE = new RegExp(`[\n\r]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
-    // remove old info
-    fullReadme = fullReadme.replace(infoRE, '');
-    return `${fullReadme}\n\r${infoDelimiters[0]}\n${readmeInfo}\n\r${infoDelimiters[1]}`;
-}
-exports.default = modifyReadme;
 
 
 /***/ }),
@@ -12027,25 +11095,6 @@ module.exports.parseURL = function (input, options) {
 
 /***/ }),
 
-/***/ 948:
-/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "escapeRegExp", function() { return escapeRegExp; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xmlSecure", function() { return xmlSecure; });
-const escapeRegExp = (text) => {
-  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-}
-
-const xmlSecure = (str) => {
-  return str.replace(/[<>]/gm, '')
-}
-
-
-
-/***/ }),
-
 /***/ 950:
 /***/ (function(__unusedmodule, exports) {
 
@@ -12107,54 +11156,6 @@ function checkBypass(reqUrl) {
     return false;
 }
 exports.checkBypass = checkBypass;
-
-
-/***/ }),
-
-/***/ 952:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-// @ts-nocheck
-const svg_builder_1 = __importDefault(__webpack_require__(334));
-const helpers_1 = __webpack_require__(948);
-function badge(testResults) {
-    const lineHeight = 25;
-    let lines = 0;
-    const draw = svg_builder_1.default.newInstance();
-    testResults.forEach(tests => {
-        lines++;
-        draw
-            .text({
-            x: 1,
-            y: lineHeight * lines,
-            'font-family': 'helvetica',
-            'font-size': 15,
-            fill: '#fff',
-        }, helpers_1.xmlSecure(tests[0].ancestorTitles[0]));
-        tests.forEach(result => {
-            lines++;
-            draw
-                .text({
-                x: 4,
-                y: lineHeight * lines,
-                'font-family': 'helvetica',
-                'font-size': 15,
-                fill: '#fff',
-            }, (result.status === 'passed' ? '✅' : '❌') + ' ' + helpers_1.xmlSecure(result.title));
-        });
-    });
-    draw
-        .width(450)
-        .height(lines * lineHeight + 10);
-    return draw.render();
-}
-exports.default = badge;
 
 
 /***/ }),
@@ -12485,28 +11486,6 @@ exports.createOctokit = createOctokit;
 /******/ 				get: function() { return module.i; }
 /******/ 			});
 /******/ 			return module;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getter */
-/******/ 	!function() {
-/******/ 		// define getter function for harmony exports
-/******/ 		var hasOwnProperty = Object.prototype.hasOwnProperty;
-/******/ 		__webpack_require__.d = function(exports, name, getter) {
-/******/ 			if(!hasOwnProperty.call(exports, name)) {
-/******/ 				Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 			}
 /******/ 		};
 /******/ 	}();
 /******/ 	
