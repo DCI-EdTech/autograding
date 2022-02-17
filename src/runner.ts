@@ -274,7 +274,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   // Set the number of points
   const text = `Points ${points}/${availablePoints}`
   log(color.bold.bgCyan.black(text))
-  await Promise.all(modifyReadme(result)/*, updateBadges(result)*/)
+  await Promise.all([modifyReadme(result), updateBadges(result)])
   core.setOutput('Points', `${points}/${availablePoints}`)
   await setCheckRunOutput(points, availablePoints, result)
 }
