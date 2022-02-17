@@ -9814,7 +9814,7 @@ async function modifyReadme(results) {
     });
     const readme = Buffer.from(content, 'base64').toString('utf8');
     // add autograding info
-    const newReadme = await addAutogradingInfo(readme, results);
+    const newReadme = readme; //await addAutogradingInfo(readme, results)
     // don't update if nothing changed
     if (newReadme === readme)
         return;
@@ -9851,6 +9851,7 @@ async function addAutogradingInfo(fullReadme, results) {
     const readmeInfo = `## Results
   [![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
 
+  ${generateResult(results)}
   
   [Results Details](${repoURL}/actions)
   
