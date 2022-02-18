@@ -10682,11 +10682,11 @@ function generateResult(results) {
 
 ${results.testResults.reduce((acc, testResult) => {
         acc += `
-  ### ${testResult[0].ancestorTitles[0]}
+### ${testResult[0].ancestorTitles[0]}
 
-  |                 Status                  | Check                                                                                    |
-  | :-------------------------------------: | :--------------------------------------------------------------------------------------- |
-  `;
+|                 Status                  | Check                                                                                    |
+| :-------------------------------------: | :--------------------------------------------------------------------------------------- |
+`;
         const lines = testResult.map((result) => {
             return `| ![Status](../../blob/badges/${result.statusBadgePath}) | ${result.title} |\n`;
         });
@@ -10697,7 +10697,7 @@ ${results.testResults.reduce((acc, testResult) => {
 async function addAutogradingInfo(fullReadme, results) {
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
     const readmeInfo = `## Results
-[![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](${repoURL}/actions)
+[![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)
 
 ${generateResult(results)}
 
