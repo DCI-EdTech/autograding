@@ -8469,6 +8469,7 @@ const os = __importStar(__webpack_require__(87));
 const chalk_1 = __importDefault(__webpack_require__(843));
 const fs_1 = __importDefault(__webpack_require__(747));
 const color = new chalk_1.default.Instance({ level: 1 });
+const taskNamePattern = 'task(s)?(\.(.*))?\.js';
 class TestError extends Error {
     constructor(message) {
         super(message);
@@ -8617,7 +8618,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     const test = {
         "name": `Tests`,
         "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
-        "run": `CI=true npm test -- "(src\/)?__tests__\/task(s)?(\.(.*))?\.js"${testOpts ? ' ' + testOpts : ''} --json --silent`,
+        "run": `CI=true npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --silent`,
         "timeout": 10
     };
     // https://help.github.com/en/actions/reference/development-tools-for-github-actions#stop-and-start-log-commands-stop-commands
@@ -8645,7 +8646,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     points = Math.round(100 / result.numTotalTests * result.numPassedTests);
     // sort results by filename
     result.testResults.sort((a, b) => {
-        const taskNameRegExp = /tasks\.(.*)\.js$/;
+        const taskNameRegExp = new RegExp(taskNamePattern);
         const aIndex = parseInt(a.name.match(taskNameRegExp)[1]);
         const bIndex = parseInt(b.name.match(taskNameRegExp)[1]);
         if (aIndex < bIndex) {
