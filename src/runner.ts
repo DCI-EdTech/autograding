@@ -10,6 +10,7 @@ import fs from 'fs'
 import path from 'path'
 
 const color = new chalk.Instance({level: 1})
+const taskNamePattern = 'task(s)?(\.(.*))?\.js'
 
 export type TestComparison = 'exact' | 'included' | 'regex'
 
@@ -193,7 +194,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   const test = {
     "name": `Tests`,
     "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
-    "run": `CI=true npm test -- "(src\/)?__tests__\/task(s)?(\.(.*))?\.js"${testOpts ? ' ' + testOpts : ''} --json --silent`,
+    "run": `CI=true npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --silent`,
     "timeout": 10
   }
 
@@ -226,7 +227,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
 
   // sort results by filename
   result.testResults.sort((a, b) => {
-    const taskNameRegExp = /tasks\.(.*)\.js$/
+    const taskNameRegExp = new RegExp(taskNamePattern)
     const aIndex = parseInt(a.name.match(taskNameRegExp)[1])
     const bIndex = parseInt(b.name.match(taskNameRegExp)[1])
     if (aIndex < bIndex) {
