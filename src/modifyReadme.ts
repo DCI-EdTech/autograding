@@ -5,6 +5,8 @@ import { escapeRegExp } from './lib/helpers';
 
 const branch = process.env['GITHUB_REF_NAME']
 const readmeInfoPath = `./AUTOGRADING.md`;
+const mainBadgeString = `[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)`;
+const mainBadgeRegExp =  /[\n]{0,1}.*\!\[Status overview badge\]\(.*[\n\r]*/g
 
 async function modifyReadme(results) {
   const octokit = createOctokit()
@@ -21,8 +23,11 @@ async function modifyReadme(results) {
 
     const readme = Buffer.from(content, 'base64').toString('utf8');
 
+    // add main badge
+    let newReadme = addMainBadge(readme);
+
     // add autograding info
-    const newReadme = await addAutogradingInfo(readme, results)
+    newReadme = await addAutogradingInfo(newReadme, results)
 
     // don't update if nothing changed
     if(newReadme === readme)
@@ -42,6 +47,14 @@ async function modifyReadme(results) {
     console.log(error)
     throw error
   }
+}
+
+function addMainBadge(readme) {
+  const headlineLevel1Regex = /^#[^#].*$/m;
+  // delete old points badge
+  readme = readme.replace(mainBadgeRegExp, '')
+  // insert points badge before level 1 headline match
+  return readme.replace(headlineLevel1Regex, `\n${mainBadgeString}\n$&`);
 }
 
 function generateResult(results) {
@@ -65,7 +78,6 @@ ${results.testResults.reduce((acc, testResult) => {
 async function addAutogradingInfo(fullReadme, results) {
   const repoURL = `${process.env['GITHUB_SERVER_URL']}/${owner}/${repo}`
   const readmeInfo = `## Results
-[![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)
 
 ${generateResult(results)}
 

@@ -100,47 +100,6 @@ eval("require")("encoding");
 
 /***/ }),
 
-/***/ 31:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'text';
-
-        this.permittedContent = [
-            'animation',
-            'descriptive',
-            'textcontentchild',
-            'container a'
-        ];
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-
-        Element.constructor.apply(this, arguments);
-    }
-
-});
-
-/***/ }),
-
 /***/ 49:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -374,46 +333,6 @@ exports.toCommandProperties = toCommandProperties;
 /***/ (function(module) {
 
 module.exports = require("os");
-
-/***/ }),
-
-/***/ 99:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'circle';
-
-        this.permittedContent = [
-            'animation',
-            'descriptive'
-        ];
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-
-        Element.constructor.apply(this, arguments);
-
-    }
-
-});
 
 /***/ }),
 
@@ -1172,43 +1091,6 @@ exports.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHand
 
 /***/ }),
 
-/***/ 229:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'a';
-
-        this.permittedContent = 'any';
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-
-        Element.constructor.apply(this, arguments);
-
-    }
-
-});
-
-/***/ }),
-
 /***/ 247:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -1763,168 +1645,6 @@ function register(state, name, method, options) {
 
 /***/ }),
 
-/***/ 283:
-/***/ (function(module) {
-
-"use strict";
-
-
-module.exports = {
-    animationevent: [
-        'onbegin',
-        'onend',
-        'onload',
-        'onrepeat'
-    ],
-    animationattributetarget: [
-        'attributeType',
-        'attributeName'
-    ],
-    animationtiming: [
-        'begin',
-        'dur',
-        'end',
-        'min',
-        'max',
-        'restart',
-        'repeatCount',
-        'repeatDur',
-        'fill'
-    ],
-    animationvalue: [
-        'calcMode',
-        'values',
-        'keyTimes',
-        'keySplines',
-        'from',
-        'to',
-        'by'
-    ],
-    animationaddition: [
-        'additive',
-        'accumulate'
-    ],
-    conditionalprocessing: [
-        'requiredExtensions',
-        'requiredFeatures',
-        'systemLanguage'
-    ],
-    core: [
-        'id',
-        'xml:base',
-        'xml:lang',
-        'xml:space'
-    ],
-    documentevent: [
-        'onabort',
-        'onerror',
-        'onresize',
-        'onscroll',
-        'onunload',
-        'onzoom'
-    ],
-    filterprimitive: [
-        'height',
-        'result',
-        'width',
-        'x',
-        'y'
-    ],
-    graphicalevent: [
-        'onactivate',
-        'onclick',
-        'onfocusin',
-        'onfocusout',
-        'onload',
-        'onmousedown',
-        'onmousemove',
-        'onmouseout',
-        'onmouseover',
-        'onmouseup'
-    ],
-    presentation: [
-        'alignment-baseline',
-        'baseline-shift',
-        'clip',
-        'clip-path',
-        'clip-rule',
-        'color',
-        'color-interpolation',
-        'color-interpolation-filters',
-        'color-profile',
-        'color-rendering',
-        'cursor',
-        'direction',
-        'display',
-        'dominant-baseline',
-        'enable-background',
-        'fill',
-        'fill-opacity',
-        'fill-rule',
-        'filter',
-        'flood-color',
-        'flood-opacity',
-        'font-family',
-        'font-size',
-        'font-size-adjust',
-        'font-stretch',
-        'font-style',
-        'font-variant',
-        'font-weight',
-        'glyph-orientation-horizontal',
-        'glyph-orientation-vertical',
-        'image-rendering',
-        'kerning',
-        'letter-spacing',
-        'lighting-color',
-        'marker-end',
-        'marker-mid',
-        'marker-start',
-        'mask',
-        'opacity',
-        'overflow',
-        'pointer-events',
-        'shape-rendering',
-        'stop-color',
-        'stop-opacity',
-        'stroke',
-        'stroke-dasharray',
-        'stroke-dashoffset',
-        'stroke-linecap',
-        'stroke-linejoin',
-        'stroke-miterlimit',
-        'stroke-opacity',
-        'stroke-width',
-        'text-anchor',
-        'text-decoration',
-        'text-rendering',
-        'unicode-bidi',
-        'visibility',
-        'word-spacing',
-        'writing-mode'
-    ],
-    transferfunction: [
-        'type',
-        'tableValues',
-        'slope',
-        'intercept',
-        'amplitude',
-        'exponent',
-        'offset'
-    ],
-    xlink: [
-        'xlink:href',
-        'xlink:type',
-        'xlink:role',
-        'xlink:arcrole',
-        'xlink:title',
-        'xlink:show',
-        'xlink:actuate'
-    ]
-};
-
-/***/ }),
-
 /***/ 299:
 /***/ (function(__unusedmodule, exports) {
 
@@ -2150,111 +1870,6 @@ exports.paginatingEndpoints = paginatingEndpoints;
 
 /***/ }),
 
-/***/ 334:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var elements = __webpack_require__(717);
-
-function SvgBuilder() {
-
-    this.root = '<svg height="100" width="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">';
-    this.elements = [];
-
-    function formatRoot(name, value) {
-      /* jshint -W040 */
-        var formatted = this.root,
-            regexp = new RegExp(name + '([^=,]*)=("[^"]*"|[^,"]*)');
-        return formatted.replace(regexp, name + '="' + value + '"');
-      /* jshint +W040 */
-    }
-
-    this.closeTag = function closeTag(name) {
-        return '</' + name + '>';
-    };
-
-    this.width = function width(value) {
-        this.root = formatRoot.call(this, 'width', value);
-        return this;
-    };
-
-    this.height = function height(value) {
-        this.root = formatRoot.call(this, 'height', value);
-        return this;
-    };
-
-    this.addElement = function addElement(element) {
-        if (!element.content) {
-            element.node += this.closeTag(element.name);
-            this.elements.push(element.node);
-        } else if (typeof element.content === 'string' && element.name === 'text') {
-            element.node += element.content + this.closeTag(element.name);
-            this.elements.push(element.node);
-        } else if (typeof element.content === 'object') {
-            var elements = this.elements.join('');
-            this.elements = [];
-            this.elements.unshift(element.node, elements);
-            this.elements.push(this.closeTag(element.name));
-        }
-    };
-
-}
-SvgBuilder.prototype.newInstance = function() {
-  return new SvgBuilder();
-};
-
-SvgBuilder.prototype.reset = function() {
-  this.elements = [];
-  return this;
-};
-
-SvgBuilder.prototype.render = function render() {
-    return this.root + this.elements.join('') + this.closeTag('svg');
-};
-
-SvgBuilder.prototype.a = function anchor(attrs, content) {
-    this.addElement(new elements.A(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.circle = function circle(attrs, content) {
-    this.addElement(new elements.Circle(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.text = function link(attrs, content) {
-    this.addElement(new elements.Text(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.foreignObject = function foreignObject(attrs, content) {
-    this.addElement(new elements.ForeignObject(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.line = function line(attrs, content) {
-    this.addElement(new elements.Line(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.rect = function rect(attrs, content) {
-    this.addElement(new elements.Rect(attrs, content));
-    return this;
-};
-
-SvgBuilder.prototype.path = function line(attrs, content) {
-    this.addElement(new elements.Path(attrs, content));
-    return this;
-};
-
-module.exports = new SvgBuilder();
-
-
-
-/***/ }),
-
 /***/ 356:
 /***/ (function(__unusedmodule, exports) {
 
@@ -2320,47 +1935,6 @@ module.exports = (flag, argv = process.argv) => {
 	const terminatorPosition = argv.indexOf('--');
 	return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
 };
-
-
-/***/ }),
-
-/***/ 366:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'path';
-
-        this.permittedContent = [
-            'animation',
-            'descriptive'
-        ];
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-
-        Element.constructor.apply(this, arguments);
-
-    }
-
-});
 
 
 /***/ }),
@@ -4805,70 +4379,6 @@ exports.FetchError = FetchError;
 
 /***/ }),
 
-/***/ 461:
-/***/ (function(module) {
-
-"use strict";
-
-
-module.exports = {
-    animation: [
-        'animate',
-        'animatecolor',
-        'animatemotion',
-        'animatetransform',
-        'mapath',
-        'set'
-    ],
-    basicshapes: [
-        'circle',
-        'ellipse',
-        'line',
-        'polygon',
-        'polyline',
-        'rect'
-    ],
-    container: [
-        'a',
-        'defs',
-        'glyph',
-        'g',
-        'marker',
-        'mask',
-        'missing-glyph',
-        'pattern',
-        'svg',
-        'switch',
-        'symbol'
-    ],
-    descriptive: [
-        'desc',
-        'metadata',
-        'title'
-    ],
-    textcontent: [
-        'altglyph',
-        'altglyphdef',
-        'altglyphitem',
-        'glyph',
-        'glyphref',
-        'text',
-        'textpath',
-        'tref',
-        'tspan'
-    ],
-    textcontentchild: [
-        'altglyph',
-        'textpath',
-        'tref',
-        'tspan'
-    ]
-
-};
-
-
-/***/ }),
-
 /***/ 463:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -6108,46 +5618,6 @@ exports.HttpClient = HttpClient;
 
 /***/ }),
 
-/***/ 585:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'line';
-
-        this.permittedContent = [
-            'animation',
-            'descriptive'
-        ];
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-        Element.constructor.apply(this, arguments);
-
-    }
-
-});
-
-
-/***/ }),
-
 /***/ 592:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -7252,43 +6722,6 @@ module.exports = require("net");
 
 /***/ }),
 
-/***/ 632:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'foreignObject';
-
-        this.permittedContent = 'any';
-
-        this.permittedAttributes = [
-            'filterprimitive',
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ]
-
-        Element.constructor.apply(this, arguments);
-    }
-
-});
-
-/***/ }),
-
 /***/ 649:
 /***/ (function(module) {
 
@@ -7520,63 +6953,6 @@ class Deprecation extends Error {
 }
 
 exports.Deprecation = Deprecation;
-
-
-/***/ }),
-
-/***/ 717:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports.A = __webpack_require__(229);
-module.exports.Circle = __webpack_require__(99);
-module.exports.Text = __webpack_require__(31);
-module.exports.ForeignObject = __webpack_require__(632);
-module.exports.Line = __webpack_require__(585);
-module.exports.Rect = __webpack_require__(727);
-module.exports.Path = __webpack_require__(366);
-
-
-/***/ }),
-
-/***/ 727:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var Element = __webpack_require__(883);
-
-module.exports = Element.extend({
-
-    constructor: function () {
-
-        this.name = 'rect';
-
-        this.permittedContent = [
-            'animation',
-            'descriptive'
-        ];
-
-        this.permittedAttributes = [
-            'graphicalevent',
-            'presentation',
-            'core',
-            'conditionalprocessing',
-            [
-                'style',
-                'class',
-                'externalResourcesRequired',
-                'transform'
-            ]
-        ];
-        Element.constructor.apply(this, arguments);
-
-    }
-
-});
 
 
 /***/ }),
@@ -10086,152 +9462,6 @@ exports.default = run;
 
 /***/ }),
 
-/***/ 883:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-"use strict";
-
-
-var prop = Object.defineProperty,
-    getPropDesc = Object.getOwnPropertyDescriptor,
-    permittedContent = __webpack_require__(461),
-    permittedAttributes = __webpack_require__(283),
-    Element = {
-
-        globalAttributes: [
-            'conditionalprocessing',
-            'core'
-        ],
-
-        constructor: function (attrs, content) {
-            this.attributes = attrs;
-            this.content = content;
-            this.defineAttributes();
-            this.defineContent();
-            this.checkAttributes();
-            this.checkContent();
-            this.make(attrs, content);
-        },
-
-        checkAny: function concatenateList(list) {
-            return (list === 'any');
-        },
-
-        defineContent: function contentList() {
-            if (this.checkAny(this.permittedContent)) return;
-            this.permittedContent.forEach(function (item, index) {
-                this.permittedContent = this.permittedContent.concat(permittedContent[item]);
-            }, this);
-        },
-
-        defineAttributes: function attrsList() {
-            if (this.checkAny(this.permittedAttributes)) return;
-            var args = this.permittedAttributes.concat(this.globalAttributes);
-            args.forEach(function (item, index) {
-                this.permittedAttributes = args.concat(permittedContent[item]);
-            }, this);
-        },
-
-        getElementName: function getElementName(element) {
-            return element.match(/(\w+)/)[0];
-        },
-
-        checkAttributes: function checkAttributes() {
-            for (var attr in this.attributes) {
-                if (this.permittedAttributes.indexOf(attr) !== -1) {
-                    throw new Error(attr + ' is not permitted on ' + this.name + ' elements.');
-                }
-            }
-        },
-
-        checkContent: function checkContent() {
-            if (this.content) {
-                if (typeof this.content === 'string' && this.name !== 'text') {
-                    throw new Error('Content cannot be a string.');
-
-                } else if (this.content.elements && this.permittedContent !== 'any') {
-                    this.content.elements.forEach(function (element) {
-                        var name = this.getElementName(element);
-                        if (this.permittedContent.indexOf(name) === -1) {
-                            throw new Error(this.name + ' cannot contain ' + name + ' elements.');
-                        }
-                    }.bind(this));
-                }
-            }
-        },
-
-        make: function makeElement(attrs, content) {
-            if (!attrs || Object.keys(attrs).length === 0) {
-                throw new Error('An element must have attributes');
-            }
-            var element = '<' + this.name,
-                prop;
-            for (prop in attrs) {
-                element += (' ' + prop + '="' + attrs[prop]) + '"';
-            }
-            element += '>';
-            this.node = element;
-        }
-
-    };
-
-function extendProps(onto, from) {
-    var props = Object.getOwnPropertyNames(from),
-        replace,
-        i;
-    for (i = 0; i < props.length; ++i) {
-        replace = getPropDesc(onto, props[i]);
-        if (!(props[i] in Function) && (!replace || replace.writable)) {
-            prop(onto, props[i], getPropDesc(from, props[i]));
-        }
-    }
-}
-
-function extend(parent, protoProps, staticProps) {
-    var child;
-
-    if (protoProps && protoProps.hasOwnProperty('constructor')) {
-        child = protoProps.constructor;
-    } else {
-        child = function subClass() {
-            return child.super.apply(this, arguments);
-        };
-    }
-
-    prop(child, 'super', { value: parent });
-
-    extendProps(child, parent);
-    if (staticProps) {
-        extendProps(child, staticProps);
-    }
-
-    child.prototype = Object.create(parent, {
-        constructor: {
-            value: child,
-            enumerable: false,
-            writable: true,
-            configurable: true
-        },
-    });
-
-    if (protoProps) {
-        extendProps(child.prototype, protoProps);
-    }
-    return child;
-}
-
-prop(Element, 'extend', {
-    configurable: true,
-    writable: true,
-    value: function ElementExtend(protoProps, staticProps) {
-        return extend(this, protoProps, staticProps);
-    },
-});
-
-module.exports = Element
-
-/***/ }),
-
 /***/ 885:
 /***/ (function(module) {
 
@@ -10643,6 +9873,8 @@ const octokit_1 = __webpack_require__(994);
 const helpers_1 = __webpack_require__(948);
 const branch = process.env['GITHUB_REF_NAME'];
 const readmeInfoPath = `./AUTOGRADING.md`;
+const mainBadgeString = `[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)`;
+const mainBadgeRegExp = /[\n]{0,1}.*\!\[Status overview badge\]\(.*[\n\r]*/g;
 async function modifyReadme(results) {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
@@ -10656,8 +9888,10 @@ async function modifyReadme(results) {
             ref: process.env['GITHUB_REF_NAME'],
         });
         const readme = Buffer.from(content, 'base64').toString('utf8');
+        // add main badge
+        let newReadme = addMainBadge(readme);
         // add autograding info
-        const newReadme = await addAutogradingInfo(readme, results);
+        newReadme = await addAutogradingInfo(newReadme, results);
         // don't update if nothing changed
         if (newReadme === readme)
             return;
@@ -10676,6 +9910,13 @@ async function modifyReadme(results) {
         console.log(error);
         throw error;
     }
+}
+function addMainBadge(readme) {
+    const headlineLevel1Regex = /^#[^#].*$/m;
+    // delete old points badge
+    readme = readme.replace(mainBadgeRegExp, '');
+    // insert points badge before level 1 headline match
+    return readme.replace(headlineLevel1Regex, `\n${mainBadgeString}\n$&`);
 }
 function generateResult(results) {
     return `# Results
@@ -10697,7 +9938,6 @@ ${results.testResults.reduce((acc, testResult) => {
 async function addAutogradingInfo(fullReadme, results) {
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
     const readmeInfo = `## Results
-[![Results badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)
 
 ${generateResult(results)}
 
@@ -12118,47 +11358,48 @@ exports.checkBypass = checkBypass;
 /***/ }),
 
 /***/ 952:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
+/***/ (function(__unusedmodule, exports) {
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
-const svg_builder_1 = __importDefault(__webpack_require__(334));
-const helpers_1 = __webpack_require__(948);
 function badge(testResults) {
-    const lineHeight = 25;
-    let lines = 0;
-    const draw = svg_builder_1.default.newInstance();
-    testResults.forEach(tests => {
-        lines++;
-        draw
-            .text({
-            x: 1,
-            y: lineHeight * lines,
-            'font-family': 'helvetica',
-            'font-size': 15,
-            fill: '#fff',
-        }, helpers_1.xmlSecure(tests[0].ancestorTitles[0]));
-        tests.forEach(result => {
-            lines++;
-            draw
-                .text({
-                x: 4,
-                y: lineHeight * lines,
-                'font-family': 'helvetica',
-                'font-size': 15,
-                fill: '#fff',
-            }, (result.status === 'passed' ? '✅' : '❌') + ' ' + helpers_1.xmlSecure(result.title));
-        });
-    });
-    draw
-        .width(450)
-        .height(lines * lineHeight + 10);
-    return draw.render();
+    const tasksCompleted = testResults.filter(testResult => {
+        return !testResult.find(result => result.status !== 'passed');
+    }).length;
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="277px" height="38px" viewBox="0 0 277 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>badge_some</title>
+    <g id="Badges" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-49.000000, -135.000000)" id="Light">
+            <g transform="translate(50.000000, 50.000000)">
+                <g id="Group" transform="translate(0.000000, 86.000000)">
+                    <rect id="Background" stroke="#FEF1AF" fill="#FFF9D9" x="0" y="0" width="275" height="36" rx="6"></rect>
+                    <g id="CTA" transform="translate(170.000000, 0.000000)">
+                        <path d="M0,0 L99,0 C102.313708,-6.08718376e-16 105,2.6862915 105,6 L105,30 C105,33.3137085 102.313708,36 99,36 L0,36 L0,36 L0,0 Z" id="CTA-Background" stroke="#FEDA2E" fill="#FEDA2E"></path>
+                        <text id="CTA-Text" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="#0E123B">
+                            <tspan x="28.4052734" y="24">Details</tspan>
+                        </text>
+                    </g>
+                    <text id="Score" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="#0E123B">
+                        <tspan x="107" y="24">${tasksCompleted}/${testResults.length}</tspan>
+                    </text>
+                    <text id="Tests" font-family="ArialMT, Arial" font-size="15" font-weight="normal" fill="#0E123B">
+                        <tspan x="54" y="24">Tasks</tspan>
+                    </text>
+                    <g id="Icon" transform="translate(20.000000, 7.000000)">
+                        <polygon id="Half-full" fill="#FEDA2E" points="1.47357941 9.51987934 18.3122101 9.51987934 16.2599831 18.7211496 14.4799805 19.5198793 5.80393219 19.5198793 3.21572876 18.7211496"></polygon>
+                        <g id="Glass" stroke="#0E123B">
+                            <path d="M19.4181624,0.5 L16.2227096,21.5 L3.79691031,21.5 L0.582360868,0.5 L19.4181624,0.5 Z" id="Rectangle"></path>
+                            <polyline id="Line" stroke-linecap="square" stroke-linejoin="round" points="3.77687454 18.5397587 5.60838318 19.5 14.7425766 19.5 16.2599831 18.5397587"></polyline>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>`;
 }
 exports.default = badge;
 
