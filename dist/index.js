@@ -9874,7 +9874,7 @@ const helpers_1 = __webpack_require__(948);
 const branch = process.env['GITHUB_REF_NAME'];
 const readmeInfoPath = `./AUTOGRADING.md`;
 const mainBadgeString = `\n\r[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)\n\r`;
-const mainBadgeRegExp = /[\n\r]{0,1}.*\!\[Status overview badge\]\(.*[\n\r]*/g;
+const mainBadgeRegExp = /[\n\r]{0,1}.*\!\[Status overview badge\]\(.*[\n\r]{1}/g;
 async function modifyReadme(results) {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
