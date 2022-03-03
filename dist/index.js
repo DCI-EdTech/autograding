@@ -9916,7 +9916,7 @@ function addMainBadge(readme) {
     // delete old points badge
     readme = readme.replace(mainBadgeRegExp, '');
     // insert points badge before level 1 headline match
-    return readme.replace(headlineLevel1Regex, `\n${mainBadgeString}\n$&`);
+    return readme.replace(headlineLevel1Regex, `$&\n${mainBadgeString}\n`);
 }
 function generateResult(results) {
     return `# Results
