@@ -103,7 +103,7 @@ There are two ways to see why tasks might not be completed:
 
   // remove old info
   fullReadme = fullReadme.replace(infoRE, '')
-  return `${fullReadme}\n${infoDelimiters[0]}\n${readmeInfo}\n${infoDelimiters[1]}`;
+  return `${fullReadme}\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
 }
 
 export default modifyReadme;
