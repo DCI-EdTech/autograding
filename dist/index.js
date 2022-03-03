@@ -9873,7 +9873,7 @@ const octokit_1 = __webpack_require__(994);
 const helpers_1 = __webpack_require__(948);
 const branch = process.env['GITHUB_REF_NAME'];
 const readmeInfoPath = `./AUTOGRADING.md`;
-const mainBadgeString = `[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)`;
+const mainBadgeString = `\n[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)\n\r`;
 const mainBadgeRegExp = /[\n]{0,1}.*\!\[Status overview badge\]\(.*[\n\r]*/g;
 async function modifyReadme(results) {
     const octokit = octokit_1.createOctokit();
@@ -9916,7 +9916,7 @@ function addMainBadge(readme) {
     // delete old points badge
     readme = readme.replace(mainBadgeRegExp, '');
     // insert points badge before level 1 headline match
-    return readme.replace(headlineLevel1Regex, `$&\n${mainBadgeString}\n`);
+    return readme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
 }
 function generateResult(results) {
     return `# Results
