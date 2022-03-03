@@ -99,11 +99,11 @@ There are two ways to see why tasks might not be completed:
 - Here you see all outputs from the test run`
 
   const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
-  const infoRE = new RegExp(`[\n\r]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
+  const infoRE = new RegExp(`[\n]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
 
   // remove old info
   fullReadme = fullReadme.replace(infoRE, '')
-  return `${fullReadme}\n\r${infoDelimiters[0]}\n${readmeInfo}\n\r${infoDelimiters[1]}`;
+  return `${fullReadme}\n${infoDelimiters[0]}\n${readmeInfo}\n${infoDelimiters[1]}`;
 }
 
 export default modifyReadme;
