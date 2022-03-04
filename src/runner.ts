@@ -8,7 +8,10 @@ import * as os from 'os'
 import chalk from 'chalk'
 import fs from 'fs'
 import path from 'path'
+import modifyReadme from './modifyReadme'
+import updateBadges from './updateBadges'
 
+const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
 const taskNamePattern = 'task(s)?(\.(.*))?\.js'
 
@@ -238,6 +241,22 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     }
     return 0
   })
+
+  // group results
+  result.testResults = result.testResults.reduce((acc, item) => {
+    acc.push(...item.assertionResults)
+    return acc
+  }, []).reduce((acc, item, index) => {
+    item.statusBadgePath = `.github/badges/${currentBranch}/status${index}.svg`
+    let arr = acc.find(i => i[0].ancestorTitles[0] == item.ancestorTitles[0])
+    if(arr) {
+      arr.push(item)
+    } else {
+      arr = [item]
+      acc.push(arr)
+    }
+    return acc
+  }, [])
   
   // Restart command processing
   log('')
@@ -256,6 +275,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   // Set the number of points
   const text = `Points ${points}/${availablePoints}`
   log(color.bold.bgCyan.black(text))
+  await Promise.all([modifyReadme(result), updateBadges(result)])
   core.setOutput('Points', `${points}/${availablePoints}`)
   await setCheckRunOutput(points, availablePoints, result)
 }

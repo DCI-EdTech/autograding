@@ -20,6 +20,75 @@ function createOctokit() {
   if (!owner) return
   if (!repo) return
 
+  // add commit method
+  async function commit(files, branch, message) {    
+    try {
+      // get last commit of branch
+      const {data:[{sha:lastCommitSHA, commit: {tree: {sha: lastCommitTreeSHA}}}], data} = await octokit.rest.repos.listCommits({
+        owner,
+        repo,
+        sha: branch,
+      })
+
+      // get tree
+      const {data: treeData} = await octokit.rest.git.getTree({
+        owner,
+        repo,
+        tree_sha: lastCommitTreeSHA
+      })
+
+      // create blobs
+      const blobs = await Promise.all(files.map(async (file) => {
+        return await octokit.rest.git.createBlob({
+          owner,
+          repo,
+          content: file.content,
+          encoding: 'utf-8'
+        })
+      }))
+
+      // create tree
+      const tree = await octokit.rest.git.createTree({
+        owner,
+        repo,
+        tree: files.map((file, index) => {
+          return {
+            path: file.path,
+            mode: '100644',
+            type: 'blob',
+            sha: blobs[index].data.sha
+          }
+        }),
+        base_tree: lastCommitTreeSHA
+      })
+
+      // create commit
+      const commit = await octokit.rest.git.createCommit({
+        owner,
+        repo,
+        message,
+        tree: tree.data.sha,
+        parents: [lastCommitSHA],
+        author: {
+          name: 'github-actions',
+          email: 'action@github.com'
+        },
+      })
+
+      // update head
+      await octokit.rest.git.updateRef({
+        owner,
+        repo,
+        ref: `heads/${branch}`,
+        sha: commit.data.sha,
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  octokit.commit = commit
+
   return octokit
 }
 
