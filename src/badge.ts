@@ -4,7 +4,7 @@ const colorVariants = {
   full: {
     stroke: '#A5F2DC',
     fill: '#DEFFF5',
-    label: 'Tasks',
+    label: 'Details',
     ctaStroke: '#00E0A1',
     ctaFill: '#00E0A1',
     ctaFontColor: '#0E123B',
@@ -18,12 +18,13 @@ const colorVariants = {
           <g id="All" transform="translate(26.500000, 14.000000)" stroke="#0E123B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
               <line x1="0" y1="4.78849792" x2="2.5" y2="7.28849792" id="Line"></line>
               <line x1="7.11474228" y1="0" x2="2.5" y2="7.28849792" id="Line"></line>
-          </g>`
+          </g>`,
+    ctaLeft: 28.4052734
   },
   partial: {
     stroke: '#FEF1AF',
     fill: '#FFF9D9',
-    label: 'Tasks',
+    label: 'Details',
     ctaStroke: '#FEDA2E',
     ctaFill: '#FEDA2E',
     ctaFontColor: '#0E123B',
@@ -33,7 +34,8 @@ const colorVariants = {
                   <path d="M19.4181624,0.5 L16.2227096,21.5 L3.79691031,21.5 L0.582360868,0.5 L19.4181624,0.5 Z" id="Rectangle"></path>
                   <polyline id="Line" stroke-linecap="square" stroke-linejoin="round" points="3.77687454 18.5397587 5.60838318 19.5 14.7425766 19.5 16.2599831 18.5397587"></polyline>
               </g>
-          </g>`
+          </g>`,
+    ctaLeft: 28.4052734
   },
   none: {
     stroke: '#F5A4C2',
@@ -51,7 +53,8 @@ const colorVariants = {
                   <line x1="0.5" y1="0.5" x2="7.5" y2="7.5" id="Line"></line>
                   <line x1="7.5" y1="0.5" x2="0.5" y2="7.5" id="Line"></line>
               </g>
-          </g>`
+          </g>`,
+    ctaLeft: 21.3300781
   }
 }
 
@@ -75,7 +78,7 @@ export default function badge(testResults) {
                     <g id="CTA" transform="translate(170.000000, 0.000000)">
                         <path d="M0,0 L99,0 C102.313708,-6.08718376e-16 105,2.6862915 105,6 L105,30 C105,33.3137085 102.313708,36 99,36 L0,36 L0,36 L0,0 Z" id="CTA-Background" stroke="${colors.ctaStroke}" fill="${colors.ctaFill}"></path>
                         <text id="CTA-Text" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="${colors.ctaFontColor}">
-                            <tspan x="28.4052734" y="24">${colors.label}</tspan>
+                            <tspan x="${colors.ctaLeft}" y="24">${colors.label}</tspan>
                         </text>
                     </g>
                     <text id="Score" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="#0E123B">
