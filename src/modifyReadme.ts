@@ -66,9 +66,7 @@ function addMainBadge(readme) {
 }
 
 function generateResult(results) {
-  return `# Results
-
-${results.testResults.reduce((acc, testResult) => {
+  return `${results.testResults.reduce((acc, testResult) => {
   acc += `
 ### ${testResult[0].ancestorTitles[0]}
 
