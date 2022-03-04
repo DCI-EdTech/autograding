@@ -2,13 +2,16 @@
 
 const colorVariants = {
   full: {
-    stroke: '#A5F2DC'
+    stroke: '#A5F2DC',
+    fill: '#DEFFF5'
   },
   partial: {
-
+    stroke: '#FEF1AF',
+    fill: ''
   },
   none: {
-
+    stroke: '#F5A4C2',
+    fill: '#FFE6EF'
   }
 }
 

@@ -53,8 +53,16 @@ function addMainBadge(readme) {
   const headlineLevel1Regex = /^#[^#].*$/m;
   // delete old points badge
   readme = readme.replace(mainBadgeRegExp, '')
-  // insert points badge before level 1 headline match
-  return readme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
+
+  // check if there is a headline
+  if(readme.test(headlineLevel1Regex)) {
+    // insert points badge after level 1 headline
+    return readme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
+  } else {
+    // insert badge on top if no headline found
+    return `${mainBadgeString}${readme}`
+  }
+
 }
 
 function generateResult(results) {
@@ -102,7 +110,7 @@ There are two ways to see why tasks might not be completed:
   const infoRE = new RegExp(`[\n]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
 
   // remove old info
-  fullReadme = fullReadme.replace(infoRE, '')
+  fullReadme = fullReadme.replace(infoRE, '').trim()
   return `${fullReadme}\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
 }
 
