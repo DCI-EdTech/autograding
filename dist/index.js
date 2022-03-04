@@ -9916,7 +9916,7 @@ function addMainBadge(readme) {
     // delete old points badge
     readme = readme.replace(mainBadgeRegExp, '');
     // check if there is a headline
-    if (readme.test(headlineLevel1Regex)) {
+    if (headlineLevel1Regex.test(readme)) {
         // insert points badge after level 1 headline
         return readme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
     }
