@@ -9968,7 +9968,7 @@ There are two ways to see why tasks might not be completed:
     const infoRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
     // remove old info
     fullReadme = fullReadme.replace(infoRE, '').trim();
-    return `${fullReadme}\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
+    return `${fullReadme}\n\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
 }
 exports.default = modifyReadme;
 
@@ -11374,15 +11374,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const colorVariants = {
     full: {
         stroke: '#A5F2DC',
-        fill: '#DEFFF5'
+        fill: '#DEFFF5',
+        label: 'Tasks',
+        ctaStroke: '#00E0A1'
     },
     partial: {
         stroke: '#FEF1AF',
-        fill: ''
+        fill: '#FFF9D9',
+        label: 'Tasks',
+        ctaStroke: '#FEDA2E'
     },
     none: {
         stroke: '#F5A4C2',
-        fill: '#FFE6EF'
+        fill: '#FFE6EF',
+        label: 'Pushed?',
+        ctaStroke: '#EF065B'
     }
 };
 function badge(testResults) {
@@ -11403,9 +11409,9 @@ function badge(testResults) {
                 <g id="Group" transform="translate(0.000000, 86.000000)">
                     <rect id="Background" stroke="${colors.stroke}" fill="#FFF9D9" x="0" y="0" width="275" height="36" rx="6"></rect>
                     <g id="CTA" transform="translate(170.000000, 0.000000)">
-                        <path d="M0,0 L99,0 C102.313708,-6.08718376e-16 105,2.6862915 105,6 L105,30 C105,33.3137085 102.313708,36 99,36 L0,36 L0,36 L0,0 Z" id="CTA-Background" stroke="#FEDA2E" fill="#FEDA2E"></path>
+                        <path d="M0,0 L99,0 C102.313708,-6.08718376e-16 105,2.6862915 105,6 L105,30 C105,33.3137085 102.313708,36 99,36 L0,36 L0,36 L0,0 Z" id="CTA-Background" stroke="${colors.ctaStroke}" fill="#FEDA2E"></path>
                         <text id="CTA-Text" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="#0E123B">
-                            <tspan x="28.4052734" y="24">Details</tspan>
+                            <tspan x="28.4052734" y="24">${colors.label}</tspan>
                         </text>
                     </g>
                     <text id="Score" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="#0E123B">
