@@ -922,9 +922,9 @@ const octokit_1 = __webpack_require__(994);
 async function reportBug(error) {
     console.log("report bug", octokit_1.owner, process.env['GITHUB_REPOSITORY']);
     // report bugs only for DCI Org for now
-    if (octokit_1.owner !== 'DigitalCareerInstitute')
-        return;
+    //if(owner !== 'DigitalCareerInstitute') return
     const octokit = octokit_1.createOctokit();
+    console.log('octokit', octokit);
     if (!octokit)
         return;
     const currentBranch = process.env['GITHUB_REF_NAME'];
