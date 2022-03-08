@@ -936,13 +936,12 @@ async function reportBug(error) {
             sha: currentBranch,
         });
         const author = data.find(item => !item.commit.author.name.includes('[bot]')).commit.author.name;
-        console.log('author', author);
         // create issue, label:bug, assign committer
         await octokit.rest.issues.create({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
             title: 'Autograding Runtime Error',
-            body: error.message,
+            body: error.message.toString(),
             labels: ['bug'],
             assignees: ['galymax']
         });

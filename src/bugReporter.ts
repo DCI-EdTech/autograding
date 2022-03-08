@@ -21,14 +21,12 @@ export default async function reportBug(error) {
     })
     const author = data.find(item => !item.commit.author.name.includes('[bot]')).commit.author.name
 
-    console.log('author', author)
-
     // create issue, label:bug, assign committer
     await octokit.rest.issues.create({
       owner,
       repo,
       title: 'Autograding Runtime Error',
-      body: error.message,
+      body: error.message.toString(),
       labels: ['bug'],
       assignees: ['galymax']
     });
