@@ -140,7 +140,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
       shell: true,
       env: {
         PATH: process.env['PATH'],
-        FORCE_COLOR: 'true',
+        //FORCE_COLOR: 'true',
       },
     })
   
@@ -149,14 +149,14 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   
     child.stdout.on('data', chunk => {
       if(chunk.toString().includes('{') || chunk.toString().includes('}')) {
-        output += chunk
+        output += chunk.toString()
       } else {
         process.stdout.write(indent(chunk))
       }
     })
   
     child.stderr.on('data', chunk => {
-      process.stderr.write(indent(chunk.toString()))
+      process.stderr.write(indent(chunk))
     })
   
     await waitForExit(child, timeout)

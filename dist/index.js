@@ -7963,21 +7963,20 @@ const runCommand = async (test, cwd, timeout) => {
             shell: true,
             env: {
                 PATH: process.env['PATH'],
-                FORCE_COLOR: 'true',
             },
         });
         // Start with a single new line
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
             if (chunk.toString().includes('{') || chunk.toString().includes('}')) {
-                output += chunk;
+                output += chunk.toString();
             }
             else {
                 process.stdout.write(indent(chunk));
             }
         });
         child.stderr.on('data', chunk => {
-            process.stderr.write(indent(chunk.toString()));
+            process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
         return JSON.parse(output);
