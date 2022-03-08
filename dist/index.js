@@ -920,11 +920,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const octokit_1 = __webpack_require__(994);
 async function reportBug(error) {
-    console.log("report bug", octokit_1.owner, process.env['GITHUB_REPOSITORY']);
     // report bugs only for DCI Org for now
-    //if(owner !== 'DigitalCareerInstitute') return
+    if (octokit_1.owner !== 'DigitalCareerInstitute')
+        return;
     const octokit = octokit_1.createOctokit();
-    console.log('octokit', octokit);
     if (!octokit)
         return;
     const currentBranch = process.env['GITHUB_REF_NAME'];
@@ -11725,11 +11724,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const core = __importStar(__webpack_require__(470));
 const github = __importStar(__webpack_require__(469));
-let owner, repo;
+// The environment contains a variable for current repository. The repository
+// will be formatted as a name with owner (`nwo`); e.g., jeffrafter/example
+// We'll split this into two separate variables for later use
+const nwo = process.env['GITHUB_REPOSITORY'] || '/';
+const [owner, repo] = nwo.split('/');
 exports.owner = owner;
 exports.repo = repo;
 function createOctokit() {
-    var _a;
     const token = process.env['GITHUB_TOKEN'] || core.getInput('token');
     if (!token || token === '')
         return;
@@ -11737,11 +11739,6 @@ function createOctokit() {
     const octokit = github.getOctokit(token);
     if (!octokit)
         return;
-    // The environment contains a variable for current repository. The repository
-    // will be formatted as a name with owner (`nwo`); e.g., jeffrafter/example
-    // We'll split this into two separate variables for later use
-    const nwo = process.env['GITHUB_REPOSITORY'] || '/';
-    _a = nwo.split('/'), exports.owner = owner = _a[0], exports.repo = repo = _a[1];
     if (!owner)
         return;
     if (!repo)
