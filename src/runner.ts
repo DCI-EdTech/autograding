@@ -10,6 +10,7 @@ import fs from 'fs'
 import path from 'path'
 import modifyReadme from './modifyReadme'
 import updateBadges from './updateBadges'
+import reportBug from './bugReporter'
 
 const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
@@ -224,6 +225,8 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     result = error.result
     core.setFailed(error.message)
   }
+
+  if(result === []) return reportBug()
 
   // calculate points
   points = Math.round(100 / result.numTotalTests * result.numPassedTests)

@@ -911,6 +911,40 @@ conversions["RegExp"] = function (V, opts) {
 
 /***/ }),
 
+/***/ 161:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+// @ts-nocheck
+const octokit_1 = __webpack_require__(994);
+async function reportBug(error) {
+    // report bugs only for DCI Org for now
+    if (octokit_1.owner !== 'DigitalCareerInstitute')
+        return;
+    const octokit = octokit_1.createOctokit();
+    if (!octokit)
+        return;
+    const currentBranch = process.env['GITHUB_REF_NAME'];
+    // get last commit of branch
+    try {
+        const { commits } = await octokit.rest.repos.listCommits({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            sha: currentBranch,
+        });
+        console.log('commits', JSON.stringify(commits));
+    }
+    catch (err) {
+        // branch doesn't exist
+    }
+}
+exports.default = reportBug;
+
+
+/***/ }),
+
 /***/ 209:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7819,6 +7853,7 @@ const chalk_1 = __importDefault(__webpack_require__(843));
 const fs_1 = __importDefault(__webpack_require__(747));
 const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const updateBadges_1 = __importDefault(__webpack_require__(860));
+const bugReporter_1 = __importDefault(__webpack_require__(161));
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 const taskNamePattern = 'task(s)?(\.(.*))?\.js';
@@ -7994,6 +8029,8 @@ exports.runAll = async (cwd, packageJsonPath) => {
         result = error.result;
         core.setFailed(error.message);
     }
+    if (result === [])
+        return bugReporter_1.default();
     // calculate points
     points = Math.round(100 / result.numTotalTests * result.numPassedTests);
     // sort results by filename
