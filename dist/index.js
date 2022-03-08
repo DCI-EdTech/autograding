@@ -11728,6 +11728,21 @@ function createOctokit() {
                 tree_sha: lastCommitTreeSHA
             }));
         }
+        else {
+            // get sha of default branch
+            const resp = await octokit.rest.repos.get({
+                owner,
+                repo,
+            });
+            console.log("repo", JSON.stringify(resp));
+            // create branch
+            await octokit.rest.git.createRef({
+                owner,
+                repo,
+                ref: `heads/${branch}`,
+                sha,
+            });
+        }
         try {
             // create blobs
             const blobs = await Promise.all(files.map(async (file) => {
