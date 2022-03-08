@@ -8029,9 +8029,8 @@ exports.runAll = async (cwd, packageJsonPath) => {
         result = error.result;
         core.setFailed(error.message);
     }
-    console.log('result', result);
-    if (result === [])
-        return bugReporter_1.default();
+    if (result.numRuntimeErrorTestSuites > 0)
+        return bugReporter_1.default(result.testResults[0]);
     // calculate points
     points = Math.round(100 / result.numTotalTests * result.numPassedTests);
     // sort results by filename

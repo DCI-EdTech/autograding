@@ -226,9 +226,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     core.setFailed(error.message)
   }
 
-  console.log('result', result)
-
-  if(result === []) return reportBug()
+  if(result.numRuntimeErrorTestSuites > 0) return reportBug(result.testResults[0])
 
   // calculate points
   points = Math.round(100 / result.numTotalTests * result.numPassedTests)
