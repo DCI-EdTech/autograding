@@ -8029,6 +8029,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
         result = error.result;
         core.setFailed(error.message);
     }
+    console.log('result', result);
     if (result === [])
         return bugReporter_1.default();
     // calculate points

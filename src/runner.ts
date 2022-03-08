@@ -226,6 +226,8 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     core.setFailed(error.message)
   }
 
+  console.log('result', result)
+
   if(result === []) return reportBug()
 
   // calculate points
