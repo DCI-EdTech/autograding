@@ -920,7 +920,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const octokit_1 = __webpack_require__(994);
 async function reportBug(error) {
-    console.log("report bug");
+    console.log("report bug", octokit_1.owner);
     // report bugs only for DCI Org for now
     if (octokit_1.owner !== 'DigitalCareerInstitute')
         return;
