@@ -2,7 +2,7 @@
 import { createOctokit, owner, repo } from './octokit'
 
 export default async function reportBug(error) {
-  console.log("report bug", owner)
+  console.log("report bug", owner, process.env['GITHUB_REPOSITORY'])
   // report bugs only for DCI Org for now
   if(owner !== 'DigitalCareerInstitute') return
 
