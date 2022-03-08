@@ -11738,7 +11738,7 @@ function createOctokit() {
             await octokit.rest.git.createRef({
                 owner,
                 repo,
-                ref: `heads/${branch}`,
+                ref: `refs/heads/${branch}`,
                 sha: lastCommitSHA,
             });
         }
