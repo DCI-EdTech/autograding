@@ -2,6 +2,7 @@
 import { createOctokit, owner, repo } from './octokit'
 
 export default async function reportBug(error) {
+  console.log("report bug")
   // report bugs only for DCI Org for now
   if(owner !== 'DigitalCareerInstitute') return
 
@@ -18,6 +19,10 @@ export default async function reportBug(error) {
       sha: currentBranch,
     })
     console.log('commits', JSON.stringify(commits))
+
+    // create issue, label:bug, assign committer
+
+    // TODO: make sure no duplicates are created
 
   } catch (err) {
     // branch doesn't exist

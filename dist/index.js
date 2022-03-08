@@ -920,6 +920,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const octokit_1 = __webpack_require__(994);
 async function reportBug(error) {
+    console.log("report bug");
     // report bugs only for DCI Org for now
     if (octokit_1.owner !== 'DigitalCareerInstitute')
         return;
@@ -935,6 +936,8 @@ async function reportBug(error) {
             sha: currentBranch,
         });
         console.log('commits', JSON.stringify(commits));
+        // create issue, label:bug, assign committer
+        // TODO: make sure no duplicates are created
     }
     catch (err) {
         // branch doesn't exist
