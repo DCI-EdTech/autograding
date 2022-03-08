@@ -59,6 +59,7 @@ const colorVariants = {
 }
 
 export default function badge(testResults) {
+  console.log('result', JSON.stringify(testResults))
   const tasksCompleted = testResults.filter(testResult => {
     return !testResult.find(result => result.status !== 'passed')
   }).length
