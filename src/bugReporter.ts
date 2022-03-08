@@ -11,6 +11,7 @@ export default async function reportBug(error) {
   const currentBranch = process.env['GITHUB_REF_NAME']
 
   // get last commit of branch
+  console.log('get commits of', owner, repo, currentBranch)
   try {
     const {commits} = await octokit.rest.repos.listCommits({
       owner,

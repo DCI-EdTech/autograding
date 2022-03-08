@@ -928,6 +928,7 @@ async function reportBug(error) {
         return;
     const currentBranch = process.env['GITHUB_REF_NAME'];
     // get last commit of branch
+    console.log('get commits of', octokit_1.owner, octokit_1.repo, currentBranch);
     try {
         const { commits } = await octokit.rest.repos.listCommits({
             owner: octokit_1.owner,
