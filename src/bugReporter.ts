@@ -13,12 +13,12 @@ export default async function reportBug(error) {
   // get last commit of branch
   console.log('get commits of', owner, repo, currentBranch)
   try {
-    const {commits} = await octokit.rest.repos.listCommits({
+    const {data} = await octokit.rest.repos.listCommits({
       owner,
       repo,
       sha: currentBranch,
     })
-    console.log('commits', JSON.stringify(commits))
+    console.log('commits', JSON.stringify(data))
 
     // create issue, label:bug, assign committer
 

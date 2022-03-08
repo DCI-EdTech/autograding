@@ -930,12 +930,12 @@ async function reportBug(error) {
     // get last commit of branch
     console.log('get commits of', octokit_1.owner, octokit_1.repo, currentBranch);
     try {
-        const { commits } = await octokit.rest.repos.listCommits({
+        const { data } = await octokit.rest.repos.listCommits({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
             sha: currentBranch,
         });
-        console.log('commits', JSON.stringify(commits));
+        console.log('commits', JSON.stringify(data));
         // create issue, label:bug, assign committer
         // TODO: make sure no duplicates are created
     }
