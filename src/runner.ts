@@ -140,7 +140,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
       shell: true,
       env: {
         PATH: process.env['PATH'],
-        FORCE_COLOR: 'true',
+        //FORCE_COLOR: 'true',
       },
     })
   
