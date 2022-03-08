@@ -22,21 +22,28 @@ function createOctokit() {
 
   // add commit method
   async function commit(files, branch, message) {    
+    // get last commit of branch
+    let lastCommitSHA, lastCommitTreeSHA, treeData
     try {
-      // get last commit of branch
-      const {data:[{sha:lastCommitSHA, commit: {tree: {sha: lastCommitTreeSHA}}}], data} = await octokit.rest.repos.listCommits({
+      ({data:[{sha:lastCommitSHA, commit: {tree: {sha: lastCommitTreeSHA}}}]} = await octokit.rest.repos.listCommits({
         owner,
         repo,
         sha: branch,
-      })
+      }))
+    } catch (err) {
+      // branch doesn't exist
+    }
 
-      // get tree
-      const {data: treeData} = await octokit.rest.git.getTree({
+    // get tree
+    if(lastCommitTreeSHA) {
+      ({data: treeData} = await octokit.rest.git.getTree({
         owner,
         repo,
         tree_sha: lastCommitTreeSHA
-      })
-
+      }))
+    }
+      
+    try {
       // create blobs
       const blobs = await Promise.all(files.map(async (file) => {
         return await octokit.rest.git.createBlob({
@@ -59,7 +66,7 @@ function createOctokit() {
             sha: blobs[index].data.sha
           }
         }),
-        base_tree: lastCommitTreeSHA
+        ...(lastCommitTreeSHA && {base_tree: lastCommitTreeSHA})
       })
 
       // create commit
@@ -68,7 +75,7 @@ function createOctokit() {
         repo,
         message,
         tree: tree.data.sha,
-        parents: [lastCommitSHA],
+        ...(lastCommitSHA && {parents: [lastCommitSHA]}),
         author: {
           name: 'github-actions',
           email: 'action@github.com'
