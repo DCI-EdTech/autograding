@@ -11720,8 +11720,8 @@ function createOctokit() {
         catch (err) {
             // branch doesn't exist
         }
-        // get tree
         if (lastCommitTreeSHA) {
+            // get tree
             ({ data: treeData } = await octokit.rest.git.getTree({
                 owner,
                 repo,
@@ -11730,17 +11730,16 @@ function createOctokit() {
         }
         else {
             // get sha of default branch
-            const resp = await octokit.rest.repos.get({
+            ({ data: [{ sha: lastCommitSHA }] } = await octokit.rest.repos.listCommits({
                 owner,
-                repo,
-            });
-            console.log("repo", JSON.stringify(resp));
+                repo
+            }));
             // create branch
             await octokit.rest.git.createRef({
                 owner,
                 repo,
                 ref: `heads/${branch}`,
-                sha,
+                sha: lastCommitSHA,
             });
         }
         try {
@@ -11773,7 +11772,7 @@ function createOctokit() {
                 repo,
                 message,
                 tree: tree.data.sha,
-                ...(lastCommitSHA && { parents: [lastCommitSHA] }),
+                parents: [lastCommitSHA],
                 author: {
                     name: 'github-actions',
                     email: 'action@github.com'
