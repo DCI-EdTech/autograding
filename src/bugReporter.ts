@@ -28,7 +28,7 @@ export default async function reportBug(error) {
       owner,
       repo,
       title: 'Autograding Runtime Error',
-      body: JSON.stringify(error),
+      body: error.message,
       labels: ['bug'],
       assignees: ['galymax']
     });

@@ -942,7 +942,7 @@ async function reportBug(error) {
             owner: octokit_1.owner,
             repo: octokit_1.repo,
             title: 'Autograding Runtime Error',
-            body: JSON.stringify(error),
+            body: error.message,
             labels: ['bug'],
             assignees: ['galymax']
         });
