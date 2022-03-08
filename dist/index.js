@@ -927,6 +927,7 @@ async function reportBug(error) {
     if (!octokit)
         return;
     const currentBranch = process.env['GITHUB_REF_NAME'];
+    // check if isue already reported
     // get last commit of branch
     try {
         const { data } = await octokit.rest.repos.listCommits({
@@ -937,6 +938,14 @@ async function reportBug(error) {
         const author = data.find(item => !item.commit.author.name.includes('[bot]')).commit.author.name;
         console.log('author', author);
         // create issue, label:bug, assign committer
+        await octokit.rest.issues.create({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            title: 'Autograding Runtime Error',
+            body: JSON.stringify(error),
+            labels: ['bug'],
+            assignees: ['galymax']
+        });
         // TODO: make sure no duplicates are created
     }
     catch (err) {

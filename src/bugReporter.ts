@@ -10,6 +10,8 @@ export default async function reportBug(error) {
 
   const currentBranch = process.env['GITHUB_REF_NAME']
 
+  // check if isue already reported
+
   // get last commit of branch
   try {
     const {data} = await octokit.rest.repos.listCommits({
@@ -22,6 +24,14 @@ export default async function reportBug(error) {
     console.log('author', author)
 
     // create issue, label:bug, assign committer
+    await octokit.rest.issues.create({
+      owner,
+      repo,
+      title: 'Autograding Runtime Error',
+      body: JSON.stringify(error),
+      labels: ['bug'],
+      assignees: ['galymax']
+    });
 
     // TODO: make sure no duplicates are created
 
