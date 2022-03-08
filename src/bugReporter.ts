@@ -11,14 +11,15 @@ export default async function reportBug(error) {
   const currentBranch = process.env['GITHUB_REF_NAME']
 
   // get last commit of branch
-  console.log('get commits of', owner, repo, currentBranch)
   try {
     const {data} = await octokit.rest.repos.listCommits({
       owner,
       repo,
       sha: currentBranch,
     })
-    console.log('commits', JSON.stringify(data))
+    const author = data.find(item => !item.commit.author.name.includes('[bot]')).commit.author.name
+
+    console.log('author', author)
 
     // create issue, label:bug, assign committer
 

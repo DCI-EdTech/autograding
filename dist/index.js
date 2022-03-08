@@ -928,14 +928,14 @@ async function reportBug(error) {
         return;
     const currentBranch = process.env['GITHUB_REF_NAME'];
     // get last commit of branch
-    console.log('get commits of', octokit_1.owner, octokit_1.repo, currentBranch);
     try {
         const { data } = await octokit.rest.repos.listCommits({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
             sha: currentBranch,
         });
-        console.log('commits', JSON.stringify(data));
+        const author = data.find(item => !item.commit.author.name.includes('[bot]')).commit.author.name;
+        console.log('author', author);
         // create issue, label:bug, assign committer
         // TODO: make sure no duplicates are created
     }
