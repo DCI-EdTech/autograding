@@ -66,7 +66,7 @@ export default function badge(testResults) {
 
   let colors = colorVariants.none
   if(tasksCompleted > 0) colors = colorVariants.partial
-  if(tasksCompleted == testResults.length) colors = colorVariants.full
+  if(tasksCompleted > 0 && tasksCompleted == testResults.length) colors = colorVariants.full
   
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="277px" height="38px" viewBox="0 0 277 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
