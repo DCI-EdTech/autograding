@@ -33,6 +33,9 @@ export default async function reportBug(error) {
       repo,
       sha: currentBranch,
     })
+
+    console.log(data)
+
     const author = data.find(item => !item.commit.author.name.includes('[bot]')).commit.committer.name
 
     // create issue, label:bug, assign committer
@@ -48,7 +51,7 @@ export default async function reportBug(error) {
     // TODO: make sure no duplicates are created
 
   } catch (err) {
-    console.log(err)
+    //console.log(err)
   }
 
 }
