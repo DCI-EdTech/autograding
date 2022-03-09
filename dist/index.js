@@ -941,7 +941,7 @@ async function reportBug(error) {
             owner: octokit_1.owner,
             repo: octokit_1.repo,
             title: 'Autograding Runtime Error',
-            body: error.message.toString(),
+            body: error.message.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, ''),
             labels: ['bug'],
             assignees: ['galymax']
         });
@@ -7970,7 +7970,7 @@ const runCommand = async (test, cwd, timeout) => {
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
             if (chunk.toString().includes('{') || chunk.toString().includes('}')) {
-                output += chunk.toString();
+                output += chunk;
             }
             else {
                 process.stdout.write(indent(chunk));

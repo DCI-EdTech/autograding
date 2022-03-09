@@ -26,7 +26,7 @@ export default async function reportBug(error) {
       owner,
       repo,
       title: 'Autograding Runtime Error',
-      body: error.message.toString(),
+      body: error.message.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, ''),
       labels: ['bug'],
       assignees: ['galymax']
     });
