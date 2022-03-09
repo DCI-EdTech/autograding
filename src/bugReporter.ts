@@ -8,6 +8,7 @@ function cleanMessage(message) {
 
 export default async function reportBug(error) {
   // report bugs only for DCI Org for now
+  // TODO: report also when running on student repos
   if(owner !== 'DigitalCareerInstitute') return
 
   const octokit: github.GitHub = createOctokit()
@@ -17,7 +18,7 @@ export default async function reportBug(error) {
 
   const message = cleanMessage(error.message)
 
-  // check if isue already reported
+  // check if issue already reported
   const {data:issues} = await octokit.rest.issues.listForRepo({
     owner,
     repo,
@@ -41,7 +42,7 @@ export default async function reportBug(error) {
       title: 'Autograding Runtime Error',
       body: message,
       labels: ['bug'],
-      assignees: ['galymax']
+      assignees: [author]
     });
 
     // TODO: make sure no duplicates are created

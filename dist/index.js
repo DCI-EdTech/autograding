@@ -926,6 +926,7 @@ function cleanMessage(message) {
 }
 async function reportBug(error) {
     // report bugs only for DCI Org for now
+    // TODO: report also when running on student repos
     if (octokit_1.owner !== 'DigitalCareerInstitute')
         return;
     const octokit = octokit_1.createOctokit();
@@ -933,7 +934,7 @@ async function reportBug(error) {
         return;
     const currentBranch = process.env['GITHUB_REF_NAME'];
     const message = cleanMessage(error.message);
-    // check if isue already reported
+    // check if issue already reported
     const { data: issues } = await octokit.rest.issues.listForRepo({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
@@ -955,7 +956,7 @@ async function reportBug(error) {
             title: 'Autograding Runtime Error',
             body: message,
             labels: ['bug'],
-            assignees: ['galymax']
+            assignees: [author]
         });
         // TODO: make sure no duplicates are created
     }
@@ -8052,6 +8053,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
         result = error.result;
         core.setFailed(error.message);
     }
+    // Report bug as issue
     if (result.numRuntimeErrorTestSuites > 0)
         return bugReporter_1.default(result.testResults[0]);
     // calculate points

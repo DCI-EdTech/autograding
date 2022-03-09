@@ -226,6 +226,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     core.setFailed(error.message)
   }
 
+  // Report bug as issue
   if(result.numRuntimeErrorTestSuites > 0) return reportBug(result.testResults[0])
 
   // calculate points
