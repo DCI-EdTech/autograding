@@ -1,6 +1,10 @@
 // @ts-nocheck
 import { createOctokit, owner, repo } from './octokit'
 
+function cleanMessage(message) {
+  return message.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
+}
+
 export default async function reportBug(error) {
   // report bugs only for DCI Org for now
   if(owner !== 'DigitalCareerInstitute') return
@@ -10,7 +14,15 @@ export default async function reportBug(error) {
 
   const currentBranch = process.env['GITHUB_REF_NAME']
 
+  const message = cleanMessage(error.message)
+
   // check if isue already reported
+  const {data:issues} = await octokit.rest.issues.listForRepo({
+    owner,
+    repo,
+  });
+
+  if(issues.find(issue => cleanMessage(issue.body) === cleanMessage(error.message))) return
 
   // get last commit of branch
   try {
@@ -26,7 +38,7 @@ export default async function reportBug(error) {
       owner,
       repo,
       title: 'Autograding Runtime Error',
-      body: error.message.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, ''),
+      body: message,
       labels: ['bug'],
       assignees: ['galymax']
     });
