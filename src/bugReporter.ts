@@ -7,15 +7,12 @@ function cleanMessage(message) {
 }
 
 export default async function reportBug(error) {
-  console.log('report bug', owner)
   // report bugs only for DCI Org for now
   // TODO: report also when running on student repos
   if(owner !== 'DigitalCareerInstitute') return
 
   const octokit: github.GitHub = createOctokit()
   if (!octokit) return
-
-  console.log('octokit ok')
 
   const currentBranch = process.env['GITHUB_REF_NAME']
 
@@ -51,7 +48,7 @@ export default async function reportBug(error) {
     // TODO: make sure no duplicates are created
 
   } catch (err) {
-    // branch doesn't exist
+    console.log(err)
   }
 
 }
