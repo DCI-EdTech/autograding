@@ -7,6 +7,7 @@ function cleanMessage(message) {
 }
 
 export default async function reportBug(error) {
+  console.log('report bug')
   // report bugs only for DCI Org for now
   // TODO: report also when running on student repos
   if(owner !== 'DigitalCareerInstitute') return
@@ -24,7 +25,7 @@ export default async function reportBug(error) {
     repo,
   });
 
-  if(issues.find(issue => cleanMessage(issue.body) === cleanMessage(error.message))) return
+  if(issues.find(issue => cleanMessage(issue.body) === cleanMessage(error.message))) return console.log('issue already exists')
 
   // get last commit of branch
   try {

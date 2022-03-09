@@ -925,6 +925,7 @@ function cleanMessage(message) {
     return message.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
 }
 async function reportBug(error) {
+    console.log('report bug');
     // report bugs only for DCI Org for now
     // TODO: report also when running on student repos
     if (octokit_1.owner !== 'DigitalCareerInstitute')
@@ -940,7 +941,7 @@ async function reportBug(error) {
         repo: octokit_1.repo,
     });
     if (issues.find(issue => cleanMessage(issue.body) === cleanMessage(error.message)))
-        return;
+        return console.log('issue already exists');
     // get last commit of branch
     try {
         const { data } = await octokit.rest.repos.listCommits({
@@ -8053,7 +8054,6 @@ exports.runAll = async (cwd, packageJsonPath) => {
         result = error.result;
         core.setFailed(error.message);
     }
-    console.log('result', JSON.stringify(result));
     // Report bug as issue
     if (result.numRuntimeErrorTestSuites > 0)
         return bugReporter_1.default(result.testResults[0]);
