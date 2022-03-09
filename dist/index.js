@@ -948,7 +948,7 @@ async function reportBug(error) {
             repo: octokit_1.repo,
             sha: currentBranch,
         });
-        console.log(data);
+        console.log(JSON.stringify(data));
         const author = data.find(item => !item.commit.author.name.includes('[bot]')).commit.committer.name;
         // create issue, label:bug, assign committer
         await octokit.rest.issues.create({

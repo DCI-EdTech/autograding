@@ -34,7 +34,7 @@ export default async function reportBug(error) {
       sha: currentBranch,
     })
 
-    console.log(data)
+    console.log(JSON.stringify(data))
 
     const author = data.find(item => !item.commit.author.name.includes('[bot]')).commit.committer.name
 
