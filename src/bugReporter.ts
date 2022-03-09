@@ -7,13 +7,15 @@ function cleanMessage(message) {
 }
 
 export default async function reportBug(error) {
-  console.log('report bug')
+  console.log('report bug', owner)
   // report bugs only for DCI Org for now
   // TODO: report also when running on student repos
   if(owner !== 'DigitalCareerInstitute') return
 
   const octokit: github.GitHub = createOctokit()
   if (!octokit) return
+
+  console.log('octokit ok')
 
   const currentBranch = process.env['GITHUB_REF_NAME']
 
@@ -25,7 +27,7 @@ export default async function reportBug(error) {
     repo,
   });
 
-  if(issues.find(issue => cleanMessage(issue.body) === cleanMessage(error.message))) return console.log('issue already exists')
+  if(issues.find(issue => cleanMessage(issue.body) === cleanMessage(error.message))) return
 
   // get last commit of branch
   try {

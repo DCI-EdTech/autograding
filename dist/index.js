@@ -925,7 +925,7 @@ function cleanMessage(message) {
     return message.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
 }
 async function reportBug(error) {
-    console.log('report bug');
+    console.log('report bug', octokit_1.owner);
     // report bugs only for DCI Org for now
     // TODO: report also when running on student repos
     if (octokit_1.owner !== 'DigitalCareerInstitute')
@@ -933,6 +933,7 @@ async function reportBug(error) {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
         return;
+    console.log('octokit ok');
     const currentBranch = process.env['GITHUB_REF_NAME'];
     const message = cleanMessage(error.message);
     // check if issue already reported
@@ -941,7 +942,7 @@ async function reportBug(error) {
         repo: octokit_1.repo,
     });
     if (issues.find(issue => cleanMessage(issue.body) === cleanMessage(error.message)))
-        return console.log('issue already exists');
+        return;
     // get last commit of branch
     try {
         const { data } = await octokit.rest.repos.listCommits({
