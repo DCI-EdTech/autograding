@@ -33,7 +33,7 @@ export default async function reportBug(error) {
       repo,
       sha: currentBranch,
     })
-    const author = data.find(item => !item.commit.author.name.includes('[bot]')).commit.author.name
+    const author = data.find(item => !item.commit.author.name.includes('[bot]')).commit.committer.name
 
     // create issue, label:bug, assign committer
     await octokit.rest.issues.create({
