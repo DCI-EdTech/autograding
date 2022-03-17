@@ -59,6 +59,7 @@ const axios_1 = __importDefault(__webpack_require__(53));
 const octokit_1 = __webpack_require__(994);
 async function recordResult(points, result) {
     // get run info
+    let runInfo;
     try {
         const octokit = octokit_1.createOctokit();
         if (!octokit)
@@ -68,6 +69,7 @@ async function recordResult(points, result) {
             repo: octokit_1.repo,
             run_id: process.env.GITHUB_RUN_ID,
         });
+        runInfo = data;
         console.log(JSON.stringify(data));
     }
     catch (error) {
@@ -76,7 +78,11 @@ async function recordResult(points, result) {
     // send webhook event
     try {
         axios_1.default.post('https://smee.io/IvFctqLqvsxFy230', {
-            TIMESTAMP: 'time',
+            TIMESTAMP: runInfo && runInfo.run_started_at,
+            GITHUB_USER_NAME: runInfo && runInfo.actor.login,
+            GITHUB_USER_ID: runInfo && runInfo.actor.id,
+            GITHUB_USER_NODE_ID: runInfo && runInfo.actor.node_id,
+            GITHUB_USER_EMAIL: runInfo && runInfo.head_commit.author.email,
             INVOCATION_ID: process.env.INVOCATION_ID,
             GITHUB_REF: process.env.GITHUB_REF,
             GITHUB_SHA: process.env.GITHUB_SHA,

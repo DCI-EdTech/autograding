@@ -4,6 +4,7 @@ import { createOctokit, owner, repo } from './octokit'
 
 export default async function recordResult(points, result) {
   // get run info
+  let runInfo
   try {
     const octokit: github.GitHub = createOctokit()
     if (!octokit) throw 'Octokit not initialized'
@@ -14,6 +15,8 @@ export default async function recordResult(points, result) {
       run_id: process.env.GITHUB_RUN_ID,
     });
 
+    runInfo = data
+
     console.log(JSON.stringify(data))
   } catch (error) {
     console.log(error)
@@ -23,7 +26,11 @@ export default async function recordResult(points, result) {
   // send webhook event
   try {
     axios.post('https://smee.io/IvFctqLqvsxFy230', {
-      TIMESTAMP: 'time',
+      TIMESTAMP: runInfo && runInfo.run_started_at,
+      GITHUB_USER_NAME: runInfo && runInfo.actor.login,
+      GITHUB_USER_ID: runInfo && runInfo.actor.id,
+      GITHUB_USER_NODE_ID: runInfo && runInfo.actor.node_id,
+      GITHUB_USER_EMAIL: runInfo && runInfo.head_commit.author.email,
       INVOCATION_ID: process.env.INVOCATION_ID,
       GITHUB_REF: process.env.GITHUB_REF,
       GITHUB_SHA: process.env.GITHUB_SHA,
