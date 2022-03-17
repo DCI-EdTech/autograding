@@ -11,6 +11,7 @@ import path from 'path'
 import modifyReadme from './modifyReadme'
 import updateBadges from './updateBadges'
 import reportBug from './bugReporter'
+import recordResult from './recordResult'
 
 const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
@@ -227,7 +228,8 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   }
 
   // Report bug as issue
-  if(result.numRuntimeErrorTestSuites > 0) return reportBug(result.testResults[0])
+  if(result.numRuntimeErrorTestSuites > 0)
+    reportBug(result.testResults[0])
 
   // calculate points
   points = Math.round(100 / result.numTotalTests * result.numPassedTests)
@@ -280,6 +282,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   const text = `Points ${points}/${availablePoints}`
   log(color.bold.bgCyan.black(text))
   await Promise.all([modifyReadme(result), updateBadges(result)])
+  await recordResult(points, result)
   core.setOutput('Points', `${points}/${availablePoints}`)
   await setCheckRunOutput(points, availablePoints, result)
 }
