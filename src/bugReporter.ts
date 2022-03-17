@@ -40,7 +40,7 @@ export default async function reportBug(error) {
     await octokit.rest.issues.create({
       owner,
       repo,
-      title: 'Autograding Runtime Error',
+      title: `Autograding Runtime Error in \`${currentBranch}\``,
       body: message,
       labels: ['bug'],
       assignees: [author]
