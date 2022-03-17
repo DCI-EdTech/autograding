@@ -14,12 +14,11 @@ async function modifyReadme(results) {
 
   try {
     // get readme
-    const { data: { sha, content} } = await octokit.rest.repos.getContent({
+    const { data: { sha, content} } = await octokit.rest.repos.getReadme({
       owner,
       repo,
-      path: 'README.md',
       ref: process.env['GITHUB_REF_NAME'],
-    })
+    });
 
     const readme = Buffer.from(content, 'base64').toString('utf8');
 
@@ -37,7 +36,7 @@ async function modifyReadme(results) {
     await octokit.rest.repos.createOrUpdateFileContents({
       owner,
       repo,
-      path: 'README.md',
+      path,
       message: 'update readme',
       content: Buffer.from(newReadme).toString('base64'),
       branch: process.env['GITHUB_REF_NAME'],
