@@ -14,7 +14,7 @@ async function modifyReadme(results) {
 
   try {
     // get readme
-    const { data: { sha, content} } = await octokit.rest.repos.getReadme({
+    const { data: { sha, content, path} } = await octokit.rest.repos.getReadme({
       owner,
       repo,
       ref: process.env['GITHUB_REF_NAME'],
