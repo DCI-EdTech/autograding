@@ -2025,7 +2025,7 @@ async function reportBug(error) {
         await octokit.rest.issues.create({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
-            title: 'Autograding Runtime Error',
+            title: `Autograding Runtime Error in \`${currentBranch}\``,
             body: message,
             labels: ['bug'],
             assignees: [author]
@@ -11818,13 +11818,12 @@ exports.runAll = async (cwd, packageJsonPath) => {
     points = Math.round(100 / result.numTotalTests * result.numPassedTests);
     // sort results by filename
     result.testResults.sort((a, b) => {
-        const taskNameRegExp = new RegExp(taskNamePattern);
-        const aIndex = parseInt(a.name.match(taskNameRegExp)[1]);
-        const bIndex = parseInt(b.name.match(taskNameRegExp)[1]);
-        if (aIndex < bIndex) {
+        const nameA = a.name.toUpperCase();
+        const nameB = b.name.toUpperCase();
+        if (nameA < nameB) {
             return -1;
         }
-        if (aIndex > bIndex) {
+        if (nameA > nameB) {
             return 1;
         }
         return 0;
@@ -13843,10 +13842,9 @@ async function modifyReadme(results) {
         return;
     try {
         // get readme
-        const { data: { sha, content } } = await octokit.rest.repos.getContent({
+        const { data: { sha, content, path } } = await octokit.rest.repos.getReadme({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
-            path: 'README.md',
             ref: process.env['GITHUB_REF_NAME'],
         });
         const readme = Buffer.from(content, 'base64').toString('utf8');
@@ -13861,7 +13859,7 @@ async function modifyReadme(results) {
         await octokit.rest.repos.createOrUpdateFileContents({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
-            path: 'README.md',
+            path,
             message: 'update readme',
             content: Buffer.from(newReadme).toString('base64'),
             branch: process.env['GITHUB_REF_NAME'],

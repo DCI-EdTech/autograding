@@ -236,18 +236,18 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
 
   // sort results by filename
   result.testResults.sort((a, b) => {
-    const taskNameRegExp = new RegExp(taskNamePattern)
-    const aIndex = parseInt(a.name.match(taskNameRegExp)[1])
-    const bIndex = parseInt(b.name.match(taskNameRegExp)[1])
-    if (aIndex < bIndex) {
-      return -1
+    const nameA = a.name.toUpperCase();
+    const nameB = b.name.toUpperCase();
+    if (nameA < nameB) {
+      return -1;
     }
-    if (aIndex > bIndex) {
-      return 1
+    if (nameA > nameB) {
+      return 1;
     }
-    return 0
-  })
 
+    return 0;
+  })
+  
   // group results
   result.testResults = result.testResults.reduce((acc, item) => {
     acc.push(...item.assertionResults)
