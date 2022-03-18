@@ -44,8 +44,6 @@ export default async function recordResult(points, result) {
       GITHUB_RETENTION_DAYS: process.env.GITHUB_RETENTION_DAYS,
       GITHUB_RUN_ATTEMPT: process.env.GITHUB_RUN_ATTEMPT,
       GITHUB_WORKFLOW: process.env.GITHUB_WORKFLOW,
-      GITHUB_HEAD_REF: process.env.GITHUB_HEAD_REF,
-      GITHUB_BASE_REF: process.env.GITHUB_BASE_REF,
       GITHUB_EVENT_NAME: process.env.GITHUB_EVENT_NAME,
       GITHUB_SERVER_URL: process.env.GITHUB_SERVER_URL,
       GITHUB_API_URL: process.env.GITHUB_API_URL,
