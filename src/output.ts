@@ -31,13 +31,12 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     check_suite_id: checkSuiteId,
   })
   const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0]
-  console.log(checkRun)
   if (!checkRun) return
 
   // Update the checkrun, we'll assign the title, summary and text even though we expect
   // the title and summary to be overwritten by GitHub Actions (they are required in this call)
   // We'll also store the total in an annotation to future-proof
-  await octokit.rest.checks.update({
+  const res = await octokit.rest.checks.update({
     owner,
     repo,
     check_run_id: checkRun.id,
@@ -58,4 +57,6 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
       ],
     },
   })
+
+  console.log(JSON.stringify(res))
 }
