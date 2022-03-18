@@ -31,6 +31,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     check_suite_id: checkSuiteId,
   })
   const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0]
+  console.log(checkRun)
   if (!checkRun) return
 
   // Update the checkrun, we'll assign the title, summary and text even though we expect
