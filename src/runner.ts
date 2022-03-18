@@ -227,7 +227,6 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   }
 
   // Report bug as issue
-  console.log(JSON.stringify(result))
   if(result.numRuntimeErrorTestSuites > 0) return reportBug(result.testResults[0])
 
   // calculate points
@@ -246,6 +245,8 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     }
     return 0
   })
+
+  console.log('sorted', JSON.stringify(result))
 
   // group results
   result.testResults = result.testResults.reduce((acc, item) => {

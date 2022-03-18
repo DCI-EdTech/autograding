@@ -8054,7 +8054,6 @@ exports.runAll = async (cwd, packageJsonPath) => {
         core.setFailed(error.message);
     }
     // Report bug as issue
-    console.log(JSON.stringify(result));
     if (result.numRuntimeErrorTestSuites > 0)
         return bugReporter_1.default(result.testResults[0]);
     // calculate points
@@ -8072,6 +8071,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
         }
         return 0;
     });
+    console.log('sorted', JSON.stringify(result));
     // group results
     result.testResults = result.testResults.reduce((acc, item) => {
         acc.push(...item.assertionResults);
