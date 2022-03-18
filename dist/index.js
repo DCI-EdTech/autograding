@@ -8070,7 +8070,6 @@ exports.runAll = async (cwd, packageJsonPath) => {
         }
         return 0;
     });
-    console.log('sorted', JSON.stringify(result));
     // group results
     result.testResults = result.testResults.reduce((acc, item) => {
         acc.push(...item.assertionResults);

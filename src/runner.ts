@@ -245,9 +245,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
 
     return 0;
   })
-
-  console.log('sorted', JSON.stringify(result))
-
+  
   // group results
   result.testResults = result.testResults.reduce((acc, item) => {
     acc.push(...item.assertionResults)
