@@ -23,7 +23,7 @@ async function modifyReadme(results) {
     const readme = Buffer.from(content, 'base64').toString('utf8');
 
     // get template name
-    const { data: repoInfo, data: { template_repository: { name: template } }} = await octokit.rest.repos.get({
+    const { data: repoInfo/*, data: { template_repository: { name: template } }*/} = await octokit.rest.repos.get({
       owner,
       repo
     })
