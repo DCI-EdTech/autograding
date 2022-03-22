@@ -9950,16 +9950,10 @@ async function modifyReadme(results) {
             ref: process.env['GITHUB_REF_NAME'],
         });
         const readme = Buffer.from(content, 'base64').toString('utf8');
-        // get template name
-        const { data: repoInfo /*, data: { template_repository: { name: template } }*/ } = await octokit.rest.repos.get({
-            owner: octokit_1.owner,
-            repo: octokit_1.repo
-        });
-        console.log(repoInfo);
         // add main badge
         let newReadme = addMainBadge(readme);
         // add autograding info
-        newReadme = await addAutogradingInfo(newReadme, results, template);
+        newReadme = await addAutogradingInfo(newReadme, results);
         // don't update if nothing changed
         if (newReadme === readme)
             return;
@@ -10008,7 +10002,7 @@ function generateResult(results) {
     }, '')}
 `;
 }
-async function addAutogradingInfo(fullReadme, results, template) {
+async function addAutogradingInfo(fullReadme, results) {
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
     const readmeInfo = `## Results
 
@@ -10016,7 +10010,7 @@ ${generateResult(results)}
 
 [🔬 Results Details](${repoURL}/actions)
 
-[📢 Give Feedback or Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_urlentry.652569746=${encodeURIComponent(template)}&entry.2115011968=${encodeURIComponent('https://github.com/')}${encodeURIComponent(process.env.GITHUB_REPOSITORY)})
+[📢 Give Feedback or Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(process.env.GITHUB_REPOSITORY.split('/')[1])}&entry.2115011968=${encodeURIComponent('https://github.com/')}${encodeURIComponent(process.env.GITHUB_REPOSITORY)})
 
 ### Debugging your code
 > [reading the test outputs](https://github.com/DCI-EdTech/autograding-setup/wiki/Reading-test-outputs)
