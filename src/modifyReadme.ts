@@ -23,12 +23,12 @@ async function modifyReadme(results) {
     const readme = Buffer.from(content, 'base64').toString('utf8');
 
     // get template name
-    const { data: repo, data: { template_repository: { name: template } }} = await octokit.rest.repos.get({
+    const { data: repoInfo, data: { template_repository: { name: template } }} = await octokit.rest.repos.get({
       owner,
       repo
     })
 
-    console.log(repo)
+    console.log(repoInfo)
 
     // add main badge
     let newReadme = addMainBadge(readme);

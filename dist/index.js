@@ -9946,16 +9946,16 @@ async function modifyReadme(results) {
         // get readme
         const { data: { sha, content, path } } = await octokit.rest.repos.getReadme({
             owner: octokit_1.owner,
-            repo,
+            repo: octokit_1.repo,
             ref: process.env['GITHUB_REF_NAME'],
         });
         const readme = Buffer.from(content, 'base64').toString('utf8');
         // get template name
-        const { data: repo, data: { template_repository: { name: template } } } = await octokit.rest.repos.get({
+        const { data: repoInfo, data: { template_repository: { name: template } } } = await octokit.rest.repos.get({
             owner: octokit_1.owner,
-            repo
+            repo: octokit_1.repo
         });
-        console.log(repo);
+        console.log(repoInfo);
         // add main badge
         let newReadme = addMainBadge(readme);
         // add autograding info
@@ -9966,7 +9966,7 @@ async function modifyReadme(results) {
         // update readme
         await octokit.rest.repos.createOrUpdateFileContents({
             owner: octokit_1.owner,
-            repo,
+            repo: octokit_1.repo,
             path,
             message: 'update readme',
             content: Buffer.from(newReadme).toString('base64'),
