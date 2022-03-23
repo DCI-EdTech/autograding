@@ -185,6 +185,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         check_name: 'Autograding',
         check_suite_id: checkSuiteId,
     });
+    console.log('checkRunsResponse', checkRunsResponse);
     const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0];
     if (!checkRun)
         return;
@@ -212,7 +213,6 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
             ],
         },
     });
-    console.log(JSON.stringify(res));
 };
 
 
