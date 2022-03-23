@@ -175,7 +175,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         repo: octokit_1.repo,
         run_id: runId,
     });
-    console.log(workflowRunResponse);
+    console.log(JSON.stringify(workflowRunResponse));
     // Find the check suite run
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const checkSuiteUrl = workflowRunResponse.data.check_suite_url;
