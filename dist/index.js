@@ -196,7 +196,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         repo: octokit_1.repo,
         check_run_id: checkRun.id,
         output: {
-            title: 'GitHub Classroom Workflow',
+            title: 'Autograding',
             summary: `Points ${points}/${availablePoints}`,
             text: `Points ${points}/${availablePoints}`,
             annotations: [
