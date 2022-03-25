@@ -48,10 +48,10 @@ async function modifyReadme(results) {
   }
 }
 
-function addMainBadge(readme) {
+function addMainBadge(readmePram) {
   const headlineLevel1Regex = /^#[^#].*$/m;
   // delete old points badge
-  const newReadme = readme.replace(mainBadgeRegExp, '')
+  const newReadme = readmePram.replace(mainBadgeRegExp, '')
 
   console.log('lvl 1 headline found', headlineLevel1Regex.test(newReadme))
   console.log(newReadme)
