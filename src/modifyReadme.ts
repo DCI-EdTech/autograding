@@ -6,7 +6,6 @@ import { escapeRegExp } from './lib/helpers';
 const branch = process.env['GITHUB_REF_NAME']
 const readmeInfoPath = `./AUTOGRADING.md`;
 const mainBadgeString = `\n[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)\n`;
-const mainBadgeRegExp =  new RegExp(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/, 'gi')
 
 async function modifyReadme(results) {
   const octokit = createOctokit()
@@ -51,7 +50,7 @@ async function modifyReadme(results) {
 function addMainBadge(readmePram) {
   const headlineLevel1Regex = /^#[^#].*$/m;
   // delete old points badge
-  const newReadme = readmePram.replace(mainBadgeRegExp, '')
+  const newReadme = readmePram.replace(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '')
 
   console.log('lvl 1 headline found', headlineLevel1Regex.test(newReadme))
   console.log(newReadme)
