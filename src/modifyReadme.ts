@@ -6,7 +6,7 @@ import { escapeRegExp } from './lib/helpers';
 const branch = process.env['GITHUB_REF_NAME']
 const readmeInfoPath = `./AUTOGRADING.md`;
 const mainBadgeString = `\n[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)\n`;
-const mainBadgeRegExp =  /[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/gi
+const mainBadgeRegExp =  new RegExp(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/, 'gi')
 
 async function modifyReadme(results) {
   const octokit = createOctokit()
