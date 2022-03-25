@@ -9975,17 +9975,17 @@ async function modifyReadme(results) {
 function addMainBadge(readme) {
     const headlineLevel1Regex = /^#[^#].*$/m;
     // delete old points badge
-    readme = readme.replace(mainBadgeRegExp, '');
-    console.log('lvl 1 headline found', headlineLevel1Regex.test(readme));
-    console.log(readme);
+    const newReadme = readme.replace(mainBadgeRegExp, '');
+    console.log('lvl 1 headline found', headlineLevel1Regex.test(newReadme));
+    console.log(newReadme);
     // check if there is a headline
-    if (headlineLevel1Regex.test(readme)) {
+    if (headlineLevel1Regex.test(newReadme)) {
         // insert points badge after level 1 headline
-        return readme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
+        return newReadme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
     }
     else {
         // insert badge on top if no headline found
-        return `${mainBadgeString}${readme}`;
+        return `${mainBadgeString}${newReadme}`;
     }
 }
 function generateResult(results) {
