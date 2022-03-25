@@ -53,6 +53,8 @@ function addMainBadge(readme) {
   // delete old points badge
   readme = readme.replace(mainBadgeRegExp, '')
 
+  console.log('lvl 1 headline found', headlineLevel1Regex.test(readme))
+
   // check if there is a headline
   if(headlineLevel1Regex.test(readme)) {
     // insert points badge after level 1 headline
