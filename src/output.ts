@@ -31,8 +31,6 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     check_suite_id: checkSuiteId,
   })
 
-  console.log('checkRunsResponse', JSON.stringify(checkRunsResponse))
-
   const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0]
   if (!checkRun) return
 
@@ -44,7 +42,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     repo,
     check_run_id: checkRun.id,
     output: {
-      title: 'Autograding',
+      title: 'GitHub Classroom Workflow',
       summary: `Points ${points}/${availablePoints}`,
       text: `Points ${points}/${availablePoints}`,
       annotations: [
