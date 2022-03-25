@@ -20,8 +20,6 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     run_id: runId,
   })
 
-  console.log(JSON.stringify(workflowRunResponse))
-
   // Find the check suite run
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const checkSuiteUrl = (workflowRunResponse.data as any).check_suite_url
@@ -29,11 +27,11 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
   const checkRunsResponse = await octokit.rest.checks.listForSuite({
     owner,
     repo,
-    check_name: 'GitHub Classroom Workflow',
+    check_name: 'Autograding',
     check_suite_id: checkSuiteId,
   })
 
-  //console.log('checkRunsResponse', JSON.stringify(checkRunsResponse))
+  console.log('checkRunsResponse', JSON.stringify(checkRunsResponse))
 
   const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0]
   if (!checkRun) return
