@@ -27,7 +27,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
   const checkRunsResponse = await octokit.rest.checks.listForSuite({
     owner,
     repo,
-    check_name: 'GitHub Classroom Workflow',
+    check_name: 'Autograding',
     check_suite_id: checkSuiteId,
   })
 

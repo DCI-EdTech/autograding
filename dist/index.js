@@ -182,7 +182,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     const checkRunsResponse = await octokit.rest.checks.listForSuite({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
-        check_name: 'GitHub Classroom Workflow',
+        check_name: 'Autograding',
         check_suite_id: checkSuiteId,
     });
     const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0];
