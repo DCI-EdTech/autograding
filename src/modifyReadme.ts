@@ -52,8 +52,7 @@ function addMainBadge(readme) {
   // delete old points badge
   const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, (match, p1, p2) => {
     console.log('match', match)
-    console.log('p1', p1)
-    console.log('p2', p2)
+    console.log('offset', p1)
     return ''
   })
 
