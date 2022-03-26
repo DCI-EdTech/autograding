@@ -9503,6 +9503,12 @@ const run = async () => {
         if (!cwd) {
             throw new Error('No GITHUB_WORKSPACE');
         }
+        // filter
+        const branch = process.env['GITHUB_REF_NAME'];
+        if (branch !== 'autograding' && branch !== 'autograding-solution') {
+            console.log('disable Autograding');
+            process.env.DISABLE_AUTOGRADING = true;
+        }
         await runner_1.runAll(cwd, path_1.default.resolve(cwd, 'package.json'));
     }
     catch (error) {
@@ -9975,6 +9981,7 @@ function addMainBadge(readme) {
     const headlineLevel1Regex = /^#[^#].*$/m;
     // delete old points badge
     const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '');
+    console.log('is disabled', process.env.DISABLE_AUTOGRADING);
     // check if there is a headline
     if (headlineLevel1Regex.test(newReadme)) {
         // insert points badge after level 1 headline

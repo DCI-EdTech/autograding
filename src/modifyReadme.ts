@@ -52,6 +52,7 @@ function addMainBadge(readme) {
   // delete old points badge
   const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '')
 
+  console.log('is disabled', process.env.DISABLE_AUTOGRADING)
 
   // check if there is a headline
   if(headlineLevel1Regex.test(newReadme)) {
