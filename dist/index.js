@@ -9974,36 +9974,7 @@ async function modifyReadme(results) {
 function addMainBadge(readme) {
     const headlineLevel1Regex = /^#[^#].*$/m;
     // delete old points badge
-    const newReadme = readme.replace(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/gm, '');
-    const test = `# Mongoose Wizards!
-  [![Status overview badge](../../blob/badges/.github/badges/autograding-solution/badge.svg)](#results)
-  
-  [![Status overview badge](../../blob/badges/.github/badges/autograding-solution/badge.svg)](#results)
-  
-  
-  ![Wizard](./wizard.gif)
-  
-  This assignment will allow you to build a REST API for a magical wizard database!
-  
-  What you will be doing:
-  
-  > - Mongoose schema validation
-  > - Mongoose subdocuments
-  > - Mongoose references
-  
-  This project assumes you've already had experience with:
-  
-  > - Mongoose Schemas
-  > - Building routes and endpoints in Express
-  
-  ## Tasks
-    
-  This will automatically install the following packages:
-  - express
-  - mongoose
-  - dotenv  
-  `;
-    console.log(test.replace(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/gm, ''));
+    const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/, '');
     // check if there is a headline
     if (headlineLevel1Regex.test(newReadme)) {
         // insert points badge after level 1 headline
