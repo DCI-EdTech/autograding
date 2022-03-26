@@ -1,5 +1,5 @@
 // @ts-nocheck
-import fs from 'fs';
+import fs, { read } from 'fs';
 import { createOctokit, owner, repo } from './octokit';
 import { escapeRegExp } from './lib/helpers';
 
@@ -50,13 +50,11 @@ async function modifyReadme(results) {
 function addMainBadge(readme) {
   const headlineLevel1Regex = /^#[^#].*$/m;
   // delete old points badge
-  // get first part of readme
-  const cutoff = readme.lastIndexOf(mainBadgeString) + mainBadgeString.length + 45
-  let beginning = readme.substring(0, cutoff)
-  const rest = readme.substring(cutoff)
-  beginning = beginning.replace(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/gm, '')
+  const newReadme = readme.replace(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/gm, '')
 
-  const newReadme = `${beginning}${rest}`
+
+  const test = 'One Two One'
+  console.log(test.replace(/One/g, ''))
 
   // check if there is a headline
   if(headlineLevel1Regex.test(newReadme)) {
