@@ -54,10 +54,12 @@ function addMainBadge(readme) {
 
 
   const test = `One
-  Two
+
   One
+
+  Two
   `
-  console.log(test.replace(/One/g, ''))
+  console.log(test.replace(/[\n]{0,1}.*On.*[\n]/g, ''))
 
   // check if there is a headline
   if(headlineLevel1Regex.test(newReadme)) {
