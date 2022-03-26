@@ -9975,9 +9975,10 @@ function addMainBadge(readme) {
     const headlineLevel1Regex = /^#[^#].*$/m;
     // delete old points badge
     // get first part of readme
-    let beginning = readme.substring(0, 200);
-    const rest = readme.substring(200);
-    beginning = beginning.replace(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '');
+    const cutoff = 100;
+    let beginning = readme.substring(0, cutoff);
+    const rest = readme.substring(cutoff);
+    beginning = beginning.replace(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/gm, '');
     const newReadme = `${beginning}${rest}`;
     // check if there is a headline
     if (headlineLevel1Regex.test(newReadme)) {
