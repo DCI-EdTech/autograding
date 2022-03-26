@@ -47,14 +47,15 @@ async function modifyReadme(results) {
   }
 }
 
-function addMainBadge(readmePram) {
+function addMainBadge(readme) {
   const headlineLevel1Regex = /^#[^#].*$/m;
   // delete old points badge
-  console.log(readmePram.match(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g))
-  const newReadme = readmePram.replace(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '')
+  // get first part of readme
+  const beginning = readme.substring(0, 200)
+  const rest = readme.substring(200)
+  beginning = beginning.replace(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '')
 
-  console.log('lvl 1 headline found', headlineLevel1Regex.test(newReadme))
-  console.log(newReadme)
+  const newReadme = `${beginning}${rest}`
 
   // check if there is a headline
   if(headlineLevel1Regex.test(newReadme)) {
