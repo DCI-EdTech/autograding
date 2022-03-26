@@ -9975,7 +9975,7 @@ function addMainBadge(readme) {
     const headlineLevel1Regex = /^#[^#].*$/m;
     // delete old points badge
     // get first part of readme
-    const cutoff = 100;
+    const cutoff = readme.lastIndexOf(mainBadgeString) + mainBadgeString.length + 45;
     let beginning = readme.substring(0, cutoff);
     const rest = readme.substring(cutoff);
     beginning = beginning.replace(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/gm, '');
