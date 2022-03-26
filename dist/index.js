@@ -9975,7 +9975,9 @@ function addMainBadge(readme) {
     const headlineLevel1Regex = /^#[^#].*$/m;
     // delete old points badge
     const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, (match, p1, p2) => {
-        console.log('match', match, p1, p2);
+        console.log('match', match);
+        console.log('p1', p1);
+        console.log('p2', p2);
         return '';
     });
     // check if there is a headline
