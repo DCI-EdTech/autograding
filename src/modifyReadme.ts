@@ -50,7 +50,9 @@ async function modifyReadme(results) {
 function addMainBadge(readme) {
   const headlineLevel1Regex = /^#[^#].*$/m;
   // delete old points badge
-  const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '')
+  const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, () => {
+    return ''
+  })
 
 
   // check if there is a headline
