@@ -10007,7 +10007,8 @@ function addMainBadge(readme) {
     const headlineLevel1Regex = /^#[^#].*$/m;
     // delete old points badge
     const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '');
-    console.log('is disabled', process.env.DISABLE_AUTOGRADING);
+    if (process.env.DISABLE_AUTOGRADING)
+        return newReadme;
     // check if there is a headline
     if (headlineLevel1Regex.test(newReadme)) {
         // insert points badge after level 1 headline
@@ -10061,6 +10062,8 @@ There are two ways to see why tasks might not be completed:
     const infoRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
     // remove old info
     fullReadme = fullReadme.replace(infoRE, '').trim();
+    if (process.env.DISABLE_AUTOGRADING)
+        return fullReadme;
     return `${fullReadme}\n\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
 }
 exports.default = modifyReadme;

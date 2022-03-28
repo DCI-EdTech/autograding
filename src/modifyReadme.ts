@@ -52,7 +52,7 @@ function addMainBadge(readme) {
   // delete old points badge
   const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '')
 
-  console.log('is disabled', process.env.DISABLE_AUTOGRADING)
+  if(process.env.DISABLE_AUTOGRADING) return newReadme
 
   // check if there is a headline
   if(headlineLevel1Regex.test(newReadme)) {
@@ -111,6 +111,9 @@ There are two ways to see why tasks might not be completed:
 
   // remove old info
   fullReadme = fullReadme.replace(infoRE, '').trim()
+
+  if(process.env.DISABLE_AUTOGRADING) return fullReadme
+
   return `${fullReadme}\n\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
 }
 
