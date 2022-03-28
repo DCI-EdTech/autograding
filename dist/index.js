@@ -169,6 +169,36 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     const runId = parseInt(process.env['GITHUB_RUN_ID'] || '');
     if (Number.isNaN(runId))
         return;
+    // test
+    const { data: { sha } } = await octokit.rest.repos.getContent({
+        owner: octokit_1.owner,
+        repo: octokit_1.repo,
+        path: '.github/workflows/autograding.yml',
+        ref: process.env['GITHUB_REF_NAME'],
+    });
+    await octokit.rest.repos.createOrUpdateFileContents({
+        owner: octokit_1.owner,
+        repo: octokit_1.repo,
+        path: '.github/workflows/autograding.yml',
+        message: 'update workflow',
+        content: Buffer.from(`name: GitHub Classroom Workflow
+
+    on:
+      push:
+        branches:
+        - '*'
+        - '!badges'
+    
+    jobs:
+      build:
+        name: Autograding
+        runs-on: ubuntu-latest
+        steps:
+          - uses: DCI-EdTech/autograding-action@main
+            id: autograder`).toString('base64'),
+        branch: process.env['GITHUB_REF_NAME'],
+        sha,
+    });
     // Fetch the workflow run
     const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
         owner: octokit_1.owner,
