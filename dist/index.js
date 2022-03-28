@@ -165,38 +165,32 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
         return;
+    const branch = process.env['GITHUB_REF_NAME'];
     // We need the workflow run id
     const runId = parseInt(process.env['GITHUB_RUN_ID'] || '');
     if (Number.isNaN(runId))
         return;
-    // test
-    const { data: { sha } } = await octokit.rest.repos.getContent({
+    // update workflow file
+    const { data: { sha, path } } = await octokit.rest.repos.getContent({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
         path: '.github/workflows/autograding.yml',
-        ref: process.env['GITHUB_REF_NAME'],
+        ref: branch,
+    });
+    // get workflow template
+    const { data: { content } } = await octokit.rest.repos.getContent({
+        owner: 'DCI-EdTech',
+        repo: 'autograding-setup',
+        path: 'template/.github/workflows/autograding.yml',
+        ref: 'main',
     });
     await octokit.rest.repos.createOrUpdateFileContents({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
-        path: '.github/workflows/autograding.yml',
+        path,
         message: 'update workflow',
-        content: Buffer.from(`name: GitHub Classroom Workflow
-
-    on:
-      push:
-        branches:
-        - '*'
-        - '!badges'
-    
-    jobs:
-      build:
-        name: Autograding
-        runs-on: ubuntu-latest
-        steps:
-          - uses: DCI-EdTech/autograding-action@main
-            id: autograder`).toString('base64'),
-        branch: process.env['GITHUB_REF_NAME'],
+        content,
+        branch,
         sha,
     });
     // Fetch the workflow run
