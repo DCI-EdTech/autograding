@@ -171,7 +171,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     if (Number.isNaN(runId))
         return;
     // update workflow file
-    const { data: { sha, path } } = await octokit.rest.repos.getContent({
+    const { data: { sha, path, content: currentContent } } = await octokit.rest.repos.getContent({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
         path: '.github/workflows/autograding.yml',
@@ -184,15 +184,17 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         path: 'template/.github/workflows/autograding.yml',
         ref: 'main',
     });
-    await octokit.rest.repos.createOrUpdateFileContents({
-        owner: octokit_1.owner,
-        repo: octokit_1.repo,
-        path,
-        message: 'update workflow',
-        content,
-        branch,
-        sha,
-    });
+    if (currentContent !== content) {
+        await octokit.rest.repos.createOrUpdateFileContents({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            path,
+            message: 'update workflow',
+            content,
+            branch,
+            sha,
+        });
+    }
     // Fetch the workflow run
     const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
         owner: octokit_1.owner,
