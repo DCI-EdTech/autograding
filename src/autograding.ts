@@ -13,7 +13,7 @@ const run = async (): Promise<void> => {
     }
 
     // filter
-    // disable autograding for all branches but autograding and autograding-solution
+    // disable autograding output for all branches but autograding and autograding-solution
     const branch = process.env['GITHUB_REF_NAME']
     if(branch !== 'autograding' && branch !== 'autograding-solution') {
       console.log('disable Autograding')
