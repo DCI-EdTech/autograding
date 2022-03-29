@@ -9532,12 +9532,7 @@ exports.run = async (test, cwd) => {
     // Timeouts are in minutes, but need to be in ms
     let timeout = (test.timeout || 1) * 60 * 1000 || 30000;
     const start = process.hrtime();
-    try {
-        await runSetup(test, cwd, timeout);
-    }
-    catch (error) {
-        await bugReporter_1.default({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\`` });
-    }
+    await runSetup(test, cwd, timeout);
     const elapsed = process.hrtime(start);
     // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
     timeout -= Math.floor(elapsed[0] * 1000 + elapsed[1] / 1000000);
@@ -9547,6 +9542,7 @@ exports.run = async (test, cwd) => {
         return result;
     }
     catch (error) {
+        await bugReporter_1.default({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\`` });
         throw error;
     }
 };

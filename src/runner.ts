@@ -171,11 +171,7 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   // Timeouts are in minutes, but need to be in ms
   let timeout = (test.timeout || 1) * 60 * 1000 || 30000
   const start = process.hrtime()
-  try {
-    await runSetup(test, cwd, timeout)
-  } catch (error) {
-    await reportBug({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\``})
-  }
+  await runSetup(test, cwd, timeout)
   
   const elapsed = process.hrtime(start)
   // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
@@ -185,6 +181,7 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
     result = await runCommand(test, cwd, timeout)
     return result
   } catch (error) {
+    await reportBug({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\``})
     throw error
   }
 }
