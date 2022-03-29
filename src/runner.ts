@@ -197,7 +197,6 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     packageJson = JSON.parse(packageJson);
   } catch (error) {
     await reportBug({ message: `### faulty package.json\n\n\`\`\`\n${error.stack}\n\`\`\``})
-    throw error
   }
   
   
