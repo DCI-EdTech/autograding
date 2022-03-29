@@ -15,32 +15,36 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
   const runId = parseInt(process.env['GITHUB_RUN_ID'] || '')
   if (Number.isNaN(runId)) return
 
-  // update workflow file
-  const { data: { sha, path, content:currentContent } } = await octokit.rest.repos.getContent({
-    owner,
-    repo,
-    path: '.github/workflows/autograding.yml',
-    ref: branch,
-  });
-
-  // get workflow template
-  const { data: { content } } = await octokit.rest.repos.getContent({
-    owner: 'DCI-EdTech',
-    repo: 'autograding-setup',
-    path: 'template/.github/workflows/autograding.yml',
-    ref: 'main',
-  });
-
-  if(currentContent !== content) {
-    await octokit.rest.repos.createOrUpdateFileContents({
+  try {
+    // update workflow file
+    const { data: { sha, path, content:currentContent } } = await octokit.rest.repos.getContent({
       owner,
       repo,
-      path,
-      message: 'update workflow',
-      content,
-      branch,
-      sha,
-    })
+      path: '.github/workflows/autograding.yml',
+      ref: branch,
+    });
+
+    // get workflow template
+    const { data: { content } } = await octokit.rest.repos.getContent({
+      owner: 'DCI-EdTech',
+      repo: 'autograding-setup',
+      path: 'template/.github/workflows/autograding.yml',
+      ref: 'main',
+    });
+
+    if(currentContent !== content) {
+      await octokit.rest.repos.createOrUpdateFileContents({
+        owner,
+        repo,
+        path,
+        message: 'update workflow',
+        content,
+        branch,
+        sha,
+      })
+    }
+  } catch (error) {
+    console.log(error)
   }
   
 
