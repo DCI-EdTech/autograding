@@ -16,6 +16,7 @@ import recordResult from './recordResult'
 const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
 const taskNamePattern = 'task(s)?(\.(.*))?\.js'
+let setupError = ''
 
 export type TestComparison = 'exact' | 'included' | 'regex'
 
@@ -127,6 +128,13 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup.stderr.on('data', chunk => {
     process.stderr.write(indent(chunk))
+    setupError += indent(chunk)
+  })
+
+  setup.once('exit', async (code) => {
+    if(code === 0) return;
+
+    await reportBug({ message: `\`\`\`\n${setupError}\n\`\`\``})
   })
 
   await waitForExit(setup, timeout)
@@ -191,7 +199,12 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   let result
   let packageJson = fs.readFileSync(packageJsonPath);
   packageJson = Buffer.from(packageJson, 'base64').toString('utf8')
-  packageJson = JSON.parse(packageJson);
+  try {
+    packageJson = JSON.parse(packageJson);
+  } catch (error) {
+    console.log('Error: faulty package.json')
+  }
+  
   
   
   const additionalSetup = packageJson.autograding && packageJson.autograding.setup

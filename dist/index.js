@@ -278,30 +278,35 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     const runId = parseInt(process.env['GITHUB_RUN_ID'] || '');
     if (Number.isNaN(runId))
         return;
-    // update workflow file
-    const { data: { sha, path, content: currentContent } } = await octokit.rest.repos.getContent({
-        owner: octokit_1.owner,
-        repo: octokit_1.repo,
-        path: '.github/workflows/autograding.yml',
-        ref: branch,
-    });
-    // get workflow template
-    const { data: { content } } = await octokit.rest.repos.getContent({
-        owner: 'DCI-EdTech',
-        repo: 'autograding-setup',
-        path: 'template/.github/workflows/autograding.yml',
-        ref: 'main',
-    });
-    if (currentContent !== content) {
-        await octokit.rest.repos.createOrUpdateFileContents({
+    try {
+        // update workflow file
+        const { data: { sha, path, content: currentContent } } = await octokit.rest.repos.getContent({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
-            path,
-            message: 'update workflow',
-            content,
-            branch,
-            sha,
+            path: '.github/workflows/autograding.yml',
+            ref: branch,
         });
+        // get workflow template
+        const { data: { content } } = await octokit.rest.repos.getContent({
+            owner: 'DCI-EdTech',
+            repo: 'autograding-setup',
+            path: 'template/.github/workflows/autograding.yml',
+            ref: 'main',
+        });
+        if (currentContent !== content) {
+            await octokit.rest.repos.createOrUpdateFileContents({
+                owner: octokit_1.owner,
+                repo: octokit_1.repo,
+                path,
+                message: 'update workflow',
+                content,
+                branch,
+                sha,
+            });
+        }
+    }
+    catch (error) {
+        console.log(error);
     }
     // Fetch the workflow run
     const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
@@ -9510,6 +9515,7 @@ const recordResult_1 = __importDefault(__webpack_require__(7));
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 const taskNamePattern = 'task(s)?(\.(.*))?\.js';
+let setupError = '';
 class TestError extends Error {
     constructor(message) {
         super(message);
@@ -9594,6 +9600,12 @@ const runSetup = async (test, cwd, timeout) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setup.stderr.on('data', chunk => {
         process.stderr.write(indent(chunk));
+        setupError += indent(chunk);
+    });
+    setup.once('exit', async (code) => {
+        if (code === 0)
+            return;
+        await bugReporter_1.default({ message: `\`\`\`\n${setupError}\n\`\`\`` });
     });
     await waitForExit(setup, timeout);
 };
@@ -9652,7 +9664,12 @@ exports.runAll = async (cwd, packageJsonPath) => {
     let result;
     let packageJson = fs_1.default.readFileSync(packageJsonPath);
     packageJson = Buffer.from(packageJson, 'base64').toString('utf8');
-    packageJson = JSON.parse(packageJson);
+    try {
+        packageJson = JSON.parse(packageJson);
+    }
+    catch (error) {
+        console.log('Error: faulty package.json');
+    }
     const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
     const testOpts = packageJson.autograding && packageJson.autograding.testOpts;
     const test = {
