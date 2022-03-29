@@ -9410,6 +9410,9 @@ const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 const taskNamePattern = 'task(s)?(\.(.*))?\.js';
 let setupError = '';
+process.stderr.on('data', chunk => {
+    console.log("CHUNK", indent(chunk));
+});
 class TestError extends Error {
     constructor(message) {
         super(message);

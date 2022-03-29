@@ -17,6 +17,10 @@ const color = new chalk.Instance({level: 1})
 const taskNamePattern = 'task(s)?(\.(.*))?\.js'
 let setupError = ''
 
+process.stderr.on('data', chunk => {
+  console.log("CHUNK", indent(chunk))
+})
+
 export type TestComparison = 'exact' | 'included' | 'regex'
 
 export interface Test {
