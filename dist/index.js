@@ -9556,7 +9556,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     }
     catch (error) {
         console.log('faulty package.json', error);
-        await bugReporter_1.default(error);
+        await bugReporter_1.default({ message: `${error.name}\n${error.message}\n${error.stack}` });
     }
     const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
     const testOpts = packageJson.autograding && packageJson.autograding.testOpts;

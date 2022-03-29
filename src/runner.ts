@@ -194,7 +194,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     packageJson = JSON.parse(packageJson);
   } catch (error) {
     console.log('faulty package.json', error)
-    await reportBug(error)
+    await reportBug({ message: `${error.name}\n${error.message}\n${error.stack}`})
   }
   
   
