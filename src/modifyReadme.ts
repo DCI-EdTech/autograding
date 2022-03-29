@@ -1,12 +1,11 @@
 // @ts-nocheck
-import fs from 'fs';
+import fs, { read } from 'fs';
 import { createOctokit, owner, repo } from './octokit';
 import { escapeRegExp } from './lib/helpers';
 
 const branch = process.env['GITHUB_REF_NAME']
 const readmeInfoPath = `./AUTOGRADING.md`;
 const mainBadgeString = `\n[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)\n`;
-const mainBadgeRegExp =  /[\n]{0,1}.*\!\[Status overview badge\]\(.*[\n]/g
 
 async function modifyReadme(results) {
   const octokit = createOctokit()
@@ -51,15 +50,17 @@ async function modifyReadme(results) {
 function addMainBadge(readme) {
   const headlineLevel1Regex = /^#[^#].*$/m;
   // delete old points badge
-  readme = readme.replace(mainBadgeRegExp, '')
+  const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '')
+
+  if(process.env.DISABLE_AUTOGRADING) return newReadme
 
   // check if there is a headline
-  if(headlineLevel1Regex.test(readme)) {
+  if(headlineLevel1Regex.test(newReadme)) {
     // insert points badge after level 1 headline
-    return readme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
+    return newReadme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
   } else {
     // insert badge on top if no headline found
-    return `${mainBadgeString}${readme}`
+    return `${mainBadgeString}${newReadme}`
   }
 
 }
@@ -86,7 +87,9 @@ async function addAutogradingInfo(fullReadme, results) {
 
 ${generateResult(results)}
 
-[Results Details](${repoURL}/actions)
+[🔬 Results Details](${repoURL}/actions)
+
+[📢 Give Feedback or Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(process.env.GITHUB_REPOSITORY.split('/')[1])}&entry.2115011968=${encodeURIComponent('https://github.com/')}${encodeURIComponent(process.env.GITHUB_REPOSITORY)})
 
 ### Debugging your code
 > [reading the test outputs](https://github.com/DCI-EdTech/autograding-setup/wiki/Reading-test-outputs)
@@ -108,6 +111,9 @@ There are two ways to see why tasks might not be completed:
 
   // remove old info
   fullReadme = fullReadme.replace(infoRE, '').trim()
+
+  if(process.env.DISABLE_AUTOGRADING) return fullReadme
+
   return `${fullReadme}\n\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
 }
 

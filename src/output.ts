@@ -9,9 +9,40 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
   const octokit: github.GitHub = createOctokit()
   if (!octokit) return
 
+  const branch = process.env['GITHUB_REF_NAME']
+
   // We need the workflow run id
   const runId = parseInt(process.env['GITHUB_RUN_ID'] || '')
   if (Number.isNaN(runId)) return
+
+  // update workflow file
+  const { data: { sha, path, content:currentContent } } = await octokit.rest.repos.getContent({
+    owner,
+    repo,
+    path: '.github/workflows/autograding.yml',
+    ref: branch,
+  });
+
+  // get workflow template
+  const { data: { content } } = await octokit.rest.repos.getContent({
+    owner: 'DCI-EdTech',
+    repo: 'autograding-setup',
+    path: 'template/.github/workflows/autograding.yml',
+    ref: 'main',
+  });
+
+  if(currentContent !== content) {
+    await octokit.rest.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path,
+      message: 'update workflow',
+      content,
+      branch,
+      sha,
+    })
+  }
+  
 
   // Fetch the workflow run
   const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
@@ -30,13 +61,14 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     check_name: 'Autograding',
     check_suite_id: checkSuiteId,
   })
+
   const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0]
   if (!checkRun) return
 
   // Update the checkrun, we'll assign the title, summary and text even though we expect
   // the title and summary to be overwritten by GitHub Actions (they are required in this call)
   // We'll also store the total in an annotation to future-proof
-  await octokit.rest.checks.update({
+  const res = await octokit.rest.checks.update({
     owner,
     repo,
     check_run_id: checkRun.id,
@@ -57,4 +89,5 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
       ],
     },
   })
+
 }

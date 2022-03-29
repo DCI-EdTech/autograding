@@ -12,6 +12,14 @@ const run = async (): Promise<void> => {
       throw new Error('No GITHUB_WORKSPACE')
     }
 
+    // filter
+    // disable autograding output for all branches but autograding and autograding-solution
+    const branch = process.env['GITHUB_REF_NAME']
+    if(branch !== 'autograding' && branch !== 'autograding-solution') {
+      console.log('disable Autograding')
+      process.env.DISABLE_AUTOGRADING = true
+    }
+
     await runAll(cwd, path.resolve(cwd, 'package.json'))
     
   } catch (error) {

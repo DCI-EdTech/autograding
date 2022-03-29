@@ -624,10 +624,36 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
         return;
+    const branch = process.env['GITHUB_REF_NAME'];
     // We need the workflow run id
     const runId = parseInt(process.env['GITHUB_RUN_ID'] || '');
     if (Number.isNaN(runId))
         return;
+    // update workflow file
+    const { data: { sha, path, content: currentContent } } = await octokit.rest.repos.getContent({
+        owner: octokit_1.owner,
+        repo: octokit_1.repo,
+        path: '.github/workflows/autograding.yml',
+        ref: branch,
+    });
+    // get workflow template
+    const { data: { content } } = await octokit.rest.repos.getContent({
+        owner: 'DCI-EdTech',
+        repo: 'autograding-setup',
+        path: 'template/.github/workflows/autograding.yml',
+        ref: 'main',
+    });
+    if (currentContent !== content) {
+        await octokit.rest.repos.createOrUpdateFileContents({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            path,
+            message: 'update workflow',
+            content,
+            branch,
+            sha,
+        });
+    }
     // Fetch the workflow run
     const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
         owner: octokit_1.owner,
@@ -650,7 +676,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // Update the checkrun, we'll assign the title, summary and text even though we expect
     // the title and summary to be overwritten by GitHub Actions (they are required in this call)
     // We'll also store the total in an annotation to future-proof
-    await octokit.rest.checks.update({
+    const res = await octokit.rest.checks.update({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
         check_run_id: checkRun.id,
@@ -13321,6 +13347,12 @@ const run = async () => {
         if (!cwd) {
             throw new Error('No GITHUB_WORKSPACE');
         }
+        // filter
+        const branch = process.env['GITHUB_REF_NAME'];
+        if (branch !== 'autograding' && branch !== 'autograding-solution') {
+            console.log('disable Autograding');
+            process.env.DISABLE_AUTOGRADING = true;
+        }
         await runner_1.runAll(cwd, path_1.default.resolve(cwd, 'package.json'));
     }
     catch (error) {
@@ -13833,7 +13865,6 @@ const helpers_1 = __webpack_require__(948);
 const branch = process.env['GITHUB_REF_NAME'];
 const readmeInfoPath = `./AUTOGRADING.md`;
 const mainBadgeString = `\n[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)\n`;
-const mainBadgeRegExp = /[\n]{0,1}.*\!\[Status overview badge\]\(.*[\n]/g;
 async function modifyReadme(results) {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
@@ -13872,15 +13903,17 @@ async function modifyReadme(results) {
 function addMainBadge(readme) {
     const headlineLevel1Regex = /^#[^#].*$/m;
     // delete old points badge
-    readme = readme.replace(mainBadgeRegExp, '');
+    const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '');
+    if (process.env.DISABLE_AUTOGRADING)
+        return newReadme;
     // check if there is a headline
-    if (headlineLevel1Regex.test(readme)) {
+    if (headlineLevel1Regex.test(newReadme)) {
         // insert points badge after level 1 headline
-        return readme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
+        return newReadme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
     }
     else {
         // insert badge on top if no headline found
-        return `${mainBadgeString}${readme}`;
+        return `${mainBadgeString}${newReadme}`;
     }
 }
 function generateResult(results) {
@@ -13904,7 +13937,9 @@ async function addAutogradingInfo(fullReadme, results) {
 
 ${generateResult(results)}
 
-[Results Details](${repoURL}/actions)
+[🔬 Results Details](${repoURL}/actions)
+
+[📢 Give Feedback or Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(process.env.GITHUB_REPOSITORY.split('/')[1])}&entry.2115011968=${encodeURIComponent('https://github.com/')}${encodeURIComponent(process.env.GITHUB_REPOSITORY)})
 
 ### Debugging your code
 > [reading the test outputs](https://github.com/DCI-EdTech/autograding-setup/wiki/Reading-test-outputs)
@@ -13924,6 +13959,8 @@ There are two ways to see why tasks might not be completed:
     const infoRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
     // remove old info
     fullReadme = fullReadme.replace(infoRE, '').trim();
+    if (process.env.DISABLE_AUTOGRADING)
+        return fullReadme;
     return `${fullReadme}\n\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
 }
 exports.default = modifyReadme;
