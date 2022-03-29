@@ -174,7 +174,7 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   try {
     await runSetup(test, cwd, timeout)
   } catch (error) {
-    console.log("SETUP ERROR", error)
+    await reportBug({ message: error.toString()})
   }
   
   const elapsed = process.hrtime(start)
@@ -199,7 +199,6 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     packageJson = JSON.parse(packageJson);
   } catch (error) {
     console.log('faulty package.json', error)
-    await reportBug({ message: error.toString()})
   }
   
   

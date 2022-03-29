@@ -9536,7 +9536,7 @@ exports.run = async (test, cwd) => {
         await runSetup(test, cwd, timeout);
     }
     catch (error) {
-        console.log("SETUP ERROR", error);
+        await bugReporter_1.default({ message: error.toString() });
     }
     const elapsed = process.hrtime(start);
     // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
@@ -9561,7 +9561,6 @@ exports.runAll = async (cwd, packageJsonPath) => {
     }
     catch (error) {
         console.log('faulty package.json', error);
-        await bugReporter_1.default({ message: error.toString() });
     }
     const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
     const testOpts = packageJson.autograding && packageJson.autograding.testOpts;
