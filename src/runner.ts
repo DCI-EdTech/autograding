@@ -126,7 +126,6 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup.stderr.on('data', chunk => {
     process.stderr.write(indent(chunk))
-    setupError += indent(chunk)
   })
 
   try {
