@@ -131,9 +131,9 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
   })
 
   setup.once('exit', async (code) => {
-    console.log('EXIT')
-    await reportBug({ message: `\`\`\`\n${setupError}\n\`\`\``})
+    if(code === 0) return;
 
+    await reportBug({ message: `\`\`\`\n${setupError}\n\`\`\``})
   })
 
   await waitForExit(setup, timeout)

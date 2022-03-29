@@ -9497,7 +9497,8 @@ const runSetup = async (test, cwd, timeout) => {
         setupError += indent(chunk);
     });
     setup.once('exit', async (code) => {
-        console.log('EXIT');
+        if (code === 0)
+            return;
         await bugReporter_1.default({ message: `\`\`\`\n${setupError}\n\`\`\`` });
     });
     await waitForExit(setup, timeout);
