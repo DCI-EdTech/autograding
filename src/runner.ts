@@ -121,11 +121,13 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup.stdout.on('data', chunk => {
     process.stdout.write(indent(chunk))
+    console.log('CHUNK', indent(chunk))
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup.stderr.on('data', chunk => {
     process.stderr.write(indent(chunk))
+    console.log('ERR CHUNK', indent(chunk))
   })
 
   await waitForExit(setup, timeout)
@@ -194,7 +196,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   try {
     packageJson = JSON.parse(packageJson);
   } catch (error) {
-    await reportBug({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\``})
+    await reportBug({ message: `### faulty package.json\n\n\`\`\`\n${error.stack}\n\`\`\``})
     throw error
   }
   
