@@ -15,7 +15,7 @@ import reportBug from './bugReporter'
 const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
 const taskNamePattern = 'task(s)?(\.(.*))?\.js'
-const setupError = ''
+let setupError = ''
 
 export type TestComparison = 'exact' | 'included' | 'regex'
 

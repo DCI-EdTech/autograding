@@ -9409,7 +9409,7 @@ const bugReporter_1 = __importDefault(__webpack_require__(161));
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 const taskNamePattern = 'task(s)?(\.(.*))?\.js';
-const setupError = '';
+let setupError = '';
 class TestError extends Error {
     constructor(message) {
         super(message);
