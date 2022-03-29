@@ -106,14 +106,19 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
     return
   }
 
-  const setup = spawn(test.setup, {
-    cwd,
-    shell: true,
-    env: {
-      PATH: process.env['PATH'],
-      FORCE_COLOR: 'true',
-    },
-  })
+  try {
+    const setup = spawn(test.setup, {
+      cwd,
+      shell: true,
+      env: {
+        PATH: process.env['PATH'],
+        FORCE_COLOR: 'true',
+      },
+    })
+  } catch (error) {
+    console.log("SPAWN", error)
+  }
+  
 
   // Start with a single new line
   process.stdout.write(indent('\n'))

@@ -9476,14 +9476,19 @@ const runSetup = async (test, cwd, timeout) => {
     if (!test.setup || test.setup === '') {
         return;
     }
-    const setup = child_process_1.spawn(test.setup, {
-        cwd,
-        shell: true,
-        env: {
-            PATH: process.env['PATH'],
-            FORCE_COLOR: 'true',
-        },
-    });
+    try {
+        const setup = child_process_1.spawn(test.setup, {
+            cwd,
+            shell: true,
+            env: {
+                PATH: process.env['PATH'],
+                FORCE_COLOR: 'true',
+            },
+        });
+    }
+    catch (error) {
+        console.log("SPAWN", error);
+    }
     // Start with a single new line
     process.stdout.write(indent('\n'));
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
