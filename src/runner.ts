@@ -102,6 +102,8 @@ const waitForExit = async (child: ChildProcess, timeout: number): Promise<void> 
 }
 
 const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void> => {
+  let error = ''
+
   if (!test.setup || test.setup === '') {
     return
   }
@@ -126,9 +128,11 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup.stderr.on('data', chunk => {
     process.stderr.write(indent(chunk))
+    error += indent(chunk)
   })
 
   await waitForExit(setup, timeout)
+  console.log("SETUP ERROR", error)
 }
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
@@ -194,7 +198,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     packageJson = JSON.parse(packageJson);
   } catch (error) {
     console.log('faulty package.json', error)
-    await reportBug({ message: `${error.name}\n${error.message}\n${error.stack}`})
+    await reportBug({ message: error.toString()})
   }
   
   
@@ -225,8 +229,6 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     log(color.green(`✅ ${test.name}`))
     log(``)
   } catch (error) {
-    console.log("RUNNER CATCH")
-    console.log(error)
     failed = true
     log('')
     log(color.red(`❌ ${test.name}`))

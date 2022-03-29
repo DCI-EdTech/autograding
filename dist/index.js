@@ -9473,6 +9473,7 @@ const waitForExit = async (child, timeout) => {
     });
 };
 const runSetup = async (test, cwd, timeout) => {
+    let error = '';
     if (!test.setup || test.setup === '') {
         return;
     }
@@ -9493,8 +9494,10 @@ const runSetup = async (test, cwd, timeout) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setup.stderr.on('data', chunk => {
         process.stderr.write(indent(chunk));
+        error += indent(chunk);
     });
     await waitForExit(setup, timeout);
+    console.log("SETUP ERROR", error);
 };
 const runCommand = async (test, cwd, timeout) => {
     let output = '';
@@ -9556,7 +9559,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     }
     catch (error) {
         console.log('faulty package.json', error);
-        await bugReporter_1.default({ message: `${error.name}\n${error.message}\n${error.stack}` });
+        await bugReporter_1.default({ message: error.toString() });
     }
     const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
     const testOpts = packageJson.autograding && packageJson.autograding.testOpts;
@@ -9581,8 +9584,6 @@ exports.runAll = async (cwd, packageJsonPath) => {
         log(``);
     }
     catch (error) {
-        console.log("RUNNER CATCH");
-        console.log(error);
         failed = true;
         log('');
         log(color.red(`❌ ${test.name}`));
