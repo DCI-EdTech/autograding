@@ -9409,10 +9409,6 @@ const bugReporter_1 = __importDefault(__webpack_require__(161));
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 const taskNamePattern = 'task(s)?(\.(.*))?\.js';
-let setupError = '';
-process.stderr.on('data', chunk => {
-    console.log("CHUNK", indent(chunk));
-});
 class TestError extends Error {
     constructor(message) {
         super(message);
@@ -9499,7 +9495,13 @@ const runSetup = async (test, cwd, timeout) => {
         process.stderr.write(indent(chunk));
         setupError += indent(chunk);
     });
-    await waitForExit(setup, timeout);
+    try {
+        await waitForExit(setup, timeout);
+    }
+    catch (error) {
+        console.log("EXIT ERROR", error);
+        await bugReporter_1.default({ message: `\`\`\`\n${error.stack}\n\`\`\`` });
+    }
 };
 const runCommand = async (test, cwd, timeout) => {
     let output = '';
@@ -9538,8 +9540,6 @@ exports.run = async (test, cwd) => {
     let timeout = (test.timeout || 1) * 60 * 1000 || 30000;
     const start = process.hrtime();
     await runSetup(test, cwd, timeout);
-    if (setupError !== '')
-        await bugReporter_1.default({ message: `\`\`\`\n${setupError}\n\`\`\`` });
     const elapsed = process.hrtime(start);
     // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
     timeout -= Math.floor(elapsed[0] * 1000 + elapsed[1] / 1000000);

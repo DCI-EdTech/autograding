@@ -15,11 +15,6 @@ import reportBug from './bugReporter'
 const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
 const taskNamePattern = 'task(s)?(\.(.*))?\.js'
-let setupError = ''
-
-process.stderr.on('data', chunk => {
-  console.log("CHUNK", indent(chunk))
-})
 
 export type TestComparison = 'exact' | 'included' | 'regex'
 
@@ -134,7 +129,12 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
     setupError += indent(chunk)
   })
 
-  await waitForExit(setup, timeout)
+  try {
+    await waitForExit(setup, timeout)
+  } catch (error) {
+    console.log("EXIT ERROR", error)
+    await reportBug({ message: `\`\`\`\n${error.stack}\n\`\`\``})
+  }
 }
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
@@ -178,8 +178,6 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   let timeout = (test.timeout || 1) * 60 * 1000 || 30000
   const start = process.hrtime()
   await runSetup(test, cwd, timeout)
-  if(setupError !== '')
-    await reportBug({ message: `\`\`\`\n${setupError}\n\`\`\``})
   const elapsed = process.hrtime(start)
   // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
   timeout -= Math.floor(elapsed[0] * 1000 + elapsed[1] / 1000000)
