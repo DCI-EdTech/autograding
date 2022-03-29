@@ -19,7 +19,6 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.0",
-    "axios": "^0.26.1",
     "tree-kill": "^1.2.2",
     "uuid": "^7.0.1"
   },
@@ -35,6 +34,7 @@
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
     "jest": "^25.1.0",
+    "axios": "^0.26.1",
     "nock": "^11.7.2",
     "prettier": "^1.19.1",
     "ts-jest": "^25.1.0",
