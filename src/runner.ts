@@ -15,6 +15,7 @@ import reportBug from './bugReporter'
 const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
 const taskNamePattern = 'task(s)?(\.(.*))?\.js'
+const setupError = ''
 
 export type TestComparison = 'exact' | 'included' | 'regex'
 
@@ -121,13 +122,12 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup.stdout.on('data', chunk => {
     process.stdout.write(indent(chunk))
-    console.log('CHUNK', indent(chunk))
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup.stderr.on('data', chunk => {
     process.stderr.write(indent(chunk))
-    console.log('ERR CHUNK', indent(chunk))
+    setupError += indent(chunk)
   })
 
   await waitForExit(setup, timeout)
@@ -174,7 +174,8 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   let timeout = (test.timeout || 1) * 60 * 1000 || 30000
   const start = process.hrtime()
   await runSetup(test, cwd, timeout)
-  
+  if(setupError !== '')
+    await reportBug({ message: `\`\`\`\n${setupError}\n\`\`\``})
   const elapsed = process.hrtime(start)
   // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
   timeout -= Math.floor(elapsed[0] * 1000 + elapsed[1] / 1000000)
@@ -196,7 +197,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   try {
     packageJson = JSON.parse(packageJson);
   } catch (error) {
-    await reportBug({ message: `### faulty package.json\n\n\`\`\`\n${error.stack}\n\`\`\``})
+    console.log('Error: faulty package.json')
   }
   
   
