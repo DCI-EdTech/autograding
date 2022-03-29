@@ -9473,7 +9473,6 @@ const waitForExit = async (child, timeout) => {
     });
 };
 const runSetup = async (test, cwd, timeout) => {
-    let error = '';
     if (!test.setup || test.setup === '') {
         return;
     }
@@ -9494,10 +9493,9 @@ const runSetup = async (test, cwd, timeout) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setup.stderr.on('data', chunk => {
         process.stderr.write(indent(chunk));
-        error += indent(chunk);
+        console.log("SETUP ERROR", indent(chunk));
     });
     await waitForExit(setup, timeout);
-    console.log("SETUP ERROR", error);
 };
 const runCommand = async (test, cwd, timeout) => {
     let output = '';

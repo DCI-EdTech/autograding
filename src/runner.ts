@@ -102,8 +102,6 @@ const waitForExit = async (child: ChildProcess, timeout: number): Promise<void> 
 }
 
 const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void> => {
-  let error = ''
-
   if (!test.setup || test.setup === '') {
     return
   }
@@ -128,11 +126,10 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup.stderr.on('data', chunk => {
     process.stderr.write(indent(chunk))
-    error += indent(chunk)
+    console.log("SETUP ERROR", indent(chunk))
   })
 
   await waitForExit(setup, timeout)
-  console.log("SETUP ERROR", error)
 }
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
