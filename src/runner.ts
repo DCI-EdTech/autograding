@@ -225,6 +225,8 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     log(color.green(`✅ ${test.name}`))
     log(``)
   } catch (error) {
+    console.log("RUNNER CATCH")
+    console.log(error)
     failed = true
     log('')
     log(color.red(`❌ ${test.name}`))
