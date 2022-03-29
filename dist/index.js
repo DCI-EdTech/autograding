@@ -9493,7 +9493,6 @@ const runSetup = async (test, cwd, timeout) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setup.stderr.on('data', chunk => {
         process.stderr.write(indent(chunk));
-        console.log("SETUP ERROR", indent(chunk));
     });
     await waitForExit(setup, timeout);
 };
@@ -9533,7 +9532,12 @@ exports.run = async (test, cwd) => {
     // Timeouts are in minutes, but need to be in ms
     let timeout = (test.timeout || 1) * 60 * 1000 || 30000;
     const start = process.hrtime();
-    await runSetup(test, cwd, timeout);
+    try {
+        await runSetup(test, cwd, timeout);
+    }
+    catch (error) {
+        console.log("SETUP ERROR", error);
+    }
     const elapsed = process.hrtime(start);
     // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
     timeout -= Math.floor(elapsed[0] * 1000 + elapsed[1] / 1000000);
