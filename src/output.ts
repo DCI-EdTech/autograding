@@ -24,6 +24,8 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
       ref: branch,
     });
 
+    const currentContentUTF8 = Buffer.from(currentContent, 'base64').toString('utf8')
+
     // get workflow template
     const { data: { content } } = await octokit.rest.repos.getContent({
       owner: 'DCI-EdTech',
@@ -32,7 +34,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
       ref: 'main',
     });
 
-    if(currentContent !== content) {
+    if(currentContentUTF8.indexOf('id: autograder') < 0 && currentContent !== content) {
       await octokit.rest.repos.createOrUpdateFileContents({
         owner,
         repo,

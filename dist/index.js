@@ -286,6 +286,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
             path: '.github/workflows/autograding.yml',
             ref: branch,
         });
+        const currentContentUTF8 = Buffer.from(currentContent, 'base64').toString('utf8');
         // get workflow template
         const { data: { content } } = await octokit.rest.repos.getContent({
             owner: 'DCI-EdTech',
@@ -293,7 +294,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
             path: 'template/.github/workflows/autograding.yml',
             ref: 'main',
         });
-        if (currentContent !== content) {
+        if (currentContentUTF8.indexOf('id: autograder') < 0 && currentContent !== content) {
             await octokit.rest.repos.createOrUpdateFileContents({
                 owner: octokit_1.owner,
                 repo: octokit_1.repo,
