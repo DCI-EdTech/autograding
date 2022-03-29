@@ -106,19 +106,14 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
     return
   }
 
-  try {
-    const setup = spawn(test.setup, {
-      cwd,
-      shell: true,
-      env: {
-        PATH: process.env['PATH'],
-        FORCE_COLOR: 'true',
-      },
-    })
-  } catch (error) {
-    console.log("SPAWN", error)
-  }
-  
+  const setup = spawn(test.setup, {
+    cwd,
+    shell: true,
+    env: {
+      PATH: process.env['PATH'],
+      FORCE_COLOR: 'true',
+    },
+  })
 
   // Start with a single new line
   process.stdout.write(indent('\n'))
@@ -186,7 +181,6 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
     result = await runCommand(test, cwd, timeout)
     return result
   } catch (error) {
-    await reportBug({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\``})
     throw error
   }
 }
@@ -200,7 +194,8 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   try {
     packageJson = JSON.parse(packageJson);
   } catch (error) {
-    console.log('faulty package.json', error)
+    await reportBug({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\``})
+    throw error
   }
   
   

@@ -9476,19 +9476,14 @@ const runSetup = async (test, cwd, timeout) => {
     if (!test.setup || test.setup === '') {
         return;
     }
-    try {
-        const setup = child_process_1.spawn(test.setup, {
-            cwd,
-            shell: true,
-            env: {
-                PATH: process.env['PATH'],
-                FORCE_COLOR: 'true',
-            },
-        });
-    }
-    catch (error) {
-        console.log("SPAWN", error);
-    }
+    const setup = child_process_1.spawn(test.setup, {
+        cwd,
+        shell: true,
+        env: {
+            PATH: process.env['PATH'],
+            FORCE_COLOR: 'true',
+        },
+    });
     // Start with a single new line
     process.stdout.write(indent('\n'));
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -9547,7 +9542,6 @@ exports.run = async (test, cwd) => {
         return result;
     }
     catch (error) {
-        await bugReporter_1.default({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\`` });
         throw error;
     }
 };
@@ -9561,7 +9555,8 @@ exports.runAll = async (cwd, packageJsonPath) => {
         packageJson = JSON.parse(packageJson);
     }
     catch (error) {
-        console.log('faulty package.json', error);
+        await bugReporter_1.default({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\`` });
+        throw error;
     }
     const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
     const testOpts = packageJson.autograding && packageJson.autograding.testOpts;
