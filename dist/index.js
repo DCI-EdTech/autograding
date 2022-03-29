@@ -9409,6 +9409,7 @@ const bugReporter_1 = __importDefault(__webpack_require__(161));
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 const taskNamePattern = 'task(s)?(\.(.*))?\.js';
+let setupError = '';
 class TestError extends Error {
     constructor(message) {
         super(message);
@@ -9493,14 +9494,13 @@ const runSetup = async (test, cwd, timeout) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setup.stderr.on('data', chunk => {
         process.stderr.write(indent(chunk));
+        setupError += indent(chunk);
     });
-    try {
-        await waitForExit(setup, timeout);
-    }
-    catch (error) {
-        console.log("EXIT ERROR", error);
-        await bugReporter_1.default({ message: `\`\`\`\n${error.stack}\n\`\`\`` });
-    }
+    setup.once('exit', async (code) => {
+        console.log('EXIT');
+        await bugReporter_1.default({ message: `\`\`\`\n${setupError}\n\`\`\`` });
+    });
+    await waitForExit(setup, timeout);
 };
 const runCommand = async (test, cwd, timeout) => {
     let output = '';

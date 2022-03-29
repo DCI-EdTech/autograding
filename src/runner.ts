@@ -15,6 +15,7 @@ import reportBug from './bugReporter'
 const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
 const taskNamePattern = 'task(s)?(\.(.*))?\.js'
+let setupError = ''
 
 export type TestComparison = 'exact' | 'included' | 'regex'
 
@@ -126,14 +127,16 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup.stderr.on('data', chunk => {
     process.stderr.write(indent(chunk))
+    setupError += indent(chunk)
   })
 
-  try {
-    await waitForExit(setup, timeout)
-  } catch (error) {
-    console.log("EXIT ERROR", error)
-    await reportBug({ message: `\`\`\`\n${error.stack}\n\`\`\``})
-  }
+  setup.once('exit', async (code) => {
+    console.log('EXIT')
+    await reportBug({ message: `\`\`\`\n${setupError}\n\`\`\``})
+
+  })
+
+  await waitForExit(setup, timeout)
 }
 
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
