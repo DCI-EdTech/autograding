@@ -174,7 +174,7 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   try {
     await runSetup(test, cwd, timeout)
   } catch (error) {
-    await reportBug({ message: error.toString()})
+    await reportBug({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\``})
   }
   
   const elapsed = process.hrtime(start)

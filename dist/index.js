@@ -9536,7 +9536,7 @@ exports.run = async (test, cwd) => {
         await runSetup(test, cwd, timeout);
     }
     catch (error) {
-        await bugReporter_1.default({ message: error.toString() });
+        await bugReporter_1.default({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\`` });
     }
     const elapsed = process.hrtime(start);
     // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
