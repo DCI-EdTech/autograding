@@ -9489,10 +9489,12 @@ const runSetup = async (test, cwd, timeout) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setup.stdout.on('data', chunk => {
         process.stdout.write(indent(chunk));
+        console.log('CHUNK', indent(chunk));
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setup.stderr.on('data', chunk => {
         process.stderr.write(indent(chunk));
+        console.log('ERR CHUNK', indent(chunk));
     });
     await waitForExit(setup, timeout);
 };
@@ -9555,7 +9557,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
         packageJson = JSON.parse(packageJson);
     }
     catch (error) {
-        await bugReporter_1.default({ message: `### ${error.name}:${error.message}\n\n\`\`\`\n${error.stack}\n\`\`\`` });
+        await bugReporter_1.default({ message: `### faulty package.json\n\n\`\`\`\n${error.stack}\n\`\`\`` });
         throw error;
     }
     const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
