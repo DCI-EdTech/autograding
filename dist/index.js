@@ -71,7 +71,6 @@ async function recordResult(points, result) {
             run_id: process.env.GITHUB_RUN_ID,
         });
         runInfo = data;
-        console.log(JSON.stringify(data));
     }
     catch (error) {
         console.log(error);
@@ -102,6 +101,7 @@ async function recordResult(points, result) {
         GITHUB_RETENTION_DAYS: process.env.GITHUB_RETENTION_DAYS,
         GITHUB_RUN_ATTEMPT: process.env.GITHUB_RUN_ATTEMPT,
         GITHUB_WORKFLOW: process.env.GITHUB_WORKFLOW,
+        GITHUB_WORKFLOW_ID: runInfo && runInfo.workflow_id,
         GITHUB_EVENT_NAME: process.env.GITHUB_EVENT_NAME,
         GITHUB_SERVER_URL: process.env.GITHUB_SERVER_URL,
         GITHUB_API_URL: process.env.GITHUB_API_URL,

@@ -17,16 +17,14 @@ export default async function recordResult(points, result) {
     });
 
     runInfo = data
-
-    console.log(JSON.stringify(data))
   } catch (error) {
     console.log(error)
   }
 
   const payload = JSON.stringify({
-    TIMESTAMP: runInfo && runInfo.run_started_at,
-    GITHUB_USER_NAME: runInfo && runInfo.actor.login,
-    GITHUB_USER_ID: runInfo && runInfo.actor.id,
+    TIMESTAMP: runInfo && runInfo.run_started_at, // TIMESTAMP
+    GITHUB_USER_NAME: runInfo && runInfo.actor.login, // VARCHAR
+    GITHUB_USER_ID: runInfo && runInfo.actor.id, // 
     GITHUB_USER_NODE_ID: runInfo && runInfo.actor.node_id,
     GITHUB_USER_EMAIL: runInfo && runInfo.head_commit.author.email,
     GITHUB_USER_AVATAR_URL: runInfo && runInfo.actor.avatar_url,
@@ -49,6 +47,7 @@ export default async function recordResult(points, result) {
     GITHUB_RETENTION_DAYS: process.env.GITHUB_RETENTION_DAYS,
     GITHUB_RUN_ATTEMPT: process.env.GITHUB_RUN_ATTEMPT,
     GITHUB_WORKFLOW: process.env.GITHUB_WORKFLOW,
+    GITHUB_WORKFLOW_ID: runInfo && runInfo.workflow_id,
     GITHUB_EVENT_NAME: process.env.GITHUB_EVENT_NAME,
     GITHUB_SERVER_URL: process.env.GITHUB_SERVER_URL,
     GITHUB_API_URL: process.env.GITHUB_API_URL,
