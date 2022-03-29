@@ -9551,7 +9551,13 @@ exports.runAll = async (cwd, packageJsonPath) => {
     let result;
     let packageJson = fs_1.default.readFileSync(packageJsonPath);
     packageJson = Buffer.from(packageJson, 'base64').toString('utf8');
-    packageJson = JSON.parse(packageJson);
+    try {
+        packageJson = JSON.parse(packageJson);
+    }
+    catch (error) {
+        console.log('faulty package.json', error);
+        await bugReporter_1.default({ message: error });
+    }
     const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
     const testOpts = packageJson.autograding && packageJson.autograding.testOpts;
     const test = {

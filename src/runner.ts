@@ -190,7 +190,13 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   let result
   let packageJson = fs.readFileSync(packageJsonPath);
   packageJson = Buffer.from(packageJson, 'base64').toString('utf8')
-  packageJson = JSON.parse(packageJson);
+  try {
+    packageJson = JSON.parse(packageJson);
+  } catch (error) {
+    console.log('faulty package.json', error)
+    await reportBug({message: error})
+  }
+  
   
   
   const additionalSetup = packageJson.autograding && packageJson.autograding.setup
