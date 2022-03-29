@@ -6,4 +6,9 @@ const xmlSecure = (str) => {
   return str.replace(/[<>]/gm, '')
 }
 
-export { escapeRegExp, xmlSecure }
+const removeTerminalColoring = (message) => {
+  if(!message) return message
+  return message.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
+}
+
+export { escapeRegExp, xmlSecure, removeTerminalColoring }

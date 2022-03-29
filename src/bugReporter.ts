@@ -1,10 +1,6 @@
 // @ts-nocheck
 import { createOctokit, owner, repo } from './octokit'
-
-function cleanMessage(message) {
-  if(!message) return message
-  return message.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
-}
+import { removeTerminalColoring } from './lib/helpers'
 
 export default async function reportBug(error) {
   // report bugs only for DCI Org for now
@@ -16,15 +12,15 @@ export default async function reportBug(error) {
 
   const currentBranch = process.env['GITHUB_REF_NAME']
 
-  const message = cleanMessage(error.message)
+  const message = removeTerminalColoring(error.message)
 
   // check if issue already reported
   const {data:issues} = await octokit.rest.issues.listForRepo({
     owner,
     repo,
   });
-
-  if(issues.find(issue => cleanMessage(issue.body) === cleanMessage(error.message))) return
+r
+  if(issues.find(issue => removeTerminalColoring(issue.body) === message)) return
 
   // get last commit of branch
   try {

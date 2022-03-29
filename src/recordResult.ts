@@ -1,6 +1,7 @@
 // @ts-nocheck
 import axios from "axios";
 import { createOctokit, owner, repo } from './octokit'
+import { removeTerminalColoring } from './lib/helpers'
 
 export default async function recordResult(points, result) {
   // get run info
@@ -22,6 +23,8 @@ export default async function recordResult(points, result) {
     console.log(error)
   }
 
+  // CONSIDERATION:
+  // Should check results of individual task assertions be stored in separate table?
 
   // send webhook event
   try {
@@ -33,14 +36,21 @@ export default async function recordResult(points, result) {
       GITHUB_USER_EMAIL: runInfo && runInfo.head_commit.author.email,
       GITHUB_USER_AVATAR_URL: runInfo && runInfo.actor.avatar_url,
       GITHUB_USER_HTML_URL: runInfo && runInfo.actor.html_url,
+      POINTS: points,
+      TEST_HAS_RUNTIME_ERRORS: result.numRuntimeErrorTestSuites > 0,
+      TEST_RUNTIME_ERRORS: removeTerminalColoring(result.testResults[0].message),
       INVOCATION_ID: process.env.INVOCATION_ID,
       GITHUB_HEAD_BRANCH: runInfo && runInfo.head_branch,
+      GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message,
       GITHUB_REF: process.env.GITHUB_REF,
       GITHUB_SHA: process.env.GITHUB_SHA,
       GITHUB_REPOSITORY: process.env.GITHUB_REPOSITORY,
+      GITHUB_REPOSITORY_HTML_URL: runInfo && runInfo.repository.html_url,
       GITHUB_REPOSITORY_OWNER: process.env.GITHUB_REPOSITORY_OWNER,
       GITHUB_RUN_ID: process.env.GITHUB_RUN_ID,
+      GITHUB_RUN_ATTEMPT: runInfo && runInfo.run_attempt,
       GITHUB_RUN_NUMBER: process.env.GITHUB_RUN_NUMBER,
+      GITHUB_RUN_HTML_URL: runInfo && runInfo.html_url,
       GITHUB_RETENTION_DAYS: process.env.GITHUB_RETENTION_DAYS,
       GITHUB_RUN_ATTEMPT: process.env.GITHUB_RUN_ATTEMPT,
       GITHUB_WORKFLOW: process.env.GITHUB_WORKFLOW,
