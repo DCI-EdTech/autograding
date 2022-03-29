@@ -71,11 +71,18 @@ async function recordResult(points, result) {
             run_id: process.env.GITHUB_RUN_ID,
         });
         runInfo = data;
+        // make sure right template id is in package.json
+        // if(process.env.IS_ORIGINAL_TEMPLATE_REPO)
+        // get package.json
+        // set name to repo name
+        // set id to repo id
     }
     catch (error) {
         console.log(error);
     }
     const payload = JSON.stringify({
+        // EXERCISE_NAME: [Name of original repo on DigitalCareerInstitute],
+        // EXERCISE_ID: [UUID],
         TIMESTAMP: runInfo && runInfo.run_started_at,
         GITHUB_USER_NAME: runInfo && runInfo.actor.login,
         GITHUB_USER_ID: runInfo && runInfo.actor.id,
@@ -11120,6 +11127,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const path_1 = __importDefault(__webpack_require__(622));
 const runner_1 = __webpack_require__(835);
+const octokit_1 = __webpack_require__(994);
 const run = async () => {
     try {
         const cwd = process.env['GITHUB_WORKSPACE'];
@@ -11132,6 +11140,11 @@ const run = async () => {
         if (branch !== 'autograding' && branch !== 'autograding-solution') {
             console.log('disable Autograding');
             process.env.DISABLE_AUTOGRADING = true;
+        }
+        // check if running on exercise collection org
+        if (octokit_1.owner === 'DigitalCareerInstitute') {
+            console.log('on exercise collection org');
+            process.env.IS_ORIGINAL_TEMPLATE_REPO = true;
         }
         await runner_1.runAll(cwd, path_1.default.resolve(cwd, 'package.json'));
     }

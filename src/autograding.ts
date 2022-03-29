@@ -3,7 +3,7 @@
 import * as core from '@actions/core'
 import path from 'path'
 import {Test, runAll} from './runner'
-import { createOctokit, owner, repo } from './octokit';
+import { owner } from './octokit';
 
 const run = async (): Promise<void> => {
   try {
@@ -18,6 +18,12 @@ const run = async (): Promise<void> => {
     if(branch !== 'autograding' && branch !== 'autograding-solution') {
       console.log('disable Autograding')
       process.env.DISABLE_AUTOGRADING = true
+    }
+
+    // check if running on exercise collection org
+    if(owner === 'DigitalCareerInstitute') {
+      console.log('on exercise collection org')
+      process.env.IS_ORIGINAL_TEMPLATE_REPO = true
     }
 
     await runAll(cwd, path.resolve(cwd, 'package.json'))

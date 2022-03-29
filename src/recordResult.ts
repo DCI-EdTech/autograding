@@ -17,11 +17,20 @@ export default async function recordResult(points, result) {
     });
 
     runInfo = data
+
+    // make sure right template id is in package.json
+    // if(process.env.IS_ORIGINAL_TEMPLATE_REPO)
+    // get package.json
+    // set name to repo name
+    // set id to repo id
+
   } catch (error) {
     console.log(error)
   }
 
   const payload = JSON.stringify({
+    // EXERCISE_NAME: [Name of original repo on DigitalCareerInstitute],
+    // EXERCISE_ID: [UUID],
     TIMESTAMP: runInfo && runInfo.run_started_at, // TIMESTAMP
     GITHUB_USER_NAME: runInfo && runInfo.actor.login, // VARCHAR
     GITHUB_USER_ID: runInfo && runInfo.actor.id, // 
