@@ -72,6 +72,7 @@ async function recordResult(points, result) {
             run_id: process.env.GITHUB_RUN_ID,
         });
         runInfo = data;
+        console.log(`Run info: ${JSON.stringify(runInfo)}`);
         // get package.json
         const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
             owner: octokit_1.owner,
@@ -108,7 +109,6 @@ async function recordResult(points, result) {
             repo: octokit_1.repo,
             sha: branch,
         });
-        console.log(JSON.stringify(commits));
         if (commits.length < 2 || process.env.IS_ORIGINAL_TEMPLATE_REPO || repository.is_template)
             return;
     }

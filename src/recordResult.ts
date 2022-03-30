@@ -20,6 +20,8 @@ export default async function recordResult(points, result) {
 
     runInfo = data
 
+    console.log(`Run info: ${JSON.stringify(runInfo)}`)
+
     // get package.json
     const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
       owner,
@@ -62,7 +64,6 @@ export default async function recordResult(points, result) {
       sha: branch,
     })
 
-    console.log(JSON.stringify(commits))
     if(commits.length < 2 || process.env.IS_ORIGINAL_TEMPLATE_REPO || repository.is_template) return
   } catch (error) {
     console.log(error)
