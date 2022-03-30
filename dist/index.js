@@ -80,7 +80,7 @@ async function recordResult(points, result) {
                 path: 'package.json',
                 ref: branch,
             });
-            const packageJson = JSON.parse(Buffer.from(currentContent, 'base64').toString('utf8'));
+            const packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'));
             // set repository
             packageJson.repository = {
                 "type": "git",
