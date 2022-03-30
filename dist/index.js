@@ -72,15 +72,16 @@ async function recordResult(points, result) {
             run_id: process.env.GITHUB_RUN_ID,
         });
         runInfo = data;
+        // get package.json
+        const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            path: 'package.json',
+            ref: branch,
+        });
+        const packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'));
         // make sure template repo url is in package.json
         if (process.env.IS_ORIGINAL_TEMPLATE_REPO) {
-            const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
-                owner: octokit_1.owner,
-                repo: octokit_1.repo,
-                path: 'package.json',
-                ref: branch,
-            });
-            const packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'));
             // set repository
             packageJson.repository = {
                 "type": "git",
@@ -92,7 +93,7 @@ async function recordResult(points, result) {
                 repo: octokit_1.repo,
                 path,
                 message: 'add template repo info to package.json',
-                content: Buffer.from(JSON.stringify(packageJson, null, 4)).toString('base64'),
+                content: Buffer.from(JSON.stringify(packageJson, null, 2)).toString('base64'),
                 branch,
                 sha,
             });
@@ -118,6 +119,8 @@ async function recordResult(points, result) {
         GITHUB_HEAD_BRANCH: runInfo && runInfo.head_branch,
         GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message,
         GITHUB_REF: process.env.GITHUB_REF,
+        GITHUB_TEMPLATE_REPOSITORY_URL: packageJson.repository.url,
+        GITHUB_TEMPLATE_REPOSITORY_ID: packageJson.repository.id,
         GITHUB_SHA: process.env.GITHUB_SHA,
         GITHUB_REPOSITORY: process.env.GITHUB_REPOSITORY,
         GITHUB_REPOSITORY_HTML_URL: runInfo && runInfo.repository.html_url,
