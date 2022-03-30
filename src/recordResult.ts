@@ -68,6 +68,7 @@ export default async function recordResult(points, result) {
     GITHUB_HEAD_BRANCH: runInfo && runInfo.head_branch,
     GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message,
     GITHUB_REF: process.env.GITHUB_REF,
+    GITHUB_TEMPLATE_NAME: packageJson.repository && packageJson.repository.url.match(/([^\/]+$)/)[0],
     GITHUB_TEMPLATE_REPOSITORY_URL: packageJson.repository && packageJson.repository.url,
     GITHUB_TEMPLATE_REPOSITORY_ID: packageJson.repository && packageJson.repository.id,
     GITHUB_SHA: process.env.GITHUB_SHA,
