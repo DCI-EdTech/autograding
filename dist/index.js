@@ -92,7 +92,7 @@ async function recordResult(points, result) {
                 repo: octokit_1.repo,
                 path,
                 message: 'add template repo info to package.json',
-                content: Buffer.from(JSON.stringify(packageJson)).toString('base64'),
+                content: Buffer.from(JSON.stringify(packageJson, null, '\t')).toString('base64'),
                 branch,
                 sha,
             });
