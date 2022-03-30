@@ -276,6 +276,14 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     }
     return acc
   }, [])
+
+  // calculate tasks
+  result.tasks = {
+    total: result.testResults.length,
+    completed: result.testResults.filter(testResult => {
+      return !testResult.find(result => result.status !== 'passed')
+    }).length
+  }
   
   // Restart command processing
   log('')

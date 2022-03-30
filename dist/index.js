@@ -60,7 +60,7 @@ const octokit_1 = __webpack_require__(994);
 const helpers_1 = __webpack_require__(948);
 async function recordResult(points, result) {
     // get run info
-    let runInfo, packageJson;
+    let runInfo, packageJson, commits;
     try {
         const octokit = octokit_1.createOctokit();
         if (!octokit)
@@ -103,11 +103,11 @@ async function recordResult(points, result) {
             owner: octokit_1.owner,
             repo: octokit_1.repo,
         });
-        let { data: commits } = await octokit.rest.repos.listCommits({
+        ({ data: commits } = await octokit.rest.repos.listCommits({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
             sha: branch,
-        });
+        }));
         commits = commits.filter(commit => !commit.author.login.includes('[bot]'));
         if (commits.length < 2 || commits[0].author.login.includes('[bot]') || process.env.IS_ORIGINAL_TEMPLATE_REPO || repository.is_template)
             return;
@@ -131,6 +131,7 @@ async function recordResult(points, result) {
         GITHUB_HEAD_BRANCH: runInfo && runInfo.head_branch,
         GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message,
         GITHUB_REF: process.env.GITHUB_REF,
+        NUM_COMMITS: commits.length,
         GITHUB_TEMPLATE_NAME: packageJson.repository && packageJson.repository.url.match(/([^\/]+$)/)[0],
         GITHUB_TEMPLATE_REPOSITORY_URL: packageJson.repository && packageJson.repository.url,
         GITHUB_TEMPLATE_REPOSITORY_ID: packageJson.repository && packageJson.repository.id,
@@ -302,9 +303,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const octokit_1 = __webpack_require__(994);
 exports.setCheckRunOutput = async (points, availablePoints, results) => {
-    // If we have nothing to output, then bail
-    if (typeof points === undefined)
-        return;
     // Create the octokit client
     const octokit = octokit_1.createOctokit();
     if (!octokit)
@@ -345,6 +343,9 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     catch (error) {
         console.log(error);
     }
+    // If we have nothing to output, then bail
+    if (typeof points === undefined)
+        return;
     // Fetch the workflow run
     const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
         owner: octokit_1.owner,
@@ -373,8 +374,8 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         check_run_id: checkRun.id,
         output: {
             title: 'Autograding',
-            summary: `Points ${points}/${availablePoints}`,
-            text: `Points ${points}/${availablePoints}`,
+            summary: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
+            text: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
             annotations: [
                 {
                     // Using the `.github` path is what GitHub Actions does
@@ -382,7 +383,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
                     start_line: 1,
                     end_line: 1,
                     annotation_level: 'notice',
-                    message: `Points ${points}/${availablePoints}`,
+                    message: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
                     title: 'Autograding complete',
                 },
             ],
@@ -9769,6 +9770,13 @@ exports.runAll = async (cwd, packageJsonPath) => {
         }
         return acc;
     }, []);
+    // calculate tasks
+    result.tasks = {
+        total: result.testResults.length,
+        completed: result.testResults.filter(testResult => {
+            return !testResult.find(result => result.status !== 'passed');
+        }).length
+    };
     // Restart command processing
     log('');
     log(`::${token}::`);
@@ -11119,7 +11127,7 @@ async function updateBadges(results) {
         return acc;
     }, []);
     // add main badge
-    badges.push({ path: badgePath, content: badge_1.default(results.testResults) });
+    badges.push({ path: badgePath, content: badge_1.default(results.tasks) });
     // update status badges
     await octokit.commit(badges, 'badges', 'Update badges');
 }
@@ -11890,14 +11898,11 @@ const colorVariants = {
         ctaLeft: 21.3300781
     }
 };
-function badge(testResults) {
-    const tasksCompleted = testResults.filter(testResult => {
-        return !testResult.find(result => result.status !== 'passed');
-    }).length;
+function badge(tasks) {
     let colors = colorVariants.none;
-    if (tasksCompleted > 0)
+    if (tasks.completed > 0)
         colors = colorVariants.partial;
-    if (tasksCompleted > 0 && tasksCompleted == testResults.length)
+    if (tasks.completed > 0 && tasks.completed == tasks.total)
         colors = colorVariants.full;
     return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="277px" height="38px" viewBox="0 0 277 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -11914,7 +11919,7 @@ function badge(testResults) {
                         </text>
                     </g>
                     <text id="Score" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="#0E123B">
-                        <tspan x="107" y="24">${tasksCompleted}/${testResults.length}</tspan>
+                        <tspan x="107" y="24">${tasks.completed}/${tasks.total}</tspan>
                     </text>
                     <text id="Tests" font-family="ArialMT, Arial" font-size="15" font-weight="normal" fill="#0E123B">
                         <tspan x="54" y="24">Tasks</tspan>

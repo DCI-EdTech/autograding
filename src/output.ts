@@ -2,9 +2,6 @@
 import { createOctokit, owner, repo } from './octokit'
 
 export const setCheckRunOutput = async (points:number, availablePoints:number, results:Array): Promise<void> => {
-  // If we have nothing to output, then bail
-  if (typeof points === undefined) return
-
   // Create the octokit client
   const octokit: github.GitHub = createOctokit()
   if (!octokit) return
@@ -49,6 +46,8 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     console.log(error)
   }
   
+  // If we have nothing to output, then bail
+  if (typeof points === undefined) return
 
   // Fetch the workflow run
   const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
@@ -80,8 +79,8 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     check_run_id: checkRun.id,
     output: {
       title: 'Autograding',
-      summary: `Points ${points}/${availablePoints}`,
-      text: `Points ${points}/${availablePoints}`,
+      summary: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
+      text: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
       annotations: [
         {
           // Using the `.github` path is what GitHub Actions does
@@ -89,7 +88,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
           start_line: 1,
           end_line: 1,
           annotation_level: 'notice',
-          message: `Points ${points}/${availablePoints}`,
+          message: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
           title: 'Autograding complete',
         },
       ],

@@ -5,7 +5,7 @@ import { removeTerminalColoring } from './lib/helpers'
 
 export default async function recordResult(points, result) {
   // get run info
-  let runInfo, packageJson
+  let runInfo, packageJson, commits
   try {
     const octokit: github.GitHub = createOctokit()
     if (!octokit) throw 'Octokit not initialized'
@@ -56,11 +56,11 @@ export default async function recordResult(points, result) {
       repo,
     });
 
-    let {data:commits} = await octokit.rest.repos.listCommits({
+    ({data:commits} = await octokit.rest.repos.listCommits({
       owner,
       repo,
       sha: branch,
-    })
+    }))
 
     commits = commits.filter(commit => !commit.author.login.includes('[bot]'))
 
@@ -86,6 +86,7 @@ export default async function recordResult(points, result) {
     GITHUB_HEAD_BRANCH: runInfo && runInfo.head_branch, // VARCHAR
     GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message, // VARCHAR
     GITHUB_REF: process.env.GITHUB_REF, // VARCHAR
+    NUM_COMMITS: commits.length, // MEDIUMINT
     GITHUB_TEMPLATE_NAME: packageJson.repository && packageJson.repository.url.match(/([^\/]+$)/)[0], // VARCHAR
     GITHUB_TEMPLATE_REPOSITORY_URL: packageJson.repository && packageJson.repository.url, // VARCHAR
     GITHUB_TEMPLATE_REPOSITORY_ID: packageJson.repository && packageJson.repository.id, // INT

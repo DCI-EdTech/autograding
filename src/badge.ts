@@ -58,14 +58,10 @@ const colorVariants = {
   }
 }
 
-export default function badge(testResults) {
-  const tasksCompleted = testResults.filter(testResult => {
-    return !testResult.find(result => result.status !== 'passed')
-  }).length
-
+export default function badge(tasks) {
   let colors = colorVariants.none
-  if(tasksCompleted > 0) colors = colorVariants.partial
-  if(tasksCompleted > 0 && tasksCompleted == testResults.length) colors = colorVariants.full
+  if(tasks.completed > 0) colors = colorVariants.partial
+  if(tasks.completed > 0 && tasks.completed == tasks.total) colors = colorVariants.full
   
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="277px" height="38px" viewBox="0 0 277 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -82,7 +78,7 @@ export default function badge(testResults) {
                         </text>
                     </g>
                     <text id="Score" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="#0E123B">
-                        <tspan x="107" y="24">${tasksCompleted}/${testResults.length}</tspan>
+                        <tspan x="107" y="24">${tasks.completed}/${tasks.total}</tspan>
                     </text>
                     <text id="Tests" font-family="ArialMT, Arial" font-size="15" font-weight="normal" fill="#0E123B">
                         <tspan x="54" y="24">Tasks</tspan>
