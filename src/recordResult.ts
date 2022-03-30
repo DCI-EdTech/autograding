@@ -62,7 +62,7 @@ export default async function recordResult(points, result) {
       sha: branch,
     })
 
-    console.log(commits)
+    console.log(JSON.stringify(commits))
     if(commits.length < 2 || process.env.IS_ORIGINAL_TEMPLATE_REPO || repository.is_template) return
   } catch (error) {
     console.log(error)
