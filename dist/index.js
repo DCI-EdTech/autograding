@@ -115,7 +115,6 @@ async function recordResult(points, result) {
     catch (error) {
         console.log(error);
     }
-    console.log("record run");
     const payload = JSON.stringify({
         TIMESTAMP: runInfo && runInfo.run_started_at,
         GITHUB_USER_NAME: runInfo && runInfo.actor.login,
@@ -375,7 +374,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         output: {
             title: 'Autograding',
             summary: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
-            text: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
+            text: `Points ${points}/${availablePoints}`,
             annotations: [
                 {
                     // Using the `.github` path is what GitHub Actions does
@@ -9791,7 +9790,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
         log('');
     }
     // Set the number of points
-    const text = `Points ${points}/${availablePoints}`;
+    const text = `Tasks ${result.tasks.completed}/${result.tasks.total}`;
     log(color.bold.bgCyan.black(text));
     await Promise.all([modifyReadme_1.default(result), updateBadges_1.default(result)]);
     await recordResult_1.default(points, result);

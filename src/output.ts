@@ -80,7 +80,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     output: {
       title: 'Autograding',
       summary: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
-      text: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
+      text: `Points ${points}/${availablePoints}`,
       annotations: [
         {
           // Using the `.github` path is what GitHub Actions does
