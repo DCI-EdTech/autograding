@@ -56,8 +56,6 @@ export default async function recordResult(points, result) {
       repo,
     });
 
-    console.log(JSON.stringify(repository))
-
     const {data:commits} = await octokit.rest.repos.listCommits({
       owner,
       repo,

@@ -103,7 +103,6 @@ async function recordResult(points, result) {
             owner: octokit_1.owner,
             repo: octokit_1.repo,
         });
-        console.log(JSON.stringify(repository));
         const { data: commits } = await octokit.rest.repos.listCommits({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
