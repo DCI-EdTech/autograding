@@ -54,8 +54,6 @@ export default async function recordResult(points, result) {
   }
 
   const payload = JSON.stringify({
-    // EXERCISE_NAME: [Name of original repo on DigitalCareerInstitute],
-    // EXERCISE_ID: [UUID],
     TIMESTAMP: runInfo && runInfo.run_started_at, // TIMESTAMP
     GITHUB_USER_NAME: runInfo && runInfo.actor.login, // VARCHAR
     GITHUB_USER_ID: runInfo && runInfo.actor.id, // 
@@ -70,8 +68,8 @@ export default async function recordResult(points, result) {
     GITHUB_HEAD_BRANCH: runInfo && runInfo.head_branch,
     GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message,
     GITHUB_REF: process.env.GITHUB_REF,
-    GITHUB_TEMPLATE_REPOSITORY_URL: packageJson.repository.url,
-    GITHUB_TEMPLATE_REPOSITORY_ID: packageJson.repository.id,
+    GITHUB_TEMPLATE_REPOSITORY_URL: packageJson.repository && packageJson.repository.url,
+    GITHUB_TEMPLATE_REPOSITORY_ID: packageJson.repository && packageJson.repository.id,
     GITHUB_SHA: process.env.GITHUB_SHA,
     GITHUB_REPOSITORY: process.env.GITHUB_REPOSITORY,
     GITHUB_REPOSITORY_HTML_URL: runInfo && runInfo.repository.html_url,
