@@ -72,6 +72,7 @@ async function recordResult(points, result) {
             run_id: process.env.GITHUB_RUN_ID,
         });
         runInfo = data;
+        console.log(JSON.stringify(runInfo));
         // get package.json
         const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
             owner: octokit_1.owner,
@@ -129,7 +130,6 @@ async function recordResult(points, result) {
         GITHUB_RUN_NUMBER: process.env.GITHUB_RUN_NUMBER,
         GITHUB_RUN_HTML_URL: runInfo && runInfo.html_url,
         GITHUB_RETENTION_DAYS: process.env.GITHUB_RETENTION_DAYS,
-        GITHUB_RUN_ATTEMPT: process.env.GITHUB_RUN_ATTEMPT,
         GITHUB_WORKFLOW: process.env.GITHUB_WORKFLOW,
         GITHUB_WORKFLOW_ID: runInfo && runInfo.workflow_id,
         GITHUB_EVENT_NAME: process.env.GITHUB_EVENT_NAME,
@@ -145,7 +145,7 @@ async function recordResult(points, result) {
         GITHUB_ACTION_PATH: process.env.GITHUB_ACTION_PATH,
         RUNNER_OS: process.env.RUNNER_OS,
         RUNNER_ARCH: process.env.RUNNER_ARCH,
-        RUNNER_WORKSPACE: process.env.RUNNER_WORKSPACE
+        RUNNER_WORKSPACE: process.env.RUNNER_WORKSPACE // VARCHAR
     });
     // CONSIDERATION:
     // Should check results of individual task assertions be stored in separate table?
