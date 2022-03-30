@@ -98,22 +98,22 @@ async function recordResult(points, result) {
                 sha,
             });
         }
+        // don't record on first commit or when template
+        const { data: repository } = await octokit.rest.repos.get({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+        });
+        console.log(JSON.stringify(repository));
+        const { data: commits } = await octokit.rest.repos.listCommits({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            sha: branch,
+        });
+        //if(commits.length < 2 || process.env.IS_ORIGINAL_TEMPLATE_REPO || ) return
     }
     catch (error) {
         console.log(error);
     }
-    // don't record on first commit or when template
-    const { data: repository } = await octokit.rest.repos.get({
-        owner: octokit_1.owner,
-        repo: octokit_1.repo,
-    });
-    console.log(JSON.stringify(repository));
-    const { data: commits } = await octokit.rest.repos.listCommits({
-        owner: octokit_1.owner,
-        repo: octokit_1.repo,
-        sha: branch,
-    });
-    //if(commits.length < 2 || process.env.IS_ORIGINAL_TEMPLATE_REPO || ) return
     const payload = JSON.stringify({
         TIMESTAMP: runInfo && runInfo.run_started_at,
         GITHUB_USER_NAME: runInfo && runInfo.actor.login,

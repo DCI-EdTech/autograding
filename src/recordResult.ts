@@ -49,25 +49,25 @@ export default async function recordResult(points, result) {
         sha,
       })
     }
+
+    // don't record on first commit or when template
+    const {data:repository} = await octokit.rest.repos.get({
+      owner,
+      repo,
+    });
+
+    console.log(JSON.stringify(repository))
+
+    const {data:commits} = await octokit.rest.repos.listCommits({
+      owner,
+      repo,
+      sha: branch,
+    })
+
+    //if(commits.length < 2 || process.env.IS_ORIGINAL_TEMPLATE_REPO || ) return
   } catch (error) {
     console.log(error)
   }
-
-  // don't record on first commit or when template
-  const {data:repository} = await octokit.rest.repos.get({
-    owner,
-    repo,
-  });
-
-  console.log(JSON.stringify(repository))
-
-  const {data:commits} = await octokit.rest.repos.listCommits({
-    owner,
-    repo,
-    sha: branch,
-  })
-
-  //if(commits.length < 2 || process.env.IS_ORIGINAL_TEMPLATE_REPO || ) return
 
 
   const payload = JSON.stringify({
