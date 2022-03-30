@@ -60,7 +60,7 @@ const octokit_1 = __webpack_require__(994);
 const helpers_1 = __webpack_require__(948);
 async function recordResult(points, result) {
     // get run info
-    let runInfo;
+    let runInfo, packageJson;
     try {
         const octokit = octokit_1.createOctokit();
         if (!octokit)
@@ -79,7 +79,7 @@ async function recordResult(points, result) {
             path: 'package.json',
             ref: branch,
         });
-        const packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'));
+        packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'));
         // make sure template repo url is in package.json
         if (process.env.IS_ORIGINAL_TEMPLATE_REPO) {
             // set repository

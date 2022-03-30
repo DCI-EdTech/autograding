@@ -5,7 +5,7 @@ import { removeTerminalColoring } from './lib/helpers'
 
 export default async function recordResult(points, result) {
   // get run info
-  let runInfo
+  let runInfo, packageJson
   try {
     const octokit: github.GitHub = createOctokit()
     if (!octokit) throw 'Octokit not initialized'
@@ -28,7 +28,7 @@ export default async function recordResult(points, result) {
       ref: branch,
     });
 
-    const packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'))
+    packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'))
 
     // make sure template repo url is in package.json
     if(process.env.IS_ORIGINAL_TEMPLATE_REPO) {
