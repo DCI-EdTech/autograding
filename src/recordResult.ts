@@ -117,7 +117,7 @@ export default async function recordResult(points, result) {
     req.on('error', error => {
       throw error
     })
-    console.log('send record')
+
     req.write(payload)
     req.end()
   } catch (error) {
