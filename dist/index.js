@@ -109,11 +109,13 @@ async function recordResult(points, result) {
             repo: octokit_1.repo,
             sha: branch,
         });
-        //if(commits.length < 2 || process.env.IS_ORIGINAL_TEMPLATE_REPO || ) return
+        if (commits.length < 2 || process.env.IS_ORIGINAL_TEMPLATE_REPO || repository.is_template)
+            return;
     }
     catch (error) {
         console.log(error);
     }
+    console.log("record run");
     const payload = JSON.stringify({
         TIMESTAMP: runInfo && runInfo.run_started_at,
         GITHUB_USER_NAME: runInfo && runInfo.actor.login,
