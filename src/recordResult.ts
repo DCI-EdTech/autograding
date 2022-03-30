@@ -20,8 +20,6 @@ export default async function recordResult(points, result) {
 
     runInfo = data
 
-    console.log(`Run info: ${JSON.stringify(runInfo)}`)
-
     // get package.json
     const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
       owner,
@@ -58,13 +56,17 @@ export default async function recordResult(points, result) {
       repo,
     });
 
-    const {data:commits} = await octokit.rest.repos.listCommits({
+    console.log(JSON.stringify(repository, null, 2))
+
+    let {data:commits} = await octokit.rest.repos.listCommits({
       owner,
       repo,
       sha: branch,
     })
 
-    if(commits.length < 2 || process.env.IS_ORIGINAL_TEMPLATE_REPO || repository.is_template) return
+    commits = commits.filter(commit => !commit.author.login.includes('[bot]'))
+
+    if(commits.length < 2 || commits[0].author.login.includes('[bot]') || process.env.IS_ORIGINAL_TEMPLATE_REPO || repository.is_template) return
   } catch (error) {
     console.log(error)
   }

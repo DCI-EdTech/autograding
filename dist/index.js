@@ -72,7 +72,6 @@ async function recordResult(points, result) {
             run_id: process.env.GITHUB_RUN_ID,
         });
         runInfo = data;
-        console.log(`Run info: ${JSON.stringify(runInfo)}`);
         // get package.json
         const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
             owner: octokit_1.owner,
@@ -104,12 +103,14 @@ async function recordResult(points, result) {
             owner: octokit_1.owner,
             repo: octokit_1.repo,
         });
-        const { data: commits } = await octokit.rest.repos.listCommits({
+        console.log(JSON.stringify(repository, null, 2));
+        let { data: commits } = await octokit.rest.repos.listCommits({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
             sha: branch,
         });
-        if (commits.length < 2 || process.env.IS_ORIGINAL_TEMPLATE_REPO || repository.is_template)
+        commits = commits.filter(commit => !commit.author.login.includes('[bot]'));
+        if (commits.length < 2 || commits[0].author.login.includes('[bot]') || process.env.IS_ORIGINAL_TEMPLATE_REPO || repository.is_template)
             return;
     }
     catch (error) {
