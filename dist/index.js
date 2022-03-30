@@ -72,7 +72,6 @@ async function recordResult(points, result) {
             run_id: process.env.GITHUB_RUN_ID,
         });
         runInfo = data;
-        console.log(JSON.stringify(runInfo));
         // make sure template repo url is in package.json
         if (process.env.IS_ORIGINAL_TEMPLATE_REPO) {
             const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
