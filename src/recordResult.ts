@@ -10,6 +10,8 @@ export default async function recordResult(points, result) {
     const octokit: github.GitHub = createOctokit()
     if (!octokit) throw 'Octokit not initialized'
 
+    const branch = process.env['GITHUB_REF_NAME']
+
     const { data } = await octokit.rest.actions.getWorkflowRun({
       owner,
       repo,
@@ -18,12 +20,27 @@ export default async function recordResult(points, result) {
 
     runInfo = data
 
-    // make sure right template id is in package.json
-    // if(process.env.IS_ORIGINAL_TEMPLATE_REPO)
-    // get package.json
-    // set name to repo name
-    // set id to repo id
+    console.log(JSON.stringify(runInfo))
 
+    // make sure template repo url is in package.json
+    if(process.env.IS_ORIGINAL_TEMPLATE_REPO) {
+      const { data: { content } } = await octokit.rest.repos.getContent({
+        owner,
+        repo,
+        path: 'package.json',
+        ref: branch,
+      });
+
+      const packageJson = Buffer.from(currentContent, 'base64').toString('utf8')
+
+      // set repository
+      packageJson.repository = {
+        "type": "git",
+        "url": `https://github.com/${process.env.GITHUB_REPOSITORY}`
+      }
+
+
+    }
   } catch (error) {
     console.log(error)
   }
