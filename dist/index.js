@@ -75,18 +75,28 @@ async function recordResult(points, result) {
         console.log(JSON.stringify(runInfo));
         // make sure template repo url is in package.json
         if (process.env.IS_ORIGINAL_TEMPLATE_REPO) {
-            const { data: { content } } = await octokit.rest.repos.getContent({
+            const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
                 owner: octokit_1.owner,
                 repo: octokit_1.repo,
                 path: 'package.json',
                 ref: branch,
             });
-            const packageJson = Buffer.from(currentContent, 'base64').toString('utf8');
+            const packageJson = JSON.parse(Buffer.from(currentContent, 'base64').toString('utf8'));
             // set repository
             packageJson.repository = {
                 "type": "git",
-                "url": `https://github.com/${process.env.GITHUB_REPOSITORY}`
+                "url": `https://github.com/${process.env.GITHUB_REPOSITORY}`,
+                "id": runInfo ? runInfo.repository.id : ""
             };
+            await octokit.rest.repos.createOrUpdateFileContents({
+                owner: octokit_1.owner,
+                repo: octokit_1.repo,
+                path,
+                message: 'add template repo info to package.json',
+                content: Buffer.from(JSON.stringify(packageJson)).toString('base64'),
+                branch,
+                sha,
+            });
         }
     }
     catch (error) {
