@@ -20,6 +20,8 @@ export default async function recordResult(points, result) {
 
     runInfo = data
 
+    console.log(`Run info: ${JSON.stringify(runInfo, null, 2)}`)
+
     // get package.json
     const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
       owner,
