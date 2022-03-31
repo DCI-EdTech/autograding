@@ -16,13 +16,12 @@ const run = async (): Promise<void> => {
     // disable autograding output for all branches but autograding and autograding-solution
     const branch = process.env['GITHUB_REF_NAME']
     if(branch !== 'autograding' && branch !== 'autograding-solution') {
-      console.log('disable Autograding')
+      console.log('disable Autograding output')
       process.env.DISABLE_AUTOGRADING = true
     }
 
     // check if running on exercise collection org
     if(owner === 'DigitalCareerInstitute') {
-      console.log('on exercise collection org')
       process.env.IS_ORIGINAL_TEMPLATE_REPO = true
     }
 

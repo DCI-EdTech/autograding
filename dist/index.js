@@ -885,7 +885,7 @@ const helpers_1 = __webpack_require__(948);
 async function reportBug(error) {
     // report bugs only for DCI Org for now
     // TODO: report also when running on student repos
-    if (octokit_1.owner !== 'DigitalCareerInstitute')
+    if (!process.env.IS_ORIGINAL_TEMPLATE_REPO)
         return;
     const octokit = octokit_1.createOctokit();
     if (!octokit)
@@ -11201,12 +11201,11 @@ const run = async () => {
         // disable autograding output for all branches but autograding and autograding-solution
         const branch = process.env['GITHUB_REF_NAME'];
         if (branch !== 'autograding' && branch !== 'autograding-solution') {
-            console.log('disable Autograding');
+            console.log('disable Autograding output');
             process.env.DISABLE_AUTOGRADING = true;
         }
         // check if running on exercise collection org
         if (octokit_1.owner === 'DigitalCareerInstitute') {
-            console.log('on exercise collection org');
             process.env.IS_ORIGINAL_TEMPLATE_REPO = true;
         }
         await runner_1.runAll(cwd, path_1.default.resolve(cwd, 'package.json'));

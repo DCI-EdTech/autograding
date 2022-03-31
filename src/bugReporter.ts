@@ -5,7 +5,7 @@ import { removeTerminalColoring } from './lib/helpers'
 export default async function reportBug(error) {
   // report bugs only for DCI Org for now
   // TODO: report also when running on student repos
-  if(owner !== 'DigitalCareerInstitute') return
+  if(!process.env.IS_ORIGINAL_TEMPLATE_REPO) return
 
   const octokit: github.GitHub = createOctokit()
   if (!octokit) return
