@@ -71,13 +71,7 @@ async function recordResult(points, result) {
             repo: octokit_1.repo,
             run_id: process.env.GITHUB_RUN_ID,
         });
-        const { data: checkSuite } = await octokit.rest.checks.listForSuite({
-            owner: octokit_1.owner,
-            repo: octokit_1.repo,
-            check_suite_id: data.check_suite_id,
-        });
         runInfo = data;
-        console.log(`Check suite info: ${JSON.stringify(checkSuite, null, 2)}`);
         // get package.json
         const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
             owner: octokit_1.owner,

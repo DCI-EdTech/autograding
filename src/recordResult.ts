@@ -18,15 +18,7 @@ export default async function recordResult(points, result) {
       run_id: process.env.GITHUB_RUN_ID,
     });
 
-    const { data: checkSuite } = await octokit.rest.checks.listForSuite({
-      owner,
-      repo,
-      check_suite_id: data.check_suite_id,
-    });
-
     runInfo = data
-
-    console.log(`Check suite info: ${JSON.stringify(checkSuite, null, 2)}`)
 
     // get package.json
     const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
