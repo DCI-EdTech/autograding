@@ -72,7 +72,7 @@ async function recordResult(points, result) {
             run_id: process.env.GITHUB_RUN_ID,
         });
         runInfo = data;
-        // get package.json
+        // get package.json (needs to be loaded through api again for sha)
         const { data: { sha, path, content } } = await octokit.rest.repos.getContent({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
