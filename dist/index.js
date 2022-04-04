@@ -11732,9 +11732,12 @@ There are two ways to see why tasks might not be completed:
 - Expand the item 'Run DCI-EdTech/autograding-action@main'
 - Here you see all outputs from the test run`;
     const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
+    const setupDelimiters = ['[//]: # (autograding setup start)', '[//]: # (autograding setup end)'];
     const infoRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
+    const setupRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(setupDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(setupDelimiters[1])}`, 'gsm');
     // remove old info
-    fullReadme = fullReadme.replace(infoRE, '').trim();
+    fullReadme = fullReadme.replace(infoRE, '');
+    fullReadme = fullReadme.replace(setupRE, '').trim();
     if (process.env.DISABLE_AUTOGRADING)
         return fullReadme;
     return `${fullReadme}\n\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
