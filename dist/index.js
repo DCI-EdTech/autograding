@@ -117,7 +117,7 @@ async function recordResult(points, result) {
     catch (error) {
         console.log(error);
     }
-    console.log('errors', JSON.stringify(result));
+    console.log('errors', JSON.stringify(result, null, 2));
     const payload = JSON.stringify({
         TIMESTAMP: runInfo && runInfo.run_started_at,
         GITHUB_USER_NAME: runInfo && runInfo.actor.login,
