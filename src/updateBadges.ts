@@ -4,6 +4,8 @@ import createBadge from './badge'
 import { successIcon, failureIcon } from './statusIcons'
 
 export default async function updateBadges(results:Array<any>): Promise<void> {
+  if(process.env.DISABLE_AUTOGRADING) return
+
   const octokit: github.GitHub = createOctokit()
   if (!octokit) return
 

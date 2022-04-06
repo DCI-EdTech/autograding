@@ -11117,6 +11117,8 @@ const octokit_1 = __webpack_require__(994);
 const badge_1 = __importDefault(__webpack_require__(952));
 const statusIcons_1 = __webpack_require__(529);
 async function updateBadges(results) {
+    if (process.env.DISABLE_AUTOGRADING)
+        return;
     const octokit = octokit_1.createOctokit();
     if (!octokit)
         return;
