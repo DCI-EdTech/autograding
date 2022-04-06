@@ -109,7 +109,6 @@ async function recordResult(points, result) {
             sha: branch,
         }));
         commits = commits.filter(commit => !(commit.author && commit.author.login.includes('[bot]')));
-        console.log('user', runInfo.actor.login);
         // NOTE: doesn't record when students accept but don't submit anything
         // Another solution is needed to prevent recording when teachers create class template from main template
         if (commits.length < 2 || commits.length && commits[0].author.login.includes('[bot]') || process.env.IS_ORIGINAL_TEMPLATE_REPO || repository.is_template)
@@ -118,6 +117,7 @@ async function recordResult(points, result) {
     catch (error) {
         console.log(error);
     }
+    console.log('errors', helpers_1.removeTerminalColoring(result.testResults[0].message));
     const payload = JSON.stringify({
         TIMESTAMP: runInfo && runInfo.run_started_at,
         GITHUB_USER_NAME: runInfo && runInfo.actor.login,
