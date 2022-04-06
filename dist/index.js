@@ -126,7 +126,7 @@ async function recordResult(points, result) {
         GITHUB_USER_HTML_URL: runInfo && runInfo.actor.html_url,
         POINTS: points,
         TEST_HAS_RUNTIME_ERRORS: result.numRuntimeErrorTestSuites > 0,
-        //TEST_RUNTIME_ERRORS: result.runtimeError ? removeTerminalColoring(result.runtimeError.message) : '', // TEXT
+        TEST_RUNTIME_ERRORS: 'test',
         INVOCATION_ID: process.env.INVOCATION_ID,
         GITHUB_HEAD_BRANCH: runInfo && runInfo.head_branch,
         GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message,
