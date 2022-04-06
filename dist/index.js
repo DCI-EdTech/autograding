@@ -181,7 +181,7 @@ async function recordResult(points, result) {
         req.on('error', error => {
             throw error;
         });
-        console.log("send");
+        console.log("send", payload);
         req.write(payload);
         req.end();
     }
