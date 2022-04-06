@@ -64,8 +64,6 @@ export default async function recordResult(points, result) {
 
     commits = commits.filter(commit => !(commit.author && commit.author.login.includes('[bot]')))
 
-    console.log('user', runInfo.actor.login)
-
     // NOTE: doesn't record when students accept but don't submit anything
     // Another solution is needed to prevent recording when teachers create class template from main template
 
@@ -73,6 +71,8 @@ export default async function recordResult(points, result) {
   } catch (error) {
     console.log(error)
   }
+
+  console.log('errors', removeTerminalColoring(result.testResults[0].message))
 
   const payload = JSON.stringify({
     TIMESTAMP: runInfo && runInfo.run_started_at, // TIMESTAMP (format needs to change?)
