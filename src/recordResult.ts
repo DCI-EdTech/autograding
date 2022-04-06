@@ -115,7 +115,8 @@ export default async function recordResult(points, result) {
     GITHUB_ACTION_PATH: process.env.GITHUB_ACTION_PATH, // VARCHAR
     RUNNER_OS: process.env.RUNNER_OS, // VARCHAR
     RUNNER_ARCH: process.env.RUNNER_ARCH, // VARCHAR
-    RUNNER_WORKSPACE: process.env.RUNNER_WORKSPACE // VARCHAR
+    RUNNER_WORKSPACE: process.env.RUNNER_WORKSPACE, // VARCHAR
+    TEST_RESULTS: result.testResults, // JSON
   })
 
   // CONSIDERATION:

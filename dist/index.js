@@ -160,7 +160,8 @@ async function recordResult(points, result) {
         GITHUB_ACTION_PATH: process.env.GITHUB_ACTION_PATH,
         RUNNER_OS: process.env.RUNNER_OS,
         RUNNER_ARCH: process.env.RUNNER_ARCH,
-        RUNNER_WORKSPACE: process.env.RUNNER_WORKSPACE // VARCHAR
+        RUNNER_WORKSPACE: process.env.RUNNER_WORKSPACE,
+        TEST_RESULTS: result.testResults,
     });
     // CONSIDERATION:
     // Should check results of individual task assertions be stored in separate table?
