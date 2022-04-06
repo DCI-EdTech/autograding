@@ -117,7 +117,7 @@ async function recordResult(points, result) {
     catch (error) {
         console.log(error);
     }
-    console.log(result.runtimeError);
+    console.log(helpers_1.removeTerminalColoring(result.runtimeError.message));
     const payload = JSON.stringify({
         TIMESTAMP: runInfo && runInfo.run_started_at,
         GITHUB_USER_NAME: runInfo && runInfo.actor.login,

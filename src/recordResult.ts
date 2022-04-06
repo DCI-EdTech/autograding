@@ -72,7 +72,7 @@ export default async function recordResult(points, result) {
     console.log(error)
   }
 
-  console.log(result.runtimeError)
+  console.log(removeTerminalColoring(result.runtimeError.message))
 
   const payload = JSON.stringify({
     TIMESTAMP: runInfo && runInfo.run_started_at, // TIMESTAMP (format needs to change?)
