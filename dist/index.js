@@ -117,7 +117,6 @@ async function recordResult(points, result) {
     catch (error) {
         console.log(error);
     }
-    console.log('errors', JSON.stringify(result, null, 2));
     const payload = JSON.stringify({
         TIMESTAMP: runInfo && runInfo.run_started_at,
         GITHUB_USER_NAME: runInfo && runInfo.actor.login,
@@ -128,7 +127,7 @@ async function recordResult(points, result) {
         GITHUB_USER_HTML_URL: runInfo && runInfo.actor.html_url,
         POINTS: points,
         TEST_HAS_RUNTIME_ERRORS: result.numRuntimeErrorTestSuites > 0,
-        TEST_RUNTIME_ERRORS: helpers_1.removeTerminalColoring(result.testResults[0].message),
+        TEST_RUNTIME_ERRORS: helpers_1.removeTerminalColoring(result.runtimeError.message),
         INVOCATION_ID: process.env.INVOCATION_ID,
         GITHUB_HEAD_BRANCH: runInfo && runInfo.head_branch,
         GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message,
@@ -9741,8 +9740,10 @@ exports.runAll = async (cwd, packageJsonPath) => {
         core.setFailed(error.message);
     }
     // Report bug as issue
-    if (result.numRuntimeErrorTestSuites > 0)
+    if (result.numRuntimeErrorTestSuites > 0) {
         bugReporter_1.default(result.testResults[0]);
+        result.runtimeError = result.testResults[0];
+    }
     // calculate points
     points = Math.round(100 / result.numTotalTests * result.numPassedTests);
     // sort results by filename

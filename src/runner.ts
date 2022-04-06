@@ -241,8 +241,10 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   }
 
   // Report bug as issue
-  if(result.numRuntimeErrorTestSuites > 0)
+  if(result.numRuntimeErrorTestSuites > 0) {
     reportBug(result.testResults[0])
+    result.runtimeError = result.testResults[0]
+  }
 
   // calculate points
   points = Math.round(100 / result.numTotalTests * result.numPassedTests)
