@@ -72,6 +72,8 @@ export default async function recordResult(points, result) {
     console.log(error)
   }
 
+  console.log(result.runtimeError)
+
   const payload = JSON.stringify({
     TIMESTAMP: runInfo && runInfo.run_started_at, // TIMESTAMP (format needs to change?)
     GITHUB_USER_NAME: runInfo && runInfo.actor.login, // VARCHAR
@@ -82,7 +84,7 @@ export default async function recordResult(points, result) {
     GITHUB_USER_HTML_URL: runInfo && runInfo.actor.html_url, // VARCHAR
     POINTS: points, // TINYINT
     TEST_HAS_RUNTIME_ERRORS: result.numRuntimeErrorTestSuites > 0, // BOOLEAN
-    TEST_RUNTIME_ERRORS: removeTerminalColoring(result.runtimeError.message), // TEXT
+    TEST_RUNTIME_ERRORS: result.runtimeError && removeTerminalColoring(result.runtimeError.message), // TEXT
     INVOCATION_ID: process.env.INVOCATION_ID, // VARCHAR
     GITHUB_HEAD_BRANCH: runInfo && runInfo.head_branch, // VARCHAR
     GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message, // VARCHAR
