@@ -57,7 +57,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const https_1 = __importDefault(__webpack_require__(211));
 const octokit_1 = __webpack_require__(994);
-const helpers_1 = __webpack_require__(948);
 async function recordResult(points, result) {
     // get run info
     let runInfo, packageJson, commits;
@@ -117,7 +116,6 @@ async function recordResult(points, result) {
     catch (error) {
         console.log(error);
     }
-    console.log(helpers_1.removeTerminalColoring(result.runtimeError.message));
     const payload = JSON.stringify({
         TIMESTAMP: runInfo && runInfo.run_started_at,
         GITHUB_USER_NAME: runInfo && runInfo.actor.login,
@@ -128,7 +126,7 @@ async function recordResult(points, result) {
         GITHUB_USER_HTML_URL: runInfo && runInfo.actor.html_url,
         POINTS: points,
         TEST_HAS_RUNTIME_ERRORS: result.numRuntimeErrorTestSuites > 0,
-        TEST_RUNTIME_ERRORS: result.runtimeError ? helpers_1.removeTerminalColoring(result.runtimeError.message) : '',
+        //TEST_RUNTIME_ERRORS: result.runtimeError ? removeTerminalColoring(result.runtimeError.message) : '', // TEXT
         INVOCATION_ID: process.env.INVOCATION_ID,
         GITHUB_HEAD_BRANCH: runInfo && runInfo.head_branch,
         GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message,
@@ -181,7 +179,6 @@ async function recordResult(points, result) {
         req.on('error', error => {
             throw error;
         });
-        console.log("send", payload);
         req.write(payload);
         req.end();
     }
