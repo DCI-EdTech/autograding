@@ -284,12 +284,12 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     }).length
   }
 
-  points = result.testResults.reduce((acc, item) => {
+  points = Math.round(result.testResults.reduce((acc, item) => {
     const pointsPerTest = 100 / result.tasks.total / item.length
     return acc + item.reduce((accc, result) => {
       return accc + (result.status === 'passed' ? pointsPerTest : 0)
     }, 0)
-  }, 0)
+  }, 0))
 
   console.log('points', points) 
   
