@@ -290,8 +290,6 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
       return accc + (result.status === 'passed' ? pointsPerTest : 0)
     }, 0)
   }, 0))
-
-  console.log('points', points) 
   
   // Restart command processing
   log('')
