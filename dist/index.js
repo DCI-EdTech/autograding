@@ -9744,8 +9744,6 @@ exports.runAll = async (cwd, packageJsonPath) => {
         bugReporter_1.default(result.testResults[0]);
         result.runtimeError = result.testResults[0];
     }
-    // calculate points
-    points = Math.round(100 / result.numTotalTests * result.numPassedTests);
     // sort results by filename
     result.testResults.sort((a, b) => {
         const nameA = a.name.toUpperCase();
@@ -9781,6 +9779,12 @@ exports.runAll = async (cwd, packageJsonPath) => {
             return !testResult.find(result => result.status !== 'passed');
         }).length
     };
+    points = result.testResults.reduce((acc, item) => {
+        const pointsPerTest = 100 / result.tasks.total / item.length;
+        return acc + item.reduce((accc, result) => {
+            return accc + (result.status === 'passed' ? pointsPerTest : 0);
+        }, 0);
+    }, 0);
     // Restart command processing
     log('');
     log(`::${token}::`);
