@@ -170,7 +170,7 @@ async function recordResult(points, result) {
         const req = https_1.default.request({
             hostname: 'smee.io',
             port: 443,
-            path: '/IvFctqLqvsxFy230',
+            path: '/IvFctqLqvsxFy230/api/v1/data',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
