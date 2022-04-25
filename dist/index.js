@@ -9740,7 +9740,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     }
     // Report bug as issue
     if (result.numRuntimeErrorTestSuites > 0) {
-        bugReporter_1.default(result.testResults[0]);
+        await bugReporter_1.default(result.testResults[0]);
         result.runtimeError = result.testResults[0];
     }
     // sort results by filename

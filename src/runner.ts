@@ -242,7 +242,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
 
   // Report bug as issue
   if(result.numRuntimeErrorTestSuites > 0) {
-    reportBug(result.testResults[0])
+    await reportBug(result.testResults[0])
     result.runtimeError = result.testResults[0]
   }
 
