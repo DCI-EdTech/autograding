@@ -118,10 +118,8 @@ export default async function recordResult(points, result) {
     TEST_RESULTS: result.testResults, // JSON
   })
 
-  // CONSIDERATION:
-  // Should check results of individual task assertions be stored in separate table?
-
   // send webhook event
+  console.log('result')
   try {
     const req = https.request({
       hostname: 'smee.io',

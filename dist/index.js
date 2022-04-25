@@ -163,9 +163,8 @@ async function recordResult(points, result) {
         RUNNER_WORKSPACE: process.env.RUNNER_WORKSPACE,
         TEST_RESULTS: result.testResults,
     });
-    // CONSIDERATION:
-    // Should check results of individual task assertions be stored in separate table?
     // send webhook event
+    console.log('result');
     try {
         const req = https_1.default.request({
             hostname: 'smee.io',
