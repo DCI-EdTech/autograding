@@ -164,7 +164,7 @@ async function recordResult(points, result) {
         TEST_RESULTS: result.testResults,
     });
     // send webhook event
-    console.log('result');
+    console.log('result', payload);
     try {
         const req = https_1.default.request({
             hostname: 'smee.io',
