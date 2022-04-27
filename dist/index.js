@@ -60,7 +60,7 @@ const octokit_1 = __webpack_require__(994);
 const helpers_1 = __webpack_require__(948);
 async function recordResult(points, result) {
     // get run info
-    let runInfo, updatedPackageJson, commits;
+    let runInfo, packageJson, updatedPackageJson, commits;
     try {
         const octokit = octokit_1.createOctokit();
         if (!octokit)
@@ -80,6 +80,7 @@ async function recordResult(points, result) {
             ref: branch,
         });
         const packageJsonString = Buffer.from(content, 'base64').toString('utf8');
+        packageJson = JSON.parse(packageJsonString);
         updatedPackageJson = JSON.parse(packageJsonString);
         // make sure template repo url is in package.json
         if (process.env.IS_ORIGINAL_TEMPLATE_REPO) {
@@ -92,7 +93,7 @@ async function recordResult(points, result) {
         }
         // remove preinstall script
         delete updatedPackageJson.scripts.preinstall;
-        if (packageJsonString !== JSON.stringify(updatedPackageJson)) {
+        if (JSON.stringify(packageJson) !== JSON.stringify(updatedPackageJson)) {
             await octokit.rest.repos.createOrUpdateFileContents({
                 owner: octokit_1.owner,
                 repo: octokit_1.repo,
