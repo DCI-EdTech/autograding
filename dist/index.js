@@ -79,7 +79,8 @@ async function recordResult(points, result) {
             path: 'package.json',
             ref: branch,
         });
-        packageJson = updatedPackageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'));
+        packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'));
+        updatedPackageJson = { ...packageJson };
         // make sure template repo url is in package.json
         if (process.env.IS_ORIGINAL_TEMPLATE_REPO) {
             // set repository
@@ -93,7 +94,7 @@ async function recordResult(points, result) {
         delete updatedPackageJson.scripts.preinstall;
         console.log("packageJson", packageJson);
         console.log("updatedPackageJson", updatedPackageJson);
-        if (packageJson !== updatedPackageJson) {
+        if (JSON.stringify(packageJson) !== JSON.stringify(updatedPackageJson)) {
             await octokit.rest.repos.createOrUpdateFileContents({
                 owner: octokit_1.owner,
                 repo: octokit_1.repo,

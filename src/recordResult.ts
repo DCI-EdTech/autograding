@@ -28,7 +28,8 @@ export default async function recordResult(points, result) {
       ref: branch,
     });
 
-    packageJson = updatedPackageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'))
+    packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'))
+    updatedPackageJson = {...packageJson}
 
     // make sure template repo url is in package.json
     if(process.env.IS_ORIGINAL_TEMPLATE_REPO) {
@@ -46,7 +47,7 @@ export default async function recordResult(points, result) {
     console.log("packageJson", packageJson)
     console.log("updatedPackageJson", updatedPackageJson)
 
-    if(packageJson !== updatedPackageJson) {
+    if(JSON.stringify(packageJson) !== JSON.stringify(updatedPackageJson)) {
       await octokit.rest.repos.createOrUpdateFileContents({
         owner,
         repo,
