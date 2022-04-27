@@ -79,8 +79,9 @@ async function recordResult(points, result) {
             path: 'package.json',
             ref: branch,
         });
-        packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'));
-        updatedPackageJson = structuredClone(packageJson);
+        const packageJsonString = Buffer.from(content, 'base64').toString('utf8');
+        packageJson = JSON.parse(packageJsonString);
+        updatedPackageJson = JSON.parse(packageJsonString);
         // make sure template repo url is in package.json
         if (process.env.IS_ORIGINAL_TEMPLATE_REPO) {
             // set repository
