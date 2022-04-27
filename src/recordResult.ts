@@ -29,7 +29,7 @@ export default async function recordResult(points, result) {
     });
 
     packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'))
-    updatedPackageJson = {...packageJson}
+    updatedPackageJson = structuredClone(packageJson)
 
     // make sure template repo url is in package.json
     if(process.env.IS_ORIGINAL_TEMPLATE_REPO) {
