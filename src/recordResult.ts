@@ -48,7 +48,7 @@ export default async function recordResult(points, result) {
         owner,
         repo,
         path,
-        message: 'add template repo info to package.json',
+        message: 'update package.json',
         content: Buffer.from(JSON.stringify(updatedPackageJson, null, 2)).toString('base64'),
         branch,
         sha,
