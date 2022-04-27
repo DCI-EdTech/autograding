@@ -91,6 +91,8 @@ async function recordResult(points, result) {
         }
         // remove preinstall script
         delete updatedPackageJson.scripts.preinstall;
+        console.log("packageJson", packageJson);
+        console.log("updatedPackageJson", updatedPackageJson);
         if (packageJson !== updatedPackageJson) {
             await octokit.rest.repos.createOrUpdateFileContents({
                 owner: octokit_1.owner,
