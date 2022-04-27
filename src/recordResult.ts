@@ -5,7 +5,7 @@ import { removeTerminalColoring } from './lib/helpers'
 
 export default async function recordResult(points, result) {
   // get run info
-  let runInfo, packageJson, commits
+  let runInfo, packageJson, updatedPackageJson, commits
   try {
     const octokit: github.GitHub = createOctokit()
     if (!octokit) throw 'Octokit not initialized'
@@ -28,23 +28,28 @@ export default async function recordResult(points, result) {
       ref: branch,
     });
 
-    packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'))
+    packageJson = updatedPackageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'))
 
     // make sure template repo url is in package.json
     if(process.env.IS_ORIGINAL_TEMPLATE_REPO) {
       // set repository
-      packageJson.repository = {
+      updatedPackageJson.repository = {
         "type": "git",
         "url": `https://github.com/${process.env.GITHUB_REPOSITORY}`,
         "id": runInfo ? runInfo.repository.id : ""
       }
+    }
 
+    // remove preinstall script
+    delete updatedPackageJson.scripts.preinstall
+
+    if(packageJson !== updatedPackageJson) {
       await octokit.rest.repos.createOrUpdateFileContents({
         owner,
         repo,
         path,
         message: 'add template repo info to package.json',
-        content: Buffer.from(JSON.stringify(packageJson, null, 2)).toString('base64'),
+        content: Buffer.from(JSON.stringify(updatedPackageJson, null, 2)).toString('base64'),
         branch,
         sha,
       })

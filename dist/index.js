@@ -60,7 +60,7 @@ const octokit_1 = __webpack_require__(994);
 const helpers_1 = __webpack_require__(948);
 async function recordResult(points, result) {
     // get run info
-    let runInfo, packageJson, commits;
+    let runInfo, packageJson, updatedPackageJson, commits;
     try {
         const octokit = octokit_1.createOctokit();
         if (!octokit)
@@ -79,21 +79,25 @@ async function recordResult(points, result) {
             path: 'package.json',
             ref: branch,
         });
-        packageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'));
+        packageJson = updatedPackageJson = JSON.parse(Buffer.from(content, 'base64').toString('utf8'));
         // make sure template repo url is in package.json
         if (process.env.IS_ORIGINAL_TEMPLATE_REPO) {
             // set repository
-            packageJson.repository = {
+            updatedPackageJson.repository = {
                 "type": "git",
                 "url": `https://github.com/${process.env.GITHUB_REPOSITORY}`,
                 "id": runInfo ? runInfo.repository.id : ""
             };
+        }
+        // remove preinstall script
+        delete updatedPackageJson.scripts.preinstall;
+        if (packageJson !== updatedPackageJson) {
             await octokit.rest.repos.createOrUpdateFileContents({
                 owner: octokit_1.owner,
                 repo: octokit_1.repo,
                 path,
                 message: 'add template repo info to package.json',
-                content: Buffer.from(JSON.stringify(packageJson, null, 2)).toString('base64'),
+                content: Buffer.from(JSON.stringify(updatedPackageJson, null, 2)).toString('base64'),
                 branch,
                 sha,
             });
