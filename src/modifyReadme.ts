@@ -27,21 +27,6 @@ async function modifyReadme(results) {
     // add autograding info
     newReadme = await addAutogradingInfo(newReadme, results)
 
-    // approve pull request
-    const { data:pulls } = await octokit.rest.pulls.list({
-      owner,
-      repo,
-    });
-    console.log(JSON.stringify(pulls, null, 2))
-
-    octokit.rest.pulls.submitReview({
-      owner,
-      repo,
-      pull_number: pulls[0].number,
-      review_id: '956306237',
-      event: 'APPROVE',
-    });
-
     // don't update if nothing changed
     if(newReadme === readme)
       return
