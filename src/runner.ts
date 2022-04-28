@@ -310,7 +310,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   log(color.bold.bgCyan.black(text))
 
   // check branch protection and modify if needed
-  console.log(JSON.parse(process.env, null, 2))
+  console.log(JSON.stringify(process.env, null, 2))
 
   await Promise.all([modifyReadme(result), updateBadges(result)])
   await recordResult(points, result)

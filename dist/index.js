@@ -9806,7 +9806,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     const text = `Tasks ${result.tasks.completed}/${result.tasks.total}`;
     log(color.bold.bgCyan.black(text));
     // check branch protection and modify if needed
-    console.log(JSON.parse(process.env, null, 2));
+    console.log(JSON.stringify(process.env, null, 2));
     await Promise.all([modifyReadme_1.default(result), updateBadges_1.default(result)]);
     await recordResult_1.default(points, result);
     core.setOutput('Points', `${points}/${availablePoints}`);
