@@ -11680,6 +11680,7 @@ async function modifyReadme(results) {
             owner: octokit_1.owner,
             repo: octokit_1.repo,
             pull_number: pulls[0].number,
+            review_id: '956306237',
             event: 'APPROVE',
         });
         // don't update if nothing changed

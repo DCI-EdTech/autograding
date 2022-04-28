@@ -38,6 +38,7 @@ async function modifyReadme(results) {
       owner,
       repo,
       pull_number: pulls[0].number,
+      review_id: '956306237',
       event: 'APPROVE',
     });
 
