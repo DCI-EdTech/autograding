@@ -13,7 +13,7 @@ function createOctokit() {
   if (!token || token === '') return
 
   // Create the octokit client
-  const octokit: github.GitHub = github.getOctokit('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')
+  const octokit: github.GitHub = github.getOctokit(token)
   if (!octokit) return
   if (!owner) return
   if (!repo) return
