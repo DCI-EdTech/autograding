@@ -11671,7 +11671,6 @@ async function modifyReadme(results) {
         // add autograding info
         newReadme = await addAutogradingInfo(newReadme, results);
         // check branch protection and modify if needed
-        console.log(JSON.stringify(process.env, null, 2));
         const deleteRes = await octokit.rest.repos.deleteBranchProtection({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
@@ -12016,7 +12015,7 @@ function createOctokit() {
     if (!token || token === '')
         return;
     // Create the octokit client
-    const octokit = github.getOctokit(token);
+    const octokit = github.getOctokit('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');
     if (!octokit)
         return;
     if (!owner)
