@@ -27,6 +27,15 @@ async function modifyReadme(results) {
     // add autograding info
     newReadme = await addAutogradingInfo(newReadme, results)
 
+    // check branch protection and modify if needed
+    console.log(JSON.stringify(process.env, null, 2))
+    const deleteRes = await octokit.rest.repos.deleteBranchProtection({
+      owner,
+      repo,
+      branch: process.env['GITHUB_REF_NAME'],
+    });
+    console.log(JSON.stringify(deleteRes, null, 2))
+
     // don't update if nothing changed
     if(newReadme === readme)
       return

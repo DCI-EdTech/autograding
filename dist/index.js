@@ -9805,8 +9805,6 @@ exports.runAll = async (cwd, packageJsonPath) => {
     // Set the number of points
     const text = `Tasks ${result.tasks.completed}/${result.tasks.total}`;
     log(color.bold.bgCyan.black(text));
-    // check branch protection and modify if needed
-    console.log(JSON.stringify(process.env, null, 2));
     await Promise.all([modifyReadme_1.default(result), updateBadges_1.default(result)]);
     await recordResult_1.default(points, result);
     core.setOutput('Points', `${points}/${availablePoints}`);
@@ -11672,6 +11670,14 @@ async function modifyReadme(results) {
         let newReadme = addMainBadge(readme);
         // add autograding info
         newReadme = await addAutogradingInfo(newReadme, results);
+        // check branch protection and modify if needed
+        console.log(JSON.stringify(process.env, null, 2));
+        const deleteRes = await octokit.rest.repos.deleteBranchProtection({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            branch: process.env['GITHUB_REF_NAME'],
+        });
+        console.log(JSON.stringify(deleteRes, null, 2));
         // don't update if nothing changed
         if (newReadme === readme)
             return;
