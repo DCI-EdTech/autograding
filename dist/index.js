@@ -11670,13 +11670,12 @@ async function modifyReadme(results) {
         let newReadme = addMainBadge(readme);
         // add autograding info
         newReadme = await addAutogradingInfo(newReadme, results);
-        // check branch protection and modify if needed
-        const deleteRes = await octokit.rest.repos.deleteBranchProtection({
+        // approve pull request
+        const pulls = await octokit.rest.pulls.list({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
-            branch: process.env['GITHUB_REF_NAME'],
         });
-        console.log(JSON.stringify(deleteRes, null, 2));
+        console.log(JSON.stringify(pulls, null, 2));
         // don't update if nothing changed
         if (newReadme === readme)
             return;
