@@ -11671,11 +11671,17 @@ async function modifyReadme(results) {
         // add autograding info
         newReadme = await addAutogradingInfo(newReadme, results);
         // approve pull request
-        const pulls = await octokit.rest.pulls.list({
+        const { data: pulls } = await octokit.rest.pulls.list({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
         });
         console.log(JSON.stringify(pulls, null, 2));
+        octokit.rest.pulls.submitReview({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            pull_number: pulls[0].number,
+            event: 'APPROVE',
+        });
         // don't update if nothing changed
         if (newReadme === readme)
             return;
