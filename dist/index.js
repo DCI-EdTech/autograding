@@ -9527,6 +9527,70 @@ exports.parseURL = __webpack_require__(482).parseURL;
 
 /***/ }),
 
+/***/ 824:
+/***/ (function(module) {
+
+module.exports = {
+
+    extract: function (str) {
+        var currIndex = 0
+        var objs = []
+
+        while (str[currIndex]) {
+            var openClose = this._getOpenCloseBraceIndex(str, currIndex, '{', '}')
+
+            if (openClose) {
+                var objStr = str.substr(openClose[0], openClose[1] - openClose[0] + 1)
+
+                try {
+                    var parsed = JSON.parse(objStr)
+                    if (parsed)
+                        objs.push(parsed)
+                    currIndex = openClose[1]
+                } catch (err) {
+                    currIndex++
+                }
+            } else
+                currIndex++
+
+        }
+
+
+        return objs
+    },
+
+    _getOpenCloseBraceIndex: function (str, indexStart, openBrace, closeBrace) {
+        var openIndex = str.substr(indexStart).indexOf(openBrace) + indexStart
+
+        if (!openIndex)
+            return null
+
+        var openCount = 1
+        var closeCount = 0
+        var currIndex = openIndex + 1
+
+        while (str[currIndex]) {
+
+            if (str[currIndex] == openBrace) {
+                openCount++
+                currIndex++
+                continue
+            } else if (str[currIndex] == closeBrace) {
+                closeCount++
+                if (openCount == closeCount) {
+                    return [openIndex, currIndex]
+                }
+            }
+            currIndex++
+        }
+
+        return null
+    }
+
+}
+
+/***/ }),
+
 /***/ 835:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -9556,6 +9620,7 @@ const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const updateBadges_1 = __importDefault(__webpack_require__(860));
 const bugReporter_1 = __importDefault(__webpack_require__(161));
 const recordResult_1 = __importDefault(__webpack_require__(7));
+const extract_json_string_1 = __importDefault(__webpack_require__(824));
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 const taskNamePattern = 'task(s)?(\.(.*))?\.js';
@@ -9678,11 +9743,11 @@ const runCommand = async (test, cwd, timeout) => {
             process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
-        console.log("output", output);
+        console.log("output", extract_json_string_1.default.extract(output));
         return JSON.parse(output);
     }
     catch (error) {
-        console.log("error output", output);
+        console.log("error output", extract_json_string_1.default.extract(output));
         error.result = JSON.parse(output);
         throw error;
     }

@@ -12,6 +12,7 @@ import modifyReadme from './modifyReadme'
 import updateBadges from './updateBadges'
 import reportBug from './bugReporter'
 import recordResult from './recordResult'
+import extractJSON from 'extract-json-string'
 
 const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
@@ -169,10 +170,10 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     })
   
     await waitForExit(child, timeout)
-    console.log("output", output)
+    console.log("output", extractJSON.extract(output))
     return JSON.parse(output)
   } catch (error) {
-    console.log("error output", output)
+    console.log("error output", extractJSON.extract(output))
     error.result = JSON.parse(output)
     throw error
   }
