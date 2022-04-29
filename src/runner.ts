@@ -77,8 +77,7 @@ const indent = (text: any): string => {
 
 const getResultObject = (outputString) => {
   const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
-  const foundObjects = extractJSON(cleanedString)
-  return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'))
+  return extractJSON(cleanedString)
 }
 
 const waitForExit = async (child: ChildProcess, timeout: number): Promise<void> => {

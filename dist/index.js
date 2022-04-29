@@ -9600,8 +9600,7 @@ const indent = (text) => {
 };
 const getResultObject = (outputString) => {
     const cleanedString = helpers_1.removeTerminalColoring(outputString).replace('●', '').replace('›', '');
-    const foundObjects = extractJSON_1.default(cleanedString);
-    return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'));
+    return extractJSON_1.default(cleanedString);
 };
 const waitForExit = async (child, timeout) => {
     // eslint-disable-next-line no-undef
@@ -12121,20 +12120,17 @@ function extractJSON(str) {
     firstOpen = str.indexOf('{', firstOpen + 1);
     do {
         firstClose = str.lastIndexOf('}');
-        console.log('firstOpen: ' + firstOpen, 'firstClose: ' + firstClose);
         if(firstClose <= firstOpen) {
             return null;
         }
         do {
             candidate = str.substring(firstOpen, firstClose + 1);
-            console.log('candidate: ' + candidate);
             try {
                 var res = JSON.parse(candidate);
-                console.log('...found');
-                return [res, firstOpen, firstClose + 1];
+                return res;
             }
             catch(e) {
-                console.log('...failed');
+                console.log('extractJSON failed');
             }
             firstClose = str.substr(0, firstClose).lastIndexOf('}');
         } while(firstClose > firstOpen);
