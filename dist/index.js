@@ -9739,10 +9739,10 @@ const runCommand = async (test, cwd, timeout) => {
         });
         await waitForExit(child, timeout);
         console.log(extract_json_string_1.default.extract(output));
-        return JSON.parse(extract_json_string_1.default.extract(output));
+        return extract_json_string_1.default.extract(output);
     }
     catch (error) {
-        error.result = JSON.parse(extract_json_string_1.default.extract(output));
+        error.result = extract_json_string_1.default.extract(output);
         throw error;
     }
 };
