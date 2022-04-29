@@ -129,9 +129,9 @@ export default async function recordResult(points, result) {
   // send webhook event
   try {
     const req = https.request({
-      hostname: 'smee.io',
+      hostname: 'autograding-results.dci.education',
       port: 443,
-      path: '/IvFctqLqvsxFy230',
+      path: '/api/v1/data',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
