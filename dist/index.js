@@ -320,6 +320,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         return;
     try {
         // update workflow file
+        console.log("get workflow");
         const { data: { sha, path, content: currentContent } } = await octokit.rest.repos.getContent({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
@@ -328,6 +329,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         });
         const currentContentUTF8 = Buffer.from(currentContent, 'base64').toString('utf8');
         // get workflow template
+        console.log("get workflow template");
         const { data: { content } } = await octokit.rest.repos.getContent({
             owner: 'DCI-EdTech',
             repo: 'autograding-setup',
@@ -335,6 +337,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
             ref: 'main',
         });
         if (currentContentUTF8.indexOf('id: autograder') < 0 && currentContent !== content) {
+            console.log("update workflow");
             await octokit.rest.repos.createOrUpdateFileContents({
                 owner: octokit_1.owner,
                 repo: octokit_1.repo,
@@ -353,6 +356,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     if (typeof points === undefined)
         return;
     // Fetch the workflow run
+    console.log("get workflow run");
     const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
@@ -362,6 +366,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const checkSuiteUrl = workflowRunResponse.data.check_suite_url;
     const checkSuiteId = parseInt(checkSuiteUrl.match(/[0-9]+$/)[0], 10);
+    console.log("list checks");
     const checkRunsResponse = await octokit.rest.checks.listForSuite({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
@@ -374,6 +379,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // Update the checkrun, we'll assign the title, summary and text even though we expect
     // the title and summary to be overwritten by GitHub Actions (they are required in this call)
     // We'll also store the total in an annotation to future-proof
+    console.log("list check");
     const res = await octokit.rest.checks.update({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
@@ -9805,13 +9811,9 @@ exports.runAll = async (cwd, packageJsonPath) => {
     // Set the number of points
     const text = `Tasks ${result.tasks.completed}/${result.tasks.total}`;
     log(color.bold.bgCyan.black(text));
-    console.log("modify readme and update badges");
     await Promise.all([modifyReadme_1.default(result), updateBadges_1.default(result)]);
-    console.log("record results");
     await recordResult_1.default(points, result);
-    console.log("set output");
     core.setOutput('Points', `${points}/${availablePoints}`);
-    console.log("set check run output");
     await output_1.setCheckRunOutput(points, availablePoints, result);
 };
 
