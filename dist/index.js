@@ -9601,8 +9601,6 @@ const indent = (text) => {
 const getResultObject = (outputString) => {
     const cleanedString = helpers_1.removeTerminalColoring(outputString).replace('●', '').replace('›', '');
     const foundObjects = extractJSON_1.default(cleanedString);
-    console.log('CLEANED', cleanedString);
-    console.log('FOUND JSON', foundObjects);
     return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'));
 };
 const waitForExit = async (child, timeout) => {
