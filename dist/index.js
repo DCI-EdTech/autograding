@@ -9558,6 +9558,7 @@ const bugReporter_1 = __importDefault(__webpack_require__(161));
 const recordResult_1 = __importDefault(__webpack_require__(7));
 //import extractJSON from 'extract-json-string'
 const extractJSON_1 = __importDefault(__webpack_require__(995));
+const helpers_1 = __webpack_require__(948);
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 const taskNamePattern = 'task(s)?(\.(.*))?\.js';
@@ -9598,12 +9599,11 @@ const indent = (text) => {
     return str;
 };
 const getResultObject = (outputString) => {
-    //const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
-    //const foundObjects = extractJSON.extract(cleanedString)
-    //console.log('CLEANED', cleanedString)
-    //console.log('FOUND JSON', foundObjects)
-    console.log(extractJSON_1.default(outputString));
-    //return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'))
+    const cleanedString = helpers_1.removeTerminalColoring(outputString).replace('●', '').replace('›', '');
+    const foundObjects = extractJSON_1.default(cleanedString);
+    console.log('CLEANED', cleanedString);
+    console.log('FOUND JSON', foundObjects);
+    return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'));
 };
 const waitForExit = async (child, timeout) => {
     // eslint-disable-next-line no-undef

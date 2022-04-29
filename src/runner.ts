@@ -76,12 +76,11 @@ const indent = (text: any): string => {
 }
 
 const getResultObject = (outputString) => {
-  //const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
-  //const foundObjects = extractJSON.extract(cleanedString)
-  //console.log('CLEANED', cleanedString)
-  //console.log('FOUND JSON', foundObjects)
-  console.log(extractJSON(outputString))
-  //return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'))
+  const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
+  const foundObjects = extractJSON(cleanedString)
+  console.log('CLEANED', cleanedString)
+  console.log('FOUND JSON', foundObjects)
+  return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'))
 }
 
 const waitForExit = async (child: ChildProcess, timeout: number): Promise<void> => {
