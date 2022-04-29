@@ -174,6 +174,8 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     console.log('found json', extractJSON.extract(output))
     return getResultObject(extractJSON.extract(output))
   } catch (error) {
+    console.log('output', output)
+    console.log('found json', extractJSON.extract(output))
     error.result = getResultObject(extractJSON.extract(output))
     throw error
   }

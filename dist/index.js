@@ -9746,6 +9746,8 @@ const runCommand = async (test, cwd, timeout) => {
         return getResultObject(extract_json_string_1.default.extract(output));
     }
     catch (error) {
+        console.log('output', output);
+        console.log('found json', extract_json_string_1.default.extract(output));
         error.result = getResultObject(extract_json_string_1.default.extract(output));
         throw error;
     }
