@@ -12130,7 +12130,7 @@ function extractJSON(str) {
                 return res;
             }
             catch(e) {
-                console.log('extractJSON failed');
+                // not found
             }
             firstClose = str.substr(0, firstClose).lastIndexOf('}');
         } while(firstClose > firstOpen);
