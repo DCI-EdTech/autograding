@@ -169,8 +169,10 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     })
   
     await waitForExit(child, timeout)
+    console.log("output", output)
     return JSON.parse(output)
   } catch (error) {
+    console.log("error output", output)
     error.result = JSON.parse(output)
     throw error
   }
@@ -239,8 +241,6 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     result = error.result
     core.setFailed(error.message)
   }
-
-  console.log(JSON.stringify(result, null, 2))
 
   // Report bug as issue
   if(result.numRuntimeErrorTestSuites > 0) {
