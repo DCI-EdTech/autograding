@@ -145,7 +145,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   let output = ''
 
   function getResultObject(arr) {
-    return arr.find(obj => obj.hasOwnPropperty('numFailedTestSuites'))
+    return arr.find(obj => obj.hasOwnProperty('numFailedTestSuites'))
   }
 
   try {

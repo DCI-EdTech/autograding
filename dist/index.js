@@ -9721,7 +9721,7 @@ const runSetup = async (test, cwd, timeout) => {
 const runCommand = async (test, cwd, timeout) => {
     let output = '';
     function getResultObject(arr) {
-        return arr.find(obj => obj.hasOwnPropperty('numFailedTestSuites'));
+        return arr.find(obj => obj.hasOwnProperty('numFailedTestSuites'));
     }
     try {
         const child = child_process_1.spawn(test.run, {
