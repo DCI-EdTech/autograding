@@ -9527,70 +9527,6 @@ exports.parseURL = __webpack_require__(482).parseURL;
 
 /***/ }),
 
-/***/ 824:
-/***/ (function(module) {
-
-module.exports = {
-
-    extract: function (str) {
-        var currIndex = 0
-        var objs = []
-
-        while (str[currIndex]) {
-            var openClose = this._getOpenCloseBraceIndex(str, currIndex, '{', '}')
-
-            if (openClose) {
-                var objStr = str.substr(openClose[0], openClose[1] - openClose[0] + 1)
-
-                try {
-                    var parsed = JSON.parse(objStr)
-                    if (parsed)
-                        objs.push(parsed)
-                    currIndex = openClose[1]
-                } catch (err) {
-                    currIndex++
-                }
-            } else
-                currIndex++
-
-        }
-
-
-        return objs
-    },
-
-    _getOpenCloseBraceIndex: function (str, indexStart, openBrace, closeBrace) {
-        var openIndex = str.substr(indexStart).indexOf(openBrace) + indexStart
-
-        if (!openIndex)
-            return null
-
-        var openCount = 1
-        var closeCount = 0
-        var currIndex = openIndex + 1
-
-        while (str[currIndex]) {
-
-            if (str[currIndex] == openBrace) {
-                openCount++
-                currIndex++
-                continue
-            } else if (str[currIndex] == closeBrace) {
-                closeCount++
-                if (openCount == closeCount) {
-                    return [openIndex, currIndex]
-                }
-            }
-            currIndex++
-        }
-
-        return null
-    }
-
-}
-
-/***/ }),
-
 /***/ 835:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -9620,8 +9556,8 @@ const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const updateBadges_1 = __importDefault(__webpack_require__(860));
 const bugReporter_1 = __importDefault(__webpack_require__(161));
 const recordResult_1 = __importDefault(__webpack_require__(7));
-const extract_json_string_1 = __importDefault(__webpack_require__(824));
-const helpers_1 = __webpack_require__(948);
+//import extractJSON from 'extract-json-string'
+const extractJSON_1 = __importDefault(__webpack_require__(995));
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 const taskNamePattern = 'task(s)?(\.(.*))?\.js';
@@ -9662,11 +9598,12 @@ const indent = (text) => {
     return str;
 };
 const getResultObject = (outputString) => {
-    const cleanedString = helpers_1.removeTerminalColoring(outputString).replace('●', '').replace('›', '');
-    const foundObjects = extract_json_string_1.default.extract(cleanedString);
-    console.log('CLEANED', cleanedString);
-    console.log('FOUND JSON', foundObjects);
-    return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'));
+    //const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
+    //const foundObjects = extractJSON.extract(cleanedString)
+    //console.log('CLEANED', cleanedString)
+    //console.log('FOUND JSON', foundObjects)
+    console.log(extractJSON_1.default(outputString));
+    //return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'))
 };
 const waitForExit = async (child, timeout) => {
     // eslint-disable-next-line no-undef
@@ -12172,6 +12109,40 @@ function createOctokit() {
 }
 exports.createOctokit = createOctokit;
 
+
+/***/ }),
+
+/***/ 995:
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return extractJSON; });
+function extractJSON(str) {
+    var firstOpen, firstClose, candidate;
+    firstOpen = str.indexOf('{', firstOpen + 1);
+    do {
+        firstClose = str.lastIndexOf('}');
+        console.log('firstOpen: ' + firstOpen, 'firstClose: ' + firstClose);
+        if(firstClose <= firstOpen) {
+            return null;
+        }
+        do {
+            candidate = str.substring(firstOpen, firstClose + 1);
+            console.log('candidate: ' + candidate);
+            try {
+                var res = JSON.parse(candidate);
+                console.log('...found');
+                return [res, firstOpen, firstClose + 1];
+            }
+            catch(e) {
+                console.log('...failed');
+            }
+            firstClose = str.substr(0, firstClose).lastIndexOf('}');
+        } while(firstClose > firstOpen);
+        firstOpen = str.indexOf('{', firstOpen + 1);
+    } while(firstOpen != -1);
+}
 
 /***/ }),
 

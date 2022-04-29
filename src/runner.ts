@@ -12,7 +12,8 @@ import modifyReadme from './modifyReadme'
 import updateBadges from './updateBadges'
 import reportBug from './bugReporter'
 import recordResult from './recordResult'
-import extractJSON from 'extract-json-string'
+//import extractJSON from 'extract-json-string'
+import extractJSON from './lib/extractJSON'
 import { removeTerminalColoring } from './lib/helpers'
 
 const currentBranch = process.env['GITHUB_REF_NAME']
@@ -75,11 +76,12 @@ const indent = (text: any): string => {
 }
 
 const getResultObject = (outputString) => {
-  const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
-  const foundObjects = extractJSON.extract(cleanedString)
-  console.log('CLEANED', cleanedString)
-  console.log('FOUND JSON', foundObjects)
-  return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'))
+  //const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
+  //const foundObjects = extractJSON.extract(cleanedString)
+  //console.log('CLEANED', cleanedString)
+  //console.log('FOUND JSON', foundObjects)
+  console.log(extractJSON(outputString))
+  //return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'))
 }
 
 const waitForExit = async (child: ChildProcess, timeout: number): Promise<void> => {
