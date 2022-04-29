@@ -167,10 +167,10 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   
     await waitForExit(child, timeout)
     console.log("output", extractJSON.extract(output))
-    return extractJSON.extract(output)
+    return JSON.parse(extractJSON.extract(output))
   } catch (error) {
     console.log("error output", extractJSON.extract(output))
-    error.result = extractJSON.extract(output)
+    error.result = JSON.parse(extractJSON.extract(output))
     throw error
   }
 }
