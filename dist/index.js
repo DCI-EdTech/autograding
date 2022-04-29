@@ -9667,8 +9667,7 @@ const runCommand = async (test, cwd, timeout) => {
         // Start with a single new line
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
-            console.log("CHUNK", chunk.toString());
-            if (chunk.toString().includes('{') || chunk.toString().includes('}')) {
+            if (chunk.toString().trim().startsWith('{"numFailedTestSuites"')) {
                 output += chunk;
             }
             else {
@@ -9679,11 +9678,9 @@ const runCommand = async (test, cwd, timeout) => {
             process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
-        //console.log("output", output)
         return JSON.parse(output);
     }
     catch (error) {
-        //console.log("error output", output)
         error.result = JSON.parse(output);
         throw error;
     }
