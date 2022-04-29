@@ -12005,6 +12005,8 @@ exports.owner = owner;
 exports.repo = repo;
 function createOctokit() {
     const token = process.env['GITHUB_TOKEN'] || core.getInput('token');
+    console.log('process.env', process.env['GITHUB_TOKEN']);
+    console.log('core.getInput', core.getInput('token'));
     if (!token || token === '')
         return;
     // Create the octokit client
