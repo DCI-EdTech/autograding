@@ -9732,23 +9732,18 @@ const runCommand = async (test, cwd, timeout) => {
         // Start with a single new line
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
-            if (chunk.toString().trim().charAt('{') || chunk.toString().includes('}')) {
-                output += chunk;
-            }
-            else {
-                process.stdout.write(indent(chunk));
-            }
+            output += chunk;
         });
         child.stderr.on('data', chunk => {
             process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
         console.log("output", extract_json_string_1.default.extract(output));
-        return JSON.parse(output);
+        return extract_json_string_1.default.extract(output);
     }
     catch (error) {
         console.log("error output", extract_json_string_1.default.extract(output));
-        error.result = JSON.parse(output);
+        error.result = extract_json_string_1.default.extract(output);
         throw error;
     }
 };

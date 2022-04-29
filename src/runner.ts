@@ -158,11 +158,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     process.stdout.write(indent('\n'))
   
     child.stdout.on('data', chunk => {
-      if(chunk.toString().trim().charAt('{') || chunk.toString().includes('}')) {
-        output += chunk
-      } else {
-        process.stdout.write(indent(chunk))
-      }
+      output += chunk
     })
   
     child.stderr.on('data', chunk => {
@@ -171,10 +167,10 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   
     await waitForExit(child, timeout)
     console.log("output", extractJSON.extract(output))
-    return JSON.parse(output)
+    return extractJSON.extract(output)
   } catch (error) {
     console.log("error output", extractJSON.extract(output))
-    error.result = JSON.parse(output)
+    error.result = extractJSON.extract(output)
     throw error
   }
 }
