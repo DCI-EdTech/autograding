@@ -8,9 +8,10 @@ import * as github from '@actions/github'
 const nwo = process.env['GITHUB_REPOSITORY'] || '/';
 const [owner, repo] = nwo.split('/')
 
-function createOctokit() {
-  const token = process.env['GITHUB_TOKEN'] || core.getInput('token')
-  console.log(process.env['GITHUB_TOKEN'] ? 'env used' : 'input used')
+function createOctokit(preferredToken) {
+  let origGHToken = ''
+  if(preferredToken === 'gh') origGHToken = core.getInput('token')
+  const token = origGHToken || process.env['GITHUB_TOKEN'] || core.getInput('token')
   if (!token || token === '') return
 
   // Create the octokit client

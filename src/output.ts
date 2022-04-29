@@ -3,7 +3,7 @@ import { createOctokit, owner, repo } from './octokit'
 
 export const setCheckRunOutput = async (points:number, availablePoints:number, results:Array): Promise<void> => {
   // Create the octokit client
-  const octokit: github.GitHub = createOctokit()
+  const octokit: github.GitHub = createOctokit('gh')
   if (!octokit) return
 
   const branch = process.env['GITHUB_REF_NAME']

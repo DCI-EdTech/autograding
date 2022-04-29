@@ -310,7 +310,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const octokit_1 = __webpack_require__(994);
 exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // Create the octokit client
-    const octokit = octokit_1.createOctokit();
+    const octokit = octokit_1.createOctokit('gh');
     if (!octokit)
         return;
     const branch = process.env['GITHUB_REF_NAME'];
@@ -12009,9 +12009,11 @@ const nwo = process.env['GITHUB_REPOSITORY'] || '/';
 const [owner, repo] = nwo.split('/');
 exports.owner = owner;
 exports.repo = repo;
-function createOctokit() {
-    const token = process.env['GITHUB_TOKEN'] || core.getInput('token');
-    console.log(process.env['GITHUB_TOKEN'] ? 'env used' : 'input used');
+function createOctokit(preferredToken) {
+    let origGHToken = '';
+    if (preferredToken === 'gh')
+        origGHToken = core.getInput('token');
+    const token = origGHToken || process.env['GITHUB_TOKEN'] || core.getInput('token');
     if (!token || token === '')
         return;
     // Create the octokit client
