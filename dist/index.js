@@ -172,7 +172,7 @@ async function recordResult(points, result) {
     // send webhook event
     try {
         const req = https_1.default.request({
-            hostname: 'autograding-results.dci.education',
+            hostname: 'https://autograding-results.dci.education',
             port: 443,
             path: '/api/v1/data',
             method: 'POST',
