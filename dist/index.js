@@ -9621,6 +9621,7 @@ const updateBadges_1 = __importDefault(__webpack_require__(860));
 const bugReporter_1 = __importDefault(__webpack_require__(161));
 const recordResult_1 = __importDefault(__webpack_require__(7));
 const extract_json_string_1 = __importDefault(__webpack_require__(824));
+const helpers_1 = __webpack_require__(948);
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 const taskNamePattern = 'task(s)?(\.(.*))?\.js';
@@ -9660,8 +9661,12 @@ const indent = (text) => {
     str = str.replace(/\r\n/gim, '\n').replace(/\n/gim, '\n  ');
     return str;
 };
-const getResultObject = (arr) => {
-    return arr.find(obj => obj.hasOwnProperty('numFailedTestSuites'));
+const getResultObject = (outputString) => {
+    const cleanedString = helpers_1.removeTerminalColoring(outputString).replace('●', '').replace('›', '');
+    const foundObjects = extract_json_string_1.default.extract(cleanedString);
+    console.log('CLEANED', cleanedString);
+    console.log('FOUND JSON', foundObjects);
+    return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'));
 };
 const waitForExit = async (child, timeout) => {
     // eslint-disable-next-line no-undef
@@ -9741,14 +9746,10 @@ const runCommand = async (test, cwd, timeout) => {
             process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
-        console.log('output', output);
-        console.log('found json', extract_json_string_1.default.extract(output));
-        return getResultObject(extract_json_string_1.default.extract(output));
+        return getResultObject(output);
     }
     catch (error) {
-        console.log('output', output);
-        console.log('found json', extract_json_string_1.default.extract(output));
-        error.result = getResultObject(extract_json_string_1.default.extract(output));
+        error.result = getResultObject(output);
         throw error;
     }
 };

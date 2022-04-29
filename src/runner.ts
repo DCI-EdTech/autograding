@@ -13,6 +13,7 @@ import updateBadges from './updateBadges'
 import reportBug from './bugReporter'
 import recordResult from './recordResult'
 import extractJSON from 'extract-json-string'
+import { removeTerminalColoring } from './lib/helpers'
 
 const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
@@ -73,8 +74,12 @@ const indent = (text: any): string => {
   return str
 }
 
-const getResultObject = (arr) => {
-  return arr.find(obj => obj.hasOwnProperty('numFailedTestSuites'))
+const getResultObject = (outputString) => {
+  const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
+  const foundObjects = extractJSON.extract(cleanedString)
+  console.log('CLEANED', cleanedString)
+  console.log('FOUND JSON', foundObjects)
+  return foundObjects.find(obj => typeof obj === 'object' && !Array.isArray(obj) && obj.hasOwnProperty('numFailedTestSuites'))
 }
 
 const waitForExit = async (child: ChildProcess, timeout: number): Promise<void> => {
@@ -170,13 +175,9 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     })
   
     await waitForExit(child, timeout)
-    console.log('output', output)
-    console.log('found json', extractJSON.extract(output))
-    return getResultObject(extractJSON.extract(output))
+    return getResultObject(output)
   } catch (error) {
-    console.log('output', output)
-    console.log('found json', extractJSON.extract(output))
-    error.result = getResultObject(extractJSON.extract(output))
+    error.result = getResultObject(output)
     throw error
   }
 }
