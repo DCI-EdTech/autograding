@@ -19,7 +19,6 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.0",
-    "extract-json-string": "^1.0.1",
     "tree-kill": "^1.2.2",
     "uuid": "^7.0.1"
   },

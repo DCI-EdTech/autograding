@@ -9556,7 +9556,6 @@ const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const updateBadges_1 = __importDefault(__webpack_require__(860));
 const bugReporter_1 = __importDefault(__webpack_require__(161));
 const recordResult_1 = __importDefault(__webpack_require__(7));
-//import extractJSON from 'extract-json-string'
 const extractJSON_1 = __importDefault(__webpack_require__(995));
 const helpers_1 = __webpack_require__(948);
 const currentBranch = process.env['GITHUB_REF_NAME'];

@@ -12,7 +12,6 @@ import modifyReadme from './modifyReadme'
 import updateBadges from './updateBadges'
 import reportBug from './bugReporter'
 import recordResult from './recordResult'
-//import extractJSON from 'extract-json-string'
 import extractJSON from './lib/extractJSON'
 import { removeTerminalColoring } from './lib/helpers'
 
