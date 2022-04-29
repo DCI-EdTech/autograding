@@ -9806,6 +9806,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
         result = error.result;
         core.setFailed(error.message);
     }
+    console.log(result);
     // Report bug as issue
     if (result.numRuntimeErrorTestSuites > 0) {
         await bugReporter_1.default(result.testResults[0]);

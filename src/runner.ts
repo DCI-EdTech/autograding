@@ -241,6 +241,8 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     core.setFailed(error.message)
   }
 
+  console.log(result)
+
   // Report bug as issue
   if(result.numRuntimeErrorTestSuites > 0) {
     await reportBug(result.testResults[0])
