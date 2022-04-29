@@ -73,6 +73,10 @@ const indent = (text: any): string => {
   return str
 }
 
+const getResultObject = (arr) => {
+  return arr.find(obj => obj.hasOwnProperty('numFailedTestSuites'))
+}
+
 const waitForExit = async (child: ChildProcess, timeout: number): Promise<void> => {
   // eslint-disable-next-line no-undef
   return new Promise((resolve, reject) => {
@@ -144,10 +148,6 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
   let output = ''
 
-  function getResultObject(arr) {
-    return arr.find(obj => obj.hasOwnProperty('numFailedTestSuites'))
-  }
-
   try {
     const child = spawn(test.run, {
       cwd,
@@ -170,6 +170,8 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     })
   
     await waitForExit(child, timeout)
+    console.log('output', output)
+    console.log('found json', extractJSON.extract(output))
     return getResultObject(extractJSON.extract(output))
   } catch (error) {
     error.result = getResultObject(extractJSON.extract(output))
@@ -240,8 +242,6 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     result = error.result
     core.setFailed(error.message)
   }
-
-  console.log(result)
 
   // Report bug as issue
   if(result.numRuntimeErrorTestSuites > 0) {

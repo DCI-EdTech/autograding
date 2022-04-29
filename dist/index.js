@@ -9660,6 +9660,9 @@ const indent = (text) => {
     str = str.replace(/\r\n/gim, '\n').replace(/\n/gim, '\n  ');
     return str;
 };
+const getResultObject = (arr) => {
+    return arr.find(obj => obj.hasOwnProperty('numFailedTestSuites'));
+};
 const waitForExit = async (child, timeout) => {
     // eslint-disable-next-line no-undef
     return new Promise((resolve, reject) => {
@@ -9720,9 +9723,6 @@ const runSetup = async (test, cwd, timeout) => {
 };
 const runCommand = async (test, cwd, timeout) => {
     let output = '';
-    function getResultObject(arr) {
-        return arr.find(obj => obj.hasOwnProperty('numFailedTestSuites'));
-    }
     try {
         const child = child_process_1.spawn(test.run, {
             cwd,
@@ -9741,6 +9741,8 @@ const runCommand = async (test, cwd, timeout) => {
             process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
+        console.log('output', output);
+        console.log('found json', extract_json_string_1.default.extract(output));
         return getResultObject(extract_json_string_1.default.extract(output));
     }
     catch (error) {
@@ -9806,7 +9808,6 @@ exports.runAll = async (cwd, packageJsonPath) => {
         result = error.result;
         core.setFailed(error.message);
     }
-    console.log(result);
     // Report bug as issue
     if (result.numRuntimeErrorTestSuites > 0) {
         await bugReporter_1.default(result.testResults[0]);
