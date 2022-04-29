@@ -9805,9 +9805,13 @@ exports.runAll = async (cwd, packageJsonPath) => {
     // Set the number of points
     const text = `Tasks ${result.tasks.completed}/${result.tasks.total}`;
     log(color.bold.bgCyan.black(text));
+    console.log("modify readme and update badges");
     await Promise.all([modifyReadme_1.default(result), updateBadges_1.default(result)]);
+    console.log("record results");
     await recordResult_1.default(points, result);
+    console.log("set output");
     core.setOutput('Points', `${points}/${availablePoints}`);
+    console.log("set check run output");
     await output_1.setCheckRunOutput(points, availablePoints, result);
 };
 
@@ -12005,8 +12009,6 @@ exports.owner = owner;
 exports.repo = repo;
 function createOctokit() {
     const token = process.env['GITHUB_TOKEN'] || core.getInput('token');
-    console.log('process.env', process.env['GITHUB_TOKEN']);
-    console.log('core.getInput', core.getInput('token'));
     if (!token || token === '')
         return;
     // Create the octokit client
