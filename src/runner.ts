@@ -144,6 +144,10 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 const runCommand = async (test: Test, cwd: string, timeout: number): Promise<void> => {
   let output = ''
 
+  function getResultObject(arr) {
+    return arr.find(obj => obj.hasOwnPropperty('numFailedTestSuites'))
+  }
+
   try {
     const child = spawn(test.run, {
       cwd,
@@ -166,9 +170,9 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     })
   
     await waitForExit(child, timeout)
-    return extractJSON.extract(output)
+    return getResultObject(extractJSON.extract(output))
   } catch (error) {
-    error.result = extractJSON.extract(output)
+    error.result = getResultObject(extractJSON.extract(output))
     throw error
   }
 }

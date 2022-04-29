@@ -9720,6 +9720,9 @@ const runSetup = async (test, cwd, timeout) => {
 };
 const runCommand = async (test, cwd, timeout) => {
     let output = '';
+    function getResultObject(arr) {
+        return arr.find(obj => obj.hasOwnPropperty('numFailedTestSuites'));
+    }
     try {
         const child = child_process_1.spawn(test.run, {
             cwd,
@@ -9738,10 +9741,10 @@ const runCommand = async (test, cwd, timeout) => {
             process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
-        return extract_json_string_1.default.extract(output);
+        return getResultObject(extract_json_string_1.default.extract(output));
     }
     catch (error) {
-        error.result = extract_json_string_1.default.extract(output);
+        error.result = getResultObject(extract_json_string_1.default.extract(output));
         throw error;
     }
 };
