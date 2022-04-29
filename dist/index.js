@@ -12013,6 +12013,7 @@ function createOctokit(preferredToken) {
     let origGHToken = '';
     if (preferredToken === 'gh')
         origGHToken = core.getInput('token');
+    console.log('gh token', origGHToken, origGHToken !== '', origGHToken === core.getInput('token'));
     const token = origGHToken || process.env['GITHUB_TOKEN'] || core.getInput('token');
     if (!token || token === '')
         return;
