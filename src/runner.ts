@@ -166,7 +166,6 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     })
   
     await waitForExit(child, timeout)
-    console.log(extractJSON.extract(output))
     return extractJSON.extract(output)
   } catch (error) {
     error.result = extractJSON.extract(output)

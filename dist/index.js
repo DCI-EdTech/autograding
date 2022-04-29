@@ -9738,7 +9738,6 @@ const runCommand = async (test, cwd, timeout) => {
             process.stderr.write(indent(chunk));
         });
         await waitForExit(child, timeout);
-        console.log(extract_json_string_1.default.extract(output));
         return extract_json_string_1.default.extract(output);
     }
     catch (error) {
