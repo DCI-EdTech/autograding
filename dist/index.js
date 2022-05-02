@@ -170,6 +170,7 @@ async function recordResult(points, result) {
         TEST_RESULTS: result.testResults,
     });
     // send webhook event
+    console.log("result");
     try {
         const req = https_1.default.request({
             hostname: 'autograding-results.dci.education',
