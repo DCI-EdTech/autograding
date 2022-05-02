@@ -320,7 +320,6 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         return;
     try {
         // update workflow file
-        console.log("get workflow");
         const { data: { sha, path, content: currentContent } } = await octokit.rest.repos.getContent({
             owner: octokit_1.owner,
             repo: octokit_1.repo,

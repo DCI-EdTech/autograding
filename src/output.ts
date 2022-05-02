@@ -14,7 +14,6 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
 
   try {
     // update workflow file
-    console.log("get workflow")
     const { data: { sha, path, content:currentContent } } = await octokit.rest.repos.getContent({
       owner,
       repo,
