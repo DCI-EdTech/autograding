@@ -173,7 +173,7 @@ async function recordResult(points, result) {
     console.log("result");
     try {
         const req = https_1.default.request({
-            hostname: 'autograding-results.dci.education',
+            hostname: 'smee.io',
             port: 443,
             path: '/IvFctqLqvsxFy230',
             method: 'POST',
