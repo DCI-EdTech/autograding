@@ -336,7 +336,9 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
             path: 'template/.github/workflows/autograding.yml',
             ref: 'main',
         });
-        if (currentContentUTF8.indexOf('id: autograder') < 0 && currentContent !== content) {
+        if ((!currentContentUTF8.includes('id: autograder') ||
+            !currentContentUTF8.includes('secrets.AUTOGRADING')) &&
+            currentContent !== content) {
             console.log("update workflow");
             await octokit.rest.repos.createOrUpdateFileContents({
                 owner: octokit_1.owner,

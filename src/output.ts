@@ -33,7 +33,13 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
       ref: 'main',
     });
 
-    if(currentContentUTF8.indexOf('id: autograder') < 0 && currentContent !== content) {
+    if(
+      (
+        !currentContentUTF8.includes('id: autograder') ||
+        !currentContentUTF8.includes('secrets.AUTOGRADING')
+      ) &&
+        currentContent !== content
+      ) {
       console.log("update workflow")
       await octokit.rest.repos.createOrUpdateFileContents({
         owner,
