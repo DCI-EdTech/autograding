@@ -310,7 +310,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const octokit_1 = __webpack_require__(994);
 exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // Create the octokit client
-    const octokit = octokit_1.createOctokit();
+    const octokit = octokit_1.createOctokit('gh');
     if (!octokit)
         return;
     const branch = process.env['GITHUB_REF_NAME'];
@@ -320,6 +320,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         return;
     try {
         // update workflow file
+        console.log("get workflow");
         const { data: { sha, path, content: currentContent } } = await octokit.rest.repos.getContent({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
@@ -328,13 +329,17 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         });
         const currentContentUTF8 = Buffer.from(currentContent, 'base64').toString('utf8');
         // get workflow template
+        console.log("get workflow template");
         const { data: { content } } = await octokit.rest.repos.getContent({
             owner: 'DCI-EdTech',
             repo: 'autograding-setup',
             path: 'template/.github/workflows/autograding.yml',
             ref: 'main',
         });
-        if (currentContentUTF8.indexOf('id: autograder') < 0 && currentContent !== content) {
+        if ((!currentContentUTF8.includes('id: autograder') ||
+            !currentContentUTF8.includes('secrets.AUTOGRADING')) &&
+            currentContent !== content) {
+            console.log("update workflow");
             await octokit.rest.repos.createOrUpdateFileContents({
                 owner: octokit_1.owner,
                 repo: octokit_1.repo,
@@ -353,6 +358,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     if (typeof points === undefined)
         return;
     // Fetch the workflow run
+    console.log("get workflow run");
     const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
@@ -362,6 +368,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const checkSuiteUrl = workflowRunResponse.data.check_suite_url;
     const checkSuiteId = parseInt(checkSuiteUrl.match(/[0-9]+$/)[0], 10);
+    console.log("list checks");
     const checkRunsResponse = await octokit.rest.checks.listForSuite({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
@@ -374,6 +381,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // Update the checkrun, we'll assign the title, summary and text even though we expect
     // the title and summary to be overwritten by GitHub Actions (they are required in this call)
     // We'll also store the total in an annotation to future-proof
+    console.log("update check");
     const res = await octokit.rest.checks.update({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
@@ -12004,8 +12012,12 @@ const nwo = process.env['GITHUB_REPOSITORY'] || '/';
 const [owner, repo] = nwo.split('/');
 exports.owner = owner;
 exports.repo = repo;
-function createOctokit() {
-    const token = process.env['GITHUB_TOKEN'] || core.getInput('token');
+function createOctokit(preferredToken) {
+    let origGHToken = '';
+    if (preferredToken === 'gh')
+        origGHToken = core.getInput('ghtoken');
+    console.log('gh token', origGHToken, origGHToken !== '', origGHToken === core.getInput('token'));
+    const token = process.env['GITHUB_TOKEN'] || core.getInput('token'); //origGHToken || process.env['GITHUB_TOKEN'] || core.getInput('token') || core.getInput('ghtoken')
     if (!token || token === '')
         return;
     // Create the octokit client
