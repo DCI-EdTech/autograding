@@ -174,7 +174,7 @@ async function recordResult(points, result) {
         const req = https_1.default.request({
             hostname: 'autograding-results.dci.education',
             port: 443,
-            path: '/api/v1/data',
+            path: 'IvFctqLqvsxFy230',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
