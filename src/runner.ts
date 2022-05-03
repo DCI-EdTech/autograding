@@ -213,7 +213,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   const additionalSetup = packageJson.autograding && packageJson.autograding.setup
   const testOpts = packageJson.autograding && packageJson.autograding.testOpts
   const test = {
-    "name": `Tests`,
+    "name": `Tasks`,
     "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
     "run": `CI=true npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --silent`,
     "timeout": 10
@@ -302,7 +302,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     // We need a good failure experience
   } else {
     log('')
-    log(color.green('All tests passed'))
+    log(color.green('All tasks completed'))
     log('')
     log('✨🌟💖💎🦄💎💖🌟✨🌟💖💎🦄💎💖🌟✨')
     log('')

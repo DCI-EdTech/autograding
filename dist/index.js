@@ -9721,7 +9721,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
     const testOpts = packageJson.autograding && packageJson.autograding.testOpts;
     const test = {
-        "name": `Tests`,
+        "name": `Tasks`,
         "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
         "run": `CI=true npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --silent`,
         "timeout": 10
@@ -9801,7 +9801,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     }
     else {
         log('');
-        log(color.green('All tests passed'));
+        log(color.green('All tasks completed'));
         log('');
         log('✨🌟💖💎🦄💎💖🌟✨🌟💖💎🦄💎💖🌟✨');
         log('');
