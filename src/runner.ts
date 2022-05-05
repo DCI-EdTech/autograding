@@ -251,8 +251,10 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
 
   // sort results by filename
   result.testResults.sort((a, b) => {
-    const nameA = a.name.toUpperCase();
-    const nameB = b.name.toUpperCase();
+    const nameA = a.name.toLowerCase();
+    const nameB = b.name.toLowerCase()
+
+    console.log('match', nameA.match(taskNamePattern), nameB.match(taskNamePattern), nameA, nameB)
 
     // check for numbering in file names
     const numA = parseInt(nameA.match(taskNamePattern)[3])
