@@ -9756,11 +9756,22 @@ exports.runAll = async (cwd, packageJsonPath) => {
     result.testResults.sort((a, b) => {
         const nameA = a.name.toUpperCase();
         const nameB = b.name.toUpperCase();
-        if (nameA < nameB) {
-            return -1;
+        // check for numbering in file names
+        const numA = parseInt(nameA.match(taskNamePattern)[3]);
+        const numB = parseInt(nameB.match(taskNamePattern)[3]);
+        if (!isNaN(numA) && !isNaN(numB)) {
+            // sort by number
+            if (numA < numB)
+                return -1;
+            if (numA > numB)
+                return 1;
         }
-        if (nameA > nameB) {
-            return 1;
+        else {
+            // sort by name
+            if (nameA < nameB)
+                return -1;
+            if (nameA > nameB)
+                return 1;
         }
         return 0;
     });
