@@ -9756,7 +9756,6 @@ exports.runAll = async (cwd, packageJsonPath) => {
     result.testResults.sort((a, b) => {
         const nameA = a.name.toLowerCase();
         const nameB = b.name.toLowerCase();
-        console.log('match', nameA.match(taskNamePattern), nameB.match(taskNamePattern), nameA, nameB);
         // check for numbering in file names
         const numA = parseInt(nameA.match(taskNamePattern)[3]);
         const numB = parseInt(nameB.match(taskNamePattern)[3]);
