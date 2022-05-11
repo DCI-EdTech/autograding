@@ -2,10 +2,11 @@
 import https from 'https'
 import { createOctokit, owner, repo } from './octokit'
 import { removeTerminalColoring } from './lib/helpers'
+import reportBug from './bugReporter'
 
 export default async function recordResult(points, result) {
   // get run info
-  let runInfo, packageJson, updatedPackageJson, commits
+  let runInfo, packageJson, updatedPackageJson, commits, templateRepoName = ''
   try {
     const octokit: github.GitHub = createOctokit()
     if (!octokit) throw 'Octokit not initialized'
@@ -43,6 +44,8 @@ export default async function recordResult(points, result) {
       }
     }
 
+    templateRepoName = updatedPackageJson.repository ? updatedPackageJson.repository.url.match(/([^\/]+$)/)[0] : ''
+
     // remove preinstall script
     delete updatedPackageJson.scripts.preinstall
 
@@ -79,7 +82,7 @@ export default async function recordResult(points, result) {
     console.log(error)
   }
 
-  const payload = JSON.stringify({
+  const resultMessage = {
     TIMESTAMP: runInfo && runInfo.run_started_at, // TIMESTAMP (format needs to change?)
     GITHUB_USER_NAME: runInfo && runInfo.actor.login, // VARCHAR
     GITHUB_USER_ID: runInfo && runInfo.actor.id, // MEDIUMINT
@@ -95,7 +98,7 @@ export default async function recordResult(points, result) {
     GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message, // VARCHAR
     GITHUB_REF: process.env.GITHUB_REF, // VARCHAR
     NUM_COMMITS: commits.length, // MEDIUMINT
-    GITHUB_TEMPLATE_NAME: packageJson.repository && packageJson.repository.url.match(/([^\/]+$)/)[0], // VARCHAR
+    GITHUB_TEMPLATE_NAME: templateRepoName, // VARCHAR
     GITHUB_TEMPLATE_REPOSITORY_URL: packageJson.repository && packageJson.repository.url, // VARCHAR
     GITHUB_TEMPLATE_REPOSITORY_ID: packageJson.repository && packageJson.repository.id, // INT
     GITHUB_SHA: process.env.GITHUB_SHA, // VARCHAR
@@ -124,7 +127,21 @@ export default async function recordResult(points, result) {
     RUNNER_ARCH: process.env.RUNNER_ARCH, // VARCHAR
     RUNNER_WORKSPACE: process.env.RUNNER_WORKSPACE, // VARCHAR
     TEST_RESULTS: result.testResults, // JSON
-  })
+  }
+
+  const payload = JSON.stringify(resultMessage)
+
+  // test JSON validity
+  try {
+    JSON.parse(payload)
+  } catch (error) {
+    console.log('JSON not valid:', error)
+    console.log('PAYLOAD:', JSON.stringify(resultMessage, null, 2))
+    reportBug(
+      { message: `\`\`\`\nJSON not valid\n\n${error}\n\nPAYLOAD\n${JSON.stringify(resultMessage, null, 2)} \n\`\`\``},
+      templateRepoName
+      )
+  }
 
   // send webhook event
   try {

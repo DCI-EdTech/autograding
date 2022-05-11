@@ -58,9 +58,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const https_1 = __importDefault(__webpack_require__(211));
 const octokit_1 = __webpack_require__(994);
 const helpers_1 = __webpack_require__(948);
+const bugReporter_1 = __importDefault(__webpack_require__(161));
 async function recordResult(points, result) {
     // get run info
-    let runInfo, packageJson, updatedPackageJson, commits;
+    let runInfo, packageJson, updatedPackageJson, commits, templateRepoName = '';
     try {
         const octokit = octokit_1.createOctokit();
         if (!octokit)
@@ -91,6 +92,7 @@ async function recordResult(points, result) {
                 "id": runInfo ? runInfo.repository.id : ""
             };
         }
+        templateRepoName = updatedPackageJson.repository ? updatedPackageJson.repository.url.match(/([^\/]+$)/)[0] : '';
         // remove preinstall script
         delete updatedPackageJson.scripts.preinstall;
         if (JSON.stringify(packageJson) !== JSON.stringify(updatedPackageJson)) {
@@ -123,7 +125,7 @@ async function recordResult(points, result) {
     catch (error) {
         console.log(error);
     }
-    const payload = JSON.stringify({
+    const resultMessage = {
         TIMESTAMP: runInfo && runInfo.run_started_at,
         GITHUB_USER_NAME: runInfo && runInfo.actor.login,
         GITHUB_USER_ID: runInfo && runInfo.actor.id,
@@ -139,7 +141,7 @@ async function recordResult(points, result) {
         GITHUB_HEAD_COMMIT_MESSAGE: runInfo && runInfo.head_commit.message,
         GITHUB_REF: process.env.GITHUB_REF,
         NUM_COMMITS: commits.length,
-        GITHUB_TEMPLATE_NAME: packageJson.repository && packageJson.repository.url.match(/([^\/]+$)/)[0],
+        GITHUB_TEMPLATE_NAME: templateRepoName,
         GITHUB_TEMPLATE_REPOSITORY_URL: packageJson.repository && packageJson.repository.url,
         GITHUB_TEMPLATE_REPOSITORY_ID: packageJson.repository && packageJson.repository.id,
         GITHUB_SHA: process.env.GITHUB_SHA,
@@ -168,7 +170,17 @@ async function recordResult(points, result) {
         RUNNER_ARCH: process.env.RUNNER_ARCH,
         RUNNER_WORKSPACE: process.env.RUNNER_WORKSPACE,
         TEST_RESULTS: result.testResults,
-    });
+    };
+    const payload = JSON.stringify(resultMessage);
+    // test JSON validity
+    try {
+        JSON.parse(payload);
+    }
+    catch (error) {
+        console.log('JSON not valid:', error);
+        console.log('PAYLOAD:', JSON.stringify(resultMessage, null, 2));
+        bugReporter_1.default({ message: `\`\`\`\nJSON not valid\n\n${error}\n\nPAYLOAD\n${JSON.stringify(resultMessage, null, 2)} \n\`\`\`` }, templateRepoName);
+    }
     // send webhook event
     try {
         const req = https_1.default.request({
@@ -890,11 +902,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const octokit_1 = __webpack_require__(994);
 const helpers_1 = __webpack_require__(948);
-async function reportBug(error) {
-    // report bugs only for DCI Org for now
-    // TODO: report also when running on student repos
-    if (!process.env.IS_ORIGINAL_TEMPLATE_REPO)
-        return;
+async function reportBug(error, origRepoName) {
+    if (!process.env.IS_ORIGINAL_TEMPLATE_REPO) {
+        if (!origRepoName)
+            return;
+        // get template repo
+        octokit_1.owner = 'DigitalCareerInstitute';
+        octokit_1.repo = origRepoName;
+    }
     const octokit = octokit_1.createOctokit();
     if (!octokit)
         return;

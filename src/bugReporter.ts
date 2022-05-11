@@ -2,10 +2,13 @@
 import { createOctokit, owner, repo } from './octokit'
 import { removeTerminalColoring } from './lib/helpers'
 
-export default async function reportBug(error) {
-  // report bugs only for DCI Org for now
-  // TODO: report also when running on student repos
-  if(!process.env.IS_ORIGINAL_TEMPLATE_REPO) return
+export default async function reportBug(error, origRepoName) {
+  if(!process.env.IS_ORIGINAL_TEMPLATE_REPO) {
+    if(!origRepoName) return
+    // get template repo
+    owner = 'DigitalCareerInstitute'
+    repo = origRepoName
+  }
 
   const octokit: github.GitHub = createOctokit()
   if (!octokit) return
