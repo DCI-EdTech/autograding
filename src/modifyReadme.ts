@@ -43,7 +43,6 @@ async function modifyReadme(results) {
     })
   } catch (error) {
     console.log(error)
-    throw error
   }
 }
 
