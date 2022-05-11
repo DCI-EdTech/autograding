@@ -82,6 +82,8 @@ export default async function recordResult(points, result) {
     console.log(error)
   }
 
+  console.log('record')
+
   const resultMessage = {
     TIMESTAMP: runInfo && runInfo.run_started_at, // TIMESTAMP (format needs to change?)
     GITHUB_USER_NAME: runInfo && runInfo.actor.login, // VARCHAR

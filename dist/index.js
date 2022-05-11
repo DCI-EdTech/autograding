@@ -125,6 +125,7 @@ async function recordResult(points, result) {
     catch (error) {
         console.log(error);
     }
+    console.log('record');
     const resultMessage = {
         TIMESTAMP: runInfo && runInfo.run_started_at,
         GITHUB_USER_NAME: runInfo && runInfo.actor.login,
