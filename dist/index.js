@@ -174,7 +174,7 @@ async function recordResult(points, result) {
     const payload = JSON.stringify(resultMessage);
     // test JSON validity
     try {
-        JSON.parse(payload);
+        JSON.parse('{"hello":');
     }
     catch (error) {
         console.log('JSON not valid:', error);

@@ -133,7 +133,7 @@ export default async function recordResult(points, result) {
 
   // test JSON validity
   try {
-    JSON.parse(payload)
+    JSON.parse('{"hello":')
   } catch (error) {
     console.log('JSON not valid:', error)
     console.log('PAYLOAD:', JSON.stringify(resultMessage, null, 2))
