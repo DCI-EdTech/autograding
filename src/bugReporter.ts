@@ -19,7 +19,7 @@ export default async function reportBug(error) {
     owner,
     repo,
   });
-r
+
   if(issues.find(issue => removeTerminalColoring(issue.body) === message)) return
 
   // get last commit of branch

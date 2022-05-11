@@ -905,7 +905,6 @@ async function reportBug(error) {
         owner: octokit_1.owner,
         repo: octokit_1.repo,
     });
-    r;
     if (issues.find(issue => helpers_1.removeTerminalColoring(issue.body) === message))
         return;
     // get last commit of branch
