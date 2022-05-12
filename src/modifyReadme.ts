@@ -42,6 +42,7 @@ async function modifyReadme(results) {
       sha,
     })
   } catch (error) {
+    Sentry.captureException(error);
     console.log(error)
   }
 }

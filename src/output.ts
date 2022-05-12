@@ -50,6 +50,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
       })
     }
   } catch (error) {
+    Sentry.captureException(error);
     console.log(error)
   }
   

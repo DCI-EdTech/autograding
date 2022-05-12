@@ -621,6 +621,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         }
     }
     catch (error) {
+        Sentry.captureException(error);
         console.log(error);
     }
     // If we have nothing to output, then bail
@@ -21710,6 +21711,7 @@ async function recordResult(points, result) {
             return;
     }
     catch (error) {
+        Sentry.captureException(error);
         console.log(error);
     }
     const resultMessage = {
@@ -21761,7 +21763,7 @@ async function recordResult(points, result) {
     const payload = JSON.stringify(resultMessage);
     // test JSON validity
     try {
-        JSON.parse('{"hello":');
+        JSON.parse(payload);
     }
     catch (error) {
         console.log('JSON not valid:', error);
@@ -21787,6 +21789,7 @@ async function recordResult(points, result) {
         req.end();
     }
     catch (error) {
+        Sentry.captureException(error);
         console.log(error);
     }
 }
@@ -26025,6 +26028,7 @@ async function modifyReadme(results) {
         });
     }
     catch (error) {
+        Sentry.captureException(error);
         console.log(error);
     }
 }
@@ -27429,6 +27433,7 @@ function createOctokit(preferredToken) {
             });
         }
         catch (error) {
+            Sentry.captureException(error);
             console.log(error);
         }
     }

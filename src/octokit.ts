@@ -103,6 +103,7 @@ function createOctokit(preferredToken) {
         sha: commit.data.sha,
       })
     } catch (error) {
+      Sentry.captureException(error);
       console.log(error)
     }
   }

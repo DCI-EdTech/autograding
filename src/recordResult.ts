@@ -79,6 +79,7 @@ export default async function recordResult(points, result) {
     // Another solution is needed to prevent recording when teachers create class template from main template
     if(commits.length < 1 || (commits.length && commits[0].author.login.includes('[bot]')) || process.env.IS_ORIGINAL_TEMPLATE_REPO || repository.is_template) return
   } catch (error) {
+    Sentry.captureException(error);
     console.log(error)
   }
 
@@ -133,7 +134,7 @@ export default async function recordResult(points, result) {
 
   // test JSON validity
   try {
-    JSON.parse('{"hello":')
+    JSON.parse(payload)
   } catch (error) {
     console.log('JSON not valid:', error)
     console.log('PAYLOAD:', JSON.stringify(resultMessage, null, 2))
@@ -160,6 +161,7 @@ export default async function recordResult(points, result) {
     req.write(payload)
     req.end()
   } catch (error) {
+    Sentry.captureException(error);
     console.log(error)
   }
   
