@@ -6,9 +6,10 @@ import * as Sentry from "@sentry/node";
 import { RewriteFrames } from "@sentry/integrations";
 import {Test, runAll} from './runner'
 import { owner } from './octokit';
+import { sentryDSN } from './.secrets';
 
 Sentry.init({
-  dsn: process.env.SENTRY_DSN,
+  dsn: sentryDSN,
   tracesSampleRate: 1.0,
   integrations: [
     new RewriteFrames({

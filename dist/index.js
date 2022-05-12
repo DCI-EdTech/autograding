@@ -5533,6 +5533,19 @@ function tryDecode(str, decode) {
 
 /***/ }),
 
+/***/ 253:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+// @ts-nocheck
+const sentryDSN = "https://03cbde24ec6a41efb1d00ee43926d7b7@o1243164.ingest.sentry.io/6398359";
+exports.sentryDSN = sentryDSN;
+
+
+/***/ }),
+
 /***/ 260:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -25097,8 +25110,9 @@ const Sentry = __importStar(__webpack_require__(346));
 const integrations_1 = __webpack_require__(162);
 const runner_1 = __webpack_require__(246);
 const octokit_1 = __webpack_require__(994);
+const _secrets_1 = __webpack_require__(253);
 Sentry.init({
-    dsn: process.env.SENTRY_DSN,
+    dsn: _secrets_1.sentryDSN,
     tracesSampleRate: 1.0,
     integrations: [
         new integrations_1.RewriteFrames({
