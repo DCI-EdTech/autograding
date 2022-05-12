@@ -1,6 +1,7 @@
 // @ts-nocheck
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import * as Sentry from "@sentry/node";
 
 // The environment contains a variable for current repository. The repository
 // will be formatted as a name with owner (`nwo`); e.g., jeffrafter/example

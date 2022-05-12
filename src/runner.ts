@@ -8,6 +8,7 @@ import * as os from 'os'
 import chalk from 'chalk'
 import fs from 'fs'
 import path from 'path'
+import * as Sentry from "@sentry/node";
 import modifyReadme from './modifyReadme'
 import updateBadges from './updateBadges'
 import recordResult from './recordResult'

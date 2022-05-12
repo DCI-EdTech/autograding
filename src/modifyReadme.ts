@@ -1,5 +1,6 @@
 // @ts-nocheck
 import fs, { read } from 'fs';
+import * as Sentry from "@sentry/node";
 import { createOctokit, owner, repo } from './octokit';
 import { escapeRegExp } from './lib/helpers';
 

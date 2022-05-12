@@ -1,4 +1,5 @@
 // @ts-nocheck
+import * as Sentry from "@sentry/node";
 import { createOctokit, owner, repo } from './octokit'
 
 export const setCheckRunOutput = async (points:number, availablePoints:number, results:Array): Promise<void> => {

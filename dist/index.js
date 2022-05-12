@@ -576,8 +576,16 @@ exports.SeverityLevels = ['fatal', 'error', 'warning', 'log', 'info', 'debug', '
 
 "use strict";
 
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
+const Sentry = __importStar(__webpack_require__(346));
 const octokit_1 = __webpack_require__(994);
 exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // Create the octokit client
@@ -4876,6 +4884,7 @@ const output_1 = __webpack_require__(52);
 const os = __importStar(__webpack_require__(87));
 const chalk_1 = __importDefault(__webpack_require__(273));
 const fs_1 = __importDefault(__webpack_require__(747));
+const Sentry = __importStar(__webpack_require__(346));
 const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const updateBadges_1 = __importDefault(__webpack_require__(860));
 const recordResult_1 = __importDefault(__webpack_require__(770));
@@ -25991,7 +26000,15 @@ module.exports = require("zlib");
 
 "use strict";
 
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const Sentry = __importStar(__webpack_require__(346));
 const octokit_1 = __webpack_require__(994);
 const helpers_1 = __webpack_require__(948);
 const branch = process.env['GITHUB_REF_NAME'];
@@ -27330,6 +27347,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const core = __importStar(__webpack_require__(470));
 const github = __importStar(__webpack_require__(469));
+const Sentry = __importStar(__webpack_require__(346));
 // The environment contains a variable for current repository. The repository
 // will be formatted as a name with owner (`nwo`); e.g., jeffrafter/example
 // We'll split this into two separate variables for later use
