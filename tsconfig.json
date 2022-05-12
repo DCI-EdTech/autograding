@@ -12,6 +12,6 @@
     "removeComments": false,
     "preserveConstEnums": true
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "src/.secrets.ts"],
   "exclude": ["node_modules"]
 }
