@@ -10,7 +10,6 @@ import fs from 'fs'
 import path from 'path'
 import modifyReadme from './modifyReadme'
 import updateBadges from './updateBadges'
-import reportBug from './bugReporter'
 import recordResult from './recordResult'
 import extractJSON from './lib/extractJSON'
 import { removeTerminalColoring } from './lib/helpers'
@@ -140,8 +139,7 @@ const runSetup = async (test: Test, cwd: string, timeout: number): Promise<void>
 
   setup.once('exit', async (code) => {
     if(code === 0) return;
-
-    await reportBug({ message: `\`\`\`\n${setupError}\n\`\`\``})
+    Sentry.captureMessage(setupError);
   })
 
   await waitForExit(setup, timeout)
@@ -245,7 +243,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
 
   // Report bug as issue
   if(result.numRuntimeErrorTestSuites > 0) {
-    await reportBug(result.testResults[0])
+    Sentry.captureMessage(removeTerminalColoring(result.testResults[0].message));
     result.runtimeError = result.testResults[0]
   }
 

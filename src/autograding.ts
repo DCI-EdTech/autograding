@@ -2,8 +2,20 @@
 
 import * as core from '@actions/core'
 import path from 'path'
+import * as Sentry from "@sentry/node";
+import { RewriteFrames } from "@sentry/integrations";
 import {Test, runAll} from './runner'
 import { owner } from './octokit';
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  tracesSampleRate: 1.0,
+  integrations: [
+    new RewriteFrames({
+      root: global.__dirname,
+    }),
+  ],
+});
 
 const run = async (): Promise<void> => {
   try {

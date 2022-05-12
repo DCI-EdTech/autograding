@@ -19,6 +19,8 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.0",
+    "@sentry/integrations": "^6.19.7",
+    "@sentry/node": "^6.19.7",
     "tree-kill": "^1.2.2",
     "uuid": "^7.0.1"
   },

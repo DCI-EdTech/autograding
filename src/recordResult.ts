@@ -1,8 +1,8 @@
 // @ts-nocheck
 import https from 'https'
+import * as Sentry from "@sentry/node";
 import { createOctokit, owner, repo } from './octokit'
 import { removeTerminalColoring } from './lib/helpers'
-import reportBug from './bugReporter'
 
 export default async function recordResult(points, result) {
   // get run info
@@ -82,8 +82,6 @@ export default async function recordResult(points, result) {
     console.log(error)
   }
 
-  console.log('record')
-
   const resultMessage = {
     TIMESTAMP: runInfo && runInfo.run_started_at, // TIMESTAMP (format needs to change?)
     GITHUB_USER_NAME: runInfo && runInfo.actor.login, // VARCHAR
@@ -139,10 +137,7 @@ export default async function recordResult(points, result) {
   } catch (error) {
     console.log('JSON not valid:', error)
     console.log('PAYLOAD:', JSON.stringify(resultMessage, null, 2))
-    reportBug(
-      { message: `\`\`\`\nJSON not valid\n\n${error}\n\nPAYLOAD\n${JSON.stringify(resultMessage, null, 2)} \n\`\`\``},
-      templateRepoName
-      )
+    Sentry.captureException(error);
   }
 
   // send webhook event
