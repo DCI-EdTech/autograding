@@ -12,16 +12,22 @@ async function modifyReadme(results) {
   const octokit = createOctokit()
   if (!octokit) return
 
+  let sha, content, path, readme = '';
+
   try {
     // get readme
-    const { data: { sha, content, path} } = await octokit.rest.repos.getReadme({
+    ({ data: { sha, content, path} } = await octokit.rest.repos.getReadme({
       owner,
       repo,
       ref: process.env['GITHUB_REF_NAME'],
-    });
+    }));
 
-    const readme = Buffer.from(content, 'base64').toString('utf8');
+    readme = Buffer.from(content, 'base64').toString('utf8');
+  } catch (error) {
+    Sentry.captureException(error);
+  }
 
+  try {
     // add main badge
     let newReadme = addMainBadge(readme);
 
