@@ -22,7 +22,7 @@ function createOctokit(preferredToken) {
   if (!repo) return
 
   // add commit method
-  async function commit(files, branch, message) {    
+  async function commit(files, branch, message, force) {    
     // get last commit of branch
     let lastCommitSHA, lastCommitTreeSHA, treeData
     try {
@@ -102,6 +102,7 @@ function createOctokit(preferredToken) {
         repo,
         ref: `heads/${branch}`,
         sha: commit.data.sha,
+        force: force || false
       })
     } catch (error) {
       Sentry.captureException(error);

@@ -26,5 +26,5 @@ export default async function updateBadges(results:Array<any>): Promise<void> {
   badges.push({path: badgePath, content: createBadge(results.tasks)})
 
   // update status badges
-  await octokit.commit(badges, 'badges', 'Update badges')
+  await octokit.commit(badges, 'badges', 'Update badges', true)
 }
