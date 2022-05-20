@@ -26091,23 +26091,9 @@ async function addAutogradingInfo(fullReadme, results) {
 ${generateResult(results)}
 
 [🔬 Results Details](${repoURL}/actions)
-
-[📢 Give Feedback or Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(process.env.GITHUB_REPOSITORY.split('/')[1])}&entry.2115011968=${encodeURIComponent('https://github.com/')}${encodeURIComponent(process.env.GITHUB_REPOSITORY)})
-
-### Debugging your code
-> [reading the test outputs](https://github.com/DCI-EdTech/autograding-setup/wiki/Reading-test-outputs)
-
-There are two ways to see why tasks might not be completed:
-#### 1. Running tests locally
-- Run \`npm install\`
-- Run \`npm test\` in the terminal. You will see where your solution differs from the expected result.
-
-#### 2. Inspecting the test output on GitHub
-- Go to the [Actions tab of your exercise repo](${repoURL}/actions)
-- You will see a list of the test runs. Click on the topmost one.
-- Click on 'Autograding'
-- Expand the item 'Run DCI-EdTech/autograding-action@main'
-- Here you see all outputs from the test run`;
+[🐞 Tipps on Debugging](https://github.com/DCI-EdTech/autograding-setup/wiki/How-to-work-with-CodeBuddy)
+[📢 Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(process.env.GITHUB_REPOSITORY.split('/')[1])}&entry.2115011968=${encodeURIComponent('https://github.com/')}${encodeURIComponent(process.env.GITHUB_REPOSITORY)})
+`;
     const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
     const setupDelimiters = ['[//]: # (autograding setup start)', '[//]: # (autograding setup end)'];
     const infoRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
