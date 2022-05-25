@@ -72,7 +72,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
   const checkRunsResponse = await octokit.rest.checks.listForSuite({
     owner,
     repo,
-    check_name: 'Autograding',
+    check_name: 'CodeBuddy',
     check_suite_id: checkSuiteId,
   })
 
@@ -87,7 +87,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
     repo,
     check_run_id: checkRun.id,
     output: {
-      title: 'Autograding',
+      title: 'CodeBuddy',
       summary: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
       text: `Points ${points}/${availablePoints}`,
       annotations: [
@@ -98,7 +98,7 @@ export const setCheckRunOutput = async (points:number, availablePoints:number, r
           end_line: 1,
           annotation_level: 'notice',
           message: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
-          title: 'Autograding complete',
+          title: 'CodeBuddy finished',
         },
       ],
     },

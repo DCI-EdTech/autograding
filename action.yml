@@ -1,5 +1,5 @@
-name: Autograding
-description: "Autograding for GitHub Classroom"
+name: CodeBuddy
+description: "CodeBuddy for GitHub Classroom"
 author: "@github"
 inputs:
   token:

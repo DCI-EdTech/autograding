@@ -29,7 +29,7 @@ const run = async (): Promise<void> => {
     // disable autograding output for all branches but autograding and autograding-solution
     const branch = process.env['GITHUB_REF_NAME']
     if(branch !== 'autograding' && branch !== 'autograding-solution') {
-      console.log('disable Autograding output')
+      console.log('disable CodeBuddy output')
       process.env.DISABLE_AUTOGRADING = true
     }
 
@@ -51,7 +51,7 @@ const run = async (): Promise<void> => {
       errorMessage = error.message;
     }
     console.error(errorMessage)
-    core.setFailed(`Autograding failure: ${error}`)
+    core.setFailed(`CodeBuddy failure: ${error}`)
   }
 }
 

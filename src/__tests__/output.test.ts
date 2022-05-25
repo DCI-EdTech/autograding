@@ -35,7 +35,7 @@ describe('output', () => {
       })
 
     nock('https://api.github.com')
-      .get('/repos/example/repository/check-suites/111111/check-runs?check_name=Autograding')
+      .get('/repos/example/repository/check-suites/111111/check-runs?check_name=CodeBuddy')
       .reply(200, {
         total_count: 1,
         check_runs: [

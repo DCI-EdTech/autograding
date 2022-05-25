@@ -648,7 +648,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     const checkRunsResponse = await octokit.rest.checks.listForSuite({
         owner: octokit_1.owner,
         repo: octokit_1.repo,
-        check_name: 'Autograding',
+        check_name: 'CodeBuddy',
         check_suite_id: checkSuiteId,
     });
     const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0];
@@ -662,7 +662,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
         repo: octokit_1.repo,
         check_run_id: checkRun.id,
         output: {
-            title: 'Autograding',
+            title: 'CodeBuddy',
             summary: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
             text: `Points ${points}/${availablePoints}`,
             annotations: [
@@ -673,7 +673,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
                     end_line: 1,
                     annotation_level: 'notice',
                     message: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
-                    title: 'Autograding complete',
+                    title: 'CodeBuddy finished',
                 },
             ],
         },
@@ -25140,7 +25140,7 @@ const run = async () => {
         // disable autograding output for all branches but autograding and autograding-solution
         const branch = process.env['GITHUB_REF_NAME'];
         if (branch !== 'autograding' && branch !== 'autograding-solution') {
-            console.log('disable Autograding output');
+            console.log('disable CodeBuddy output');
             process.env.DISABLE_AUTOGRADING = true;
         }
         // # NEW
@@ -25158,7 +25158,7 @@ const run = async () => {
             errorMessage = error.message;
         }
         console.error(errorMessage);
-        core.setFailed(`Autograding failure: ${error}`);
+        core.setFailed(`CodeBuddy failure: ${error}`);
     }
 };
 // Don't auto-execute in the test environment
