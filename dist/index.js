@@ -25143,6 +25143,8 @@ const run = async () => {
             console.log('disable Autograding output');
             process.env.DISABLE_AUTOGRADING = true;
         }
+        // # NEW
+        // disable autograding output for all branches but autograding and autograding-solution if on any Org other than FbW-D02-1
         // check if running on exercise collection org
         if (octokit_1.owner === 'DigitalCareerInstitute') {
             process.env.IS_ORIGINAL_TEMPLATE_REPO = true;
