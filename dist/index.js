@@ -635,50 +635,56 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
     // If we have nothing to output, then bail
     if (typeof points === undefined)
         return;
-    // Fetch the workflow run
-    const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
-        owner: octokit_1.owner,
-        repo: octokit_1.repo,
-        run_id: runId,
-    });
-    // Find the check suite run
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const checkSuiteUrl = workflowRunResponse.data.check_suite_url;
-    const checkSuiteId = parseInt(checkSuiteUrl.match(/[0-9]+$/)[0], 10);
-    const checkRunsResponse = await octokit.rest.checks.listForSuite({
-        owner: octokit_1.owner,
-        repo: octokit_1.repo,
-        check_name: 'CodeBuddy',
-        check_suite_id: checkSuiteId,
-    });
-    const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0];
-    if (!checkRun) {
-        return console.log('No check run found');
+    try {
+        // Fetch the workflow run
+        const workflowRunResponse = await octokit.rest.actions.getWorkflowRun({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            run_id: runId,
+        });
+        // Find the check suite run
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const checkSuiteUrl = workflowRunResponse.data.check_suite_url;
+        const checkSuiteId = parseInt(checkSuiteUrl.match(/[0-9]+$/)[0], 10);
+        const checkRunsResponse = await octokit.rest.checks.listForSuite({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            check_name: 'CodeBuddy',
+            check_suite_id: checkSuiteId,
+        });
+        const checkRun = checkRunsResponse.data.total_count === 1 && checkRunsResponse.data.check_runs[0];
+        if (!checkRun) {
+            return console.log('No check run found');
+        }
+        // Update the checkrun, we'll assign the title, summary and text even though we expect
+        // the title and summary to be overwritten by GitHub Actions (they are required in this call)
+        // We'll also store the total in an annotation to future-proof
+        const res = await octokit.rest.checks.update({
+            owner: octokit_1.owner,
+            repo: octokit_1.repo,
+            check_run_id: checkRun.id,
+            output: {
+                title: 'CodeBuddy',
+                summary: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
+                text: `Points ${points}/${availablePoints}`,
+                annotations: [
+                    {
+                        // Using the `.github` path is what GitHub Actions does
+                        path: '.github',
+                        start_line: 1,
+                        end_line: 1,
+                        annotation_level: 'notice',
+                        message: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
+                        title: 'CodeBuddy finished',
+                    },
+                ],
+            },
+        });
     }
-    // Update the checkrun, we'll assign the title, summary and text even though we expect
-    // the title and summary to be overwritten by GitHub Actions (they are required in this call)
-    // We'll also store the total in an annotation to future-proof
-    const res = await octokit.rest.checks.update({
-        owner: octokit_1.owner,
-        repo: octokit_1.repo,
-        check_run_id: checkRun.id,
-        output: {
-            title: 'CodeBuddy',
-            summary: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
-            text: `Points ${points}/${availablePoints}`,
-            annotations: [
-                {
-                    // Using the `.github` path is what GitHub Actions does
-                    path: '.github',
-                    start_line: 1,
-                    end_line: 1,
-                    annotation_level: 'notice',
-                    message: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
-                    title: 'CodeBuddy finished',
-                },
-            ],
-        },
-    });
+    catch (error) {
+        Sentry.captureException(error);
+        console.log(error);
+    }
 };
 
 
