@@ -1,4 +1,4 @@
-name: CodeBuddy
+name: Autograding
 description: "CodeBuddy for GitHub Classroom"
 author: "@DCI-CodeBuddy"
 inputs:
