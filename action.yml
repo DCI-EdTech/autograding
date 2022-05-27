@@ -1,6 +1,6 @@
 name: CodeBuddy
 description: "CodeBuddy for GitHub Classroom"
-author: "@github"
+author: "@DCI-CodeBuddy"
 inputs:
   token:
     description: >
