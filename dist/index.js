@@ -663,7 +663,7 @@ exports.setCheckRunOutput = async (points, availablePoints, results) => {
             repo: octokit_1.repo,
             check_run_id: checkRun.id,
             output: {
-                title: 'Autograding',
+                title: 'CodeBuddy',
                 summary: `Tasks ${results.tasks.completed}/${results.tasks.total}`,
                 text: `Points ${points}/${availablePoints}`,
                 annotations: [
