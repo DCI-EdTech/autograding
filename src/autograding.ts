@@ -28,14 +28,10 @@ const run = async (): Promise<void> => {
     // filter
     // disable autograding output for all branches but autograding and autograding-solution
     const branch = process.env['GITHUB_REF_NAME']
-    if(branch !== 'autograding' && branch !== 'autograding-solution') {
+    if(owner !== 'FbW-D02-1' && branch !== 'autograding' && branch !== 'autograding-solution') {
       console.log('disable Autograding output')
       process.env.DISABLE_AUTOGRADING = true
     }
-
-    // # NEW
-    // disable autograding output for all branches but autograding and autograding-solution if on any Org other than FbW-D02-1
-
 
     // check if running on exercise collection org
     if(owner === 'DigitalCareerInstitute') {
