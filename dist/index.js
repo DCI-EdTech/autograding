@@ -26086,7 +26086,7 @@ function generateResult(results) {
 }
 async function addAutogradingInfo(fullReadme, results, packageJson) {
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
-    const exerciseTemplateName = packageJson.repository ? repoNameFromUrl(packageJson.repository.url) : '';
+    const exerciseTemplateName = packageJson.repository ? helpers_1.repoNameFromUrl(packageJson.repository.url) : '';
     const readmeInfo = `## Results
 This is what CodeBuddy found when running your code. It is to show you what you have achieved and to give you hints on how to complete the exercise.
 

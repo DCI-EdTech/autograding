@@ -2,7 +2,7 @@
 import fs, { read } from 'fs';
 import * as Sentry from "@sentry/node";
 import { createOctokit, owner, repo } from './octokit';
-import { escapeRegExp } from './lib/helpers';
+import { escapeRegExp, repoNameFromUrl } from './lib/helpers';
 
 const branch = process.env['GITHUB_REF_NAME']
 const readmeInfoPath = `./AUTOGRADING.md`;
