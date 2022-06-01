@@ -96,7 +96,7 @@ This is what CodeBuddy found when running your code. It is to show you what you 
 
 ${generateResult(results)}
 
-[🔬 Results Details](/actions)
+[🔬 Results Details](../../actions)
 [🐞 Tips on Debugging](https://github.com/DCI-EdTech/autograding-setup/wiki/How-to-work-with-CodeBuddy)
 [📢 Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(exerciseTemplateName)})
 `
