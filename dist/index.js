@@ -26033,7 +26033,7 @@ async function modifyReadme(results, packageJson) {
         // add main badge
         let newReadme = addMainBadge(readme);
         // add autograding info
-        newReadme = await addAutogradingInfo(newReadme, results);
+        newReadme = await addAutogradingInfo(newReadme, results, packageJson);
         // don't update if nothing changed
         if (newReadme === readme)
             return;
@@ -26084,7 +26084,7 @@ function generateResult(results) {
     }, '')}
 `;
 }
-async function addAutogradingInfo(fullReadme, results) {
+async function addAutogradingInfo(fullReadme, results, packageJson) {
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
     const exerciseTemplateName = packageJson.repository ? repoNameFromUrl(packageJson.repository.url) : '';
     const readmeInfo = `## Results
