@@ -25137,7 +25137,7 @@ const run = async () => {
             throw new Error('No GITHUB_WORKSPACE');
         }
         // filter
-        // disable autograding output for all branches but autograding and autograding-solution
+        // disable autograding output for all branches but autograding and autograding-solution but enable for FbW-D02-1
         const branch = process.env['GITHUB_REF_NAME'];
         if (octokit_1.owner !== 'FbW-D02-1' && branch !== 'autograding' && branch !== 'autograding-solution') {
             console.log('disable Autograding output');
@@ -26087,6 +26087,7 @@ function generateResult(results) {
 async function addAutogradingInfo(fullReadme, results) {
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
     const readmeInfo = `## Results
+This is what CodeBuddy found when running your code. It is to show you what you have achieved and to give you hints on how to complete the exercise.
 
 ${generateResult(results)}
 

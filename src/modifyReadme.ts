@@ -91,6 +91,7 @@ function generateResult(results) {
 async function addAutogradingInfo(fullReadme, results) {
   const repoURL = `${process.env['GITHUB_SERVER_URL']}/${owner}/${repo}`
   const readmeInfo = `## Results
+This is what CodeBuddy found when running your code. It is to show you what you have achieved and to give you hints on how to complete the exercise.
 
 ${generateResult(results)}
 

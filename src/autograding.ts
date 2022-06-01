@@ -26,7 +26,7 @@ const run = async (): Promise<void> => {
     }
 
     // filter
-    // disable autograding output for all branches but autograding and autograding-solution
+    // disable autograding output for all branches but autograding and autograding-solution but enable for FbW-D02-1
     const branch = process.env['GITHUB_REF_NAME']
     if(owner !== 'FbW-D02-1' && branch !== 'autograding' && branch !== 'autograding-solution') {
       console.log('disable Autograding output')
