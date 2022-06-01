@@ -2,7 +2,7 @@
 import https from 'https'
 import * as Sentry from "@sentry/node";
 import { createOctokit, owner, repo } from './octokit'
-import { removeTerminalColoring } from './lib/helpers'
+import { removeTerminalColoring, repoNameFromUrl } from './lib/helpers'
 
 export default async function recordResult(points, result) {
   // get run info
@@ -44,7 +44,7 @@ export default async function recordResult(points, result) {
       }
     }
 
-    templateRepoName = updatedPackageJson.repository ? updatedPackageJson.repository.url.match(/([^\/]+$)/)[0] : ''
+    templateRepoName = updatedPackageJson.repository ? repoNameFromUrl(updatedPackageJson.repository.url) : ''
 
     // remove preinstall script
     delete updatedPackageJson.scripts.preinstall

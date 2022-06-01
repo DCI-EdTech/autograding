@@ -8,7 +8,7 @@ const branch = process.env['GITHUB_REF_NAME']
 const readmeInfoPath = `./AUTOGRADING.md`;
 const mainBadgeString = `\n[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)\n`;
 
-async function modifyReadme(results) {
+async function modifyReadme(results, packageJson) {
   const octokit = createOctokit()
   if (!octokit) return
 
@@ -90,14 +90,15 @@ function generateResult(results) {
 
 async function addAutogradingInfo(fullReadme, results) {
   const repoURL = `${process.env['GITHUB_SERVER_URL']}/${owner}/${repo}`
+  const exerciseTemplateName = packageJson.repository ? repoNameFromUrl(packageJson.repository.url) : ''
   const readmeInfo = `## Results
 This is what CodeBuddy found when running your code. It is to show you what you have achieved and to give you hints on how to complete the exercise.
 
 ${generateResult(results)}
 
-[🔬 Results Details](${repoURL}/actions)
+[🔬 Results Details](/actions)
 [🐞 Tips on Debugging](https://github.com/DCI-EdTech/autograding-setup/wiki/How-to-work-with-CodeBuddy)
-[📢 Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(process.env.GITHUB_REPOSITORY.split('/')[1])}&entry.2115011968=${encodeURIComponent('https://github.com/')}${encodeURIComponent(process.env.GITHUB_REPOSITORY)})
+[📢 Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(exerciseTemplateName)})
 `
 
   const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];

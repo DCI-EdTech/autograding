@@ -5149,7 +5149,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     // Set the number of points
     const text = `Tasks ${result.tasks.completed}/${result.tasks.total}`;
     log(color.bold.bgCyan.black(text));
-    await Promise.all([modifyReadme_1.default(result), updateBadges_1.default(result)]);
+    await Promise.all([modifyReadme_1.default(result, packageJson), updateBadges_1.default(result)]);
     await recordResult_1.default(points, result);
     core.setOutput('Points', `${points}/${availablePoints}`);
     await output_1.setCheckRunOutput(points, availablePoints, result);
@@ -21689,7 +21689,7 @@ async function recordResult(points, result) {
                 "id": runInfo ? runInfo.repository.id : ""
             };
         }
-        templateRepoName = updatedPackageJson.repository ? updatedPackageJson.repository.url.match(/([^\/]+$)/)[0] : '';
+        templateRepoName = updatedPackageJson.repository ? helpers_1.repoNameFromUrl(updatedPackageJson.repository.url) : '';
         // remove preinstall script
         delete updatedPackageJson.scripts.preinstall;
         if (JSON.stringify(packageJson) !== JSON.stringify(updatedPackageJson)) {
@@ -26012,7 +26012,7 @@ const helpers_1 = __webpack_require__(948);
 const branch = process.env['GITHUB_REF_NAME'];
 const readmeInfoPath = `./AUTOGRADING.md`;
 const mainBadgeString = `\n[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)\n`;
-async function modifyReadme(results) {
+async function modifyReadme(results, packageJson) {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
         return;
@@ -26086,14 +26086,15 @@ function generateResult(results) {
 }
 async function addAutogradingInfo(fullReadme, results) {
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
+    const exerciseTemplateName = packageJson.repository ? repoNameFromUrl(packageJson.repository.url) : '';
     const readmeInfo = `## Results
 This is what CodeBuddy found when running your code. It is to show you what you have achieved and to give you hints on how to complete the exercise.
 
 ${generateResult(results)}
 
-[🔬 Results Details](${repoURL}/actions)
+[🔬 Results Details](/actions)
 [🐞 Tips on Debugging](https://github.com/DCI-EdTech/autograding-setup/wiki/How-to-work-with-CodeBuddy)
-[📢 Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(process.env.GITHUB_REPOSITORY.split('/')[1])}&entry.2115011968=${encodeURIComponent('https://github.com/')}${encodeURIComponent(process.env.GITHUB_REPOSITORY)})
+[📢 Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(exerciseTemplateName)})
 `;
     const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
     const setupDelimiters = ['[//]: # (autograding setup start)', '[//]: # (autograding setup end)'];
@@ -26924,6 +26925,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "escapeRegExp", function() { return escapeRegExp; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xmlSecure", function() { return xmlSecure; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeTerminalColoring", function() { return removeTerminalColoring; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "repoNameFromUrl", function() { return repoNameFromUrl; });
 const escapeRegExp = (text) => {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }
@@ -26935,6 +26937,10 @@ const xmlSecure = (str) => {
 const removeTerminalColoring = (message) => {
   if(!message) return message
   return message.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
+}
+
+const repoNameFromUrl = (url) => {
+  return url.match(/([^\/]+$)/)[0]
 }
 
 
