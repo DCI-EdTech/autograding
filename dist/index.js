@@ -25137,9 +25137,9 @@ const run = async () => {
             throw new Error('No GITHUB_WORKSPACE');
         }
         // filter
-        // disable autograding output for all branches but autograding and autograding-solution but enable for FbW-D02-1
+        // disable autograding output for all branches but autograding and autograding-solution
         const branch = process.env['GITHUB_REF_NAME'];
-        if (octokit_1.owner !== 'FbW-D02-1' && branch !== 'autograding' && branch !== 'autograding-solution') {
+        if (branch !== 'autograding' && branch !== 'autograding-solution') {
             console.log('disable Autograding output');
             process.env.DISABLE_AUTOGRADING = true;
         }
@@ -26084,13 +26084,15 @@ function generateResult(results) {
     }, '')}
 `;
 }
+// shorter alternative CodeBuddy notice for students:
+// Check below for what you have achieved and for hints on what to improve. ⌛ If you see the orange dot ![processing](https://raw.githubusercontent.com/DCI-EdTech/autograding-setup/main/assets/processing.svg) on top, CodeBuddy is still processing.
 async function addAutogradingInfo(fullReadme, results, packageJson) {
     const repoURL = `${process.env['GITHUB_SERVER_URL']}/${octokit_1.owner}/${octokit_1.repo}`;
     const exerciseTemplateName = packageJson.repository ? helpers_1.repoNameFromUrl(packageJson.repository.url) : '';
     const readmeInfo = `## Results
-⌛ Give it a minute. As long as you see the orange dot ![processing](https://raw.githubusercontent.com/DCI-EdTech/autograding-setup/main/assets/processing.svg) on top, CodeBuddy is still processing. Refresh this page to see it's current status.
-
-This is what CodeBuddy found when running your code. It is to show you what you have achieved and to give you hints on how to complete the exercise.
+> ⌛ Give it a minute. As long as you see the orange dot ![processing](https://raw.githubusercontent.com/DCI-EdTech/autograding-setup/main/assets/processing.svg) on top, CodeBuddy is still processing. Refresh this page to see it's current status.
+>
+> This is what CodeBuddy found when running your code. It is to show you what you have achieved and to give you hints on how to complete the exercise.
 
 ${generateResult(results)}
 

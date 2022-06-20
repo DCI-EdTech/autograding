@@ -88,13 +88,16 @@ function generateResult(results) {
 `
 }
 
+// shorter alternative CodeBuddy notice for students:
+// Check below for what you have achieved and for hints on what to improve. ⌛ If you see the orange dot ![processing](https://raw.githubusercontent.com/DCI-EdTech/autograding-setup/main/assets/processing.svg) on top, CodeBuddy is still processing.
+
 async function addAutogradingInfo(fullReadme, results, packageJson) {
   const repoURL = `${process.env['GITHUB_SERVER_URL']}/${owner}/${repo}`
   const exerciseTemplateName = packageJson.repository ? repoNameFromUrl(packageJson.repository.url) : ''
   const readmeInfo = `## Results
-⌛ Give it a minute. As long as you see the orange dot ![processing](https://raw.githubusercontent.com/DCI-EdTech/autograding-setup/main/assets/processing.svg) on top, CodeBuddy is still processing. Refresh this page to see it's current status.
-
-This is what CodeBuddy found when running your code. It is to show you what you have achieved and to give you hints on how to complete the exercise.
+> ⌛ Give it a minute. As long as you see the orange dot ![processing](https://raw.githubusercontent.com/DCI-EdTech/autograding-setup/main/assets/processing.svg) on top, CodeBuddy is still processing. Refresh this page to see it's current status.
+>
+> This is what CodeBuddy found when running your code. It is to show you what you have achieved and to give you hints on how to complete the exercise.
 
 ${generateResult(results)}
 
