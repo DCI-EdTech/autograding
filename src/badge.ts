@@ -62,33 +62,6 @@ export default function badge(tasks) {
   let colors = colorVariants.none
   if(tasks.completed > 0) colors = colorVariants.partial
   if(tasks.completed > 0 && tasks.completed == tasks.total) colors = colorVariants.full
-  
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="277px" height="38px" viewBox="0 0 277 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>badge_some</title>
-    <g id="Badges" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g transform="translate(-49.000000, -135.000000)" id="Light">
-            <g transform="translate(50.000000, 50.000000)">
-                <g id="Group" transform="translate(0.000000, 86.000000)">
-                    <rect id="Background" stroke="${colors.stroke}" fill="${colors.fill}" x="0" y="0" width="275" height="36" rx="6"></rect>
-                    <g id="CTA" transform="translate(170.000000, 0.000000)">
-                        <path d="M0,0 L99,0 C102.313708,-6.08718376e-16 105,2.6862915 105,6 L105,30 C105,33.3137085 102.313708,36 99,36 L0,36 L0,36 L0,0 Z" id="CTA-Background" stroke="${colors.ctaStroke}" fill="${colors.ctaFill}"></path>
-                        <text id="CTA-Text" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="${colors.ctaFontColor}">
-                            <tspan x="${colors.ctaLeft}" y="24">${colors.label}</tspan>
-                        </text>
-                    </g>
-                    <text id="Score" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="#0E123B">
-                        <tspan x="107" y="24">${tasks.completed}/${tasks.total}</tspan>
-                    </text>
-                    <text id="Tests" font-family="ArialMT, Arial" font-size="15" font-weight="normal" fill="#0E123B">
-                        <tspan x="54" y="24">Tasks</tspan>
-                    </text>
-                    ${colors.icon}
-                </g>
-            </g>
-        </g>
-    </g>
-</svg>`
 
     return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="396px" height="38px" viewBox="0 0 396 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
