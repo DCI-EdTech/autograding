@@ -64,7 +64,7 @@ export default function badge(tasks) {
             left: '120.000000' // '120.000000'
         },
         logo: {
-            left: '0.000000'
+            left: '0.000000' // '295.000000'
         }
     }
     let colors = colorVariants.none
