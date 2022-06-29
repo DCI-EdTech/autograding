@@ -1943,7 +1943,7 @@ var net = __webpack_require__(631);
 var tls = __webpack_require__(16);
 var http = __webpack_require__(605);
 var https = __webpack_require__(211);
-var events = __webpack_require__(446);
+var events = __webpack_require__(614);
 var assert = __webpack_require__(357);
 var util = __webpack_require__(669);
 
@@ -5074,7 +5074,10 @@ exports.runAll = async (cwd, packageJsonPath) => {
         log('');
         log(color.red(`❌ ${test.name}`));
         result = error.result;
-        core.setFailed(error.message);
+        if (!process.env.DISABLE_AUTOGRADING) {
+            // if output is disabled we also don't display fail to students
+            core.setFailed(error.message);
+        }
     }
     // Report bug as issue
     if (result.numRuntimeErrorTestSuites > 0) {
@@ -10192,7 +10195,7 @@ function getRateLimitReason(rateLimits, category) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-const events_1 = __webpack_require__(446);
+const events_1 = __webpack_require__(614);
 const debug_1 = __importDefault(__webpack_require__(784));
 const promisify_1 = __importDefault(__webpack_require__(537));
 const debug = debug_1.default('agent-base');
@@ -10391,13 +10394,6 @@ function createAgent(callback, opts) {
 })(createAgent || (createAgent = {}));
 module.exports = createAgent;
 //# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ 446:
-/***/ (function(module) {
-
-module.exports = require("events");
 
 /***/ }),
 
@@ -14473,111 +14469,23 @@ exports.HttpClient = HttpClient;
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = __webpack_require__(657);
-var flags_1 = __webpack_require__(424);
-var hub_1 = __webpack_require__(152);
-/**
- * @inheritdoc
- */
-var SessionFlusher = /** @class */ (function () {
-    function SessionFlusher(transport, attrs) {
-        var _this = this;
-        this.flushTimeout = 60;
-        this._pendingAggregates = {};
-        this._isEnabled = true;
-        this._transport = transport;
-        // Call to setInterval, so that flush is called every 60 seconds
-        this._intervalId = setInterval(function () { return _this.flush(); }, this.flushTimeout * 1000);
-        this._sessionAttrs = attrs;
+var tslib_1 = __webpack_require__(422);
+var polyfill_1 = __webpack_require__(7);
+/** An error emitted by Sentry SDKs and related utilities. */
+var SentryError = /** @class */ (function (_super) {
+    tslib_1.__extends(SentryError, _super);
+    function SentryError(message) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, message) || this;
+        _this.message = message;
+        _this.name = _newTarget.prototype.constructor.name;
+        polyfill_1.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
     }
-    /** Sends session aggregates to Transport */
-    SessionFlusher.prototype.sendSessionAggregates = function (sessionAggregates) {
-        if (!this._transport.sendSession) {
-            flags_1.IS_DEBUG_BUILD && utils_1.logger.warn("Dropping session because custom transport doesn't implement sendSession");
-            return;
-        }
-        void this._transport.sendSession(sessionAggregates).then(null, function (reason) {
-            flags_1.IS_DEBUG_BUILD && utils_1.logger.error('Error while sending session:', reason);
-        });
-    };
-    /** Checks if `pendingAggregates` has entries, and if it does flushes them by calling `sendSessions` */
-    SessionFlusher.prototype.flush = function () {
-        var sessionAggregates = this.getSessionAggregates();
-        if (sessionAggregates.aggregates.length === 0) {
-            return;
-        }
-        this._pendingAggregates = {};
-        this.sendSessionAggregates(sessionAggregates);
-    };
-    /** Massages the entries in `pendingAggregates` and returns aggregated sessions */
-    SessionFlusher.prototype.getSessionAggregates = function () {
-        var _this = this;
-        var aggregates = Object.keys(this._pendingAggregates).map(function (key) {
-            return _this._pendingAggregates[parseInt(key)];
-        });
-        var sessionAggregates = {
-            attrs: this._sessionAttrs,
-            aggregates: aggregates,
-        };
-        return utils_1.dropUndefinedKeys(sessionAggregates);
-    };
-    /** JSDoc */
-    SessionFlusher.prototype.close = function () {
-        clearInterval(this._intervalId);
-        this._isEnabled = false;
-        this.flush();
-    };
-    /**
-     * Wrapper function for _incrementSessionStatusCount that checks if the instance of SessionFlusher is enabled then
-     * fetches the session status of the request from `Scope.getRequestSession().status` on the scope and passes them to
-     * `_incrementSessionStatusCount` along with the start date
-     */
-    SessionFlusher.prototype.incrementSessionStatusCount = function () {
-        if (!this._isEnabled) {
-            return;
-        }
-        var scope = hub_1.getCurrentHub().getScope();
-        var requestSession = scope && scope.getRequestSession();
-        if (requestSession && requestSession.status) {
-            this._incrementSessionStatusCount(requestSession.status, new Date());
-            // This is not entirely necessarily but is added as a safe guard to indicate the bounds of a request and so in
-            // case captureRequestSession is called more than once to prevent double count
-            if (scope) {
-                scope.setRequestSession(undefined);
-            }
-            /* eslint-enable @typescript-eslint/no-unsafe-member-access */
-        }
-    };
-    /**
-     * Increments status bucket in pendingAggregates buffer (internal state) corresponding to status of
-     * the session received
-     */
-    SessionFlusher.prototype._incrementSessionStatusCount = function (status, date) {
-        // Truncate minutes and seconds on Session Started attribute to have one minute bucket keys
-        var sessionStartedTrunc = new Date(date).setSeconds(0, 0);
-        this._pendingAggregates[sessionStartedTrunc] = this._pendingAggregates[sessionStartedTrunc] || {};
-        // corresponds to aggregated sessions in one specific minute bucket
-        // for example, {"started":"2021-03-16T08:00:00.000Z","exited":4, "errored": 1}
-        var aggregationCounts = this._pendingAggregates[sessionStartedTrunc];
-        if (!aggregationCounts.started) {
-            aggregationCounts.started = new Date(sessionStartedTrunc).toISOString();
-        }
-        switch (status) {
-            case 'errored':
-                aggregationCounts.errored = (aggregationCounts.errored || 0) + 1;
-                return aggregationCounts.errored;
-            case 'ok':
-                aggregationCounts.exited = (aggregationCounts.exited || 0) + 1;
-                return aggregationCounts.exited;
-            default:
-                aggregationCounts.crashed = (aggregationCounts.crashed || 0) + 1;
-                return aggregationCounts.crashed;
-        }
-    };
-    return SessionFlusher;
-}());
-exports.SessionFlusher = SessionFlusher;
-//# sourceMappingURL=sessionflusher.js.map
+    return SentryError;
+}(Error));
+exports.SentryError = SentryError;
+//# sourceMappingURL=error.js.map
 
 /***/ }),
 
@@ -16298,26 +16206,9 @@ exports.isInstanceOf = isInstanceOf;
 /***/ }),
 
 /***/ 614:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
+/***/ (function(module) {
 
-Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = __webpack_require__(422);
-var polyfill_1 = __webpack_require__(7);
-/** An error emitted by Sentry SDKs and related utilities. */
-var SentryError = /** @class */ (function (_super) {
-    tslib_1.__extends(SentryError, _super);
-    function SentryError(message) {
-        var _newTarget = this.constructor;
-        var _this = _super.call(this, message) || this;
-        _this.message = message;
-        _this.name = _newTarget.prototype.constructor.name;
-        polyfill_1.setPrototypeOf(_this, _newTarget.prototype);
-        return _this;
-    }
-    return SentryError;
-}(Error));
-exports.SentryError = SentryError;
-//# sourceMappingURL=error.js.map
+module.exports = require("events");
 
 /***/ }),
 
@@ -16685,7 +16576,7 @@ tslib_1.__exportStar(__webpack_require__(126), exports);
 tslib_1.__exportStar(__webpack_require__(681), exports);
 tslib_1.__exportStar(__webpack_require__(748), exports);
 tslib_1.__exportStar(__webpack_require__(50), exports);
-tslib_1.__exportStar(__webpack_require__(614), exports);
+tslib_1.__exportStar(__webpack_require__(540), exports);
 tslib_1.__exportStar(__webpack_require__(881), exports);
 tslib_1.__exportStar(__webpack_require__(932), exports);
 tslib_1.__exportStar(__webpack_require__(613), exports);
@@ -20577,7 +20468,7 @@ exports.addGlobalEventProcessor = scope_1.addGlobalEventProcessor;
 exports.Scope = scope_1.Scope;
 var session_1 = __webpack_require__(654);
 exports.Session = session_1.Session;
-var sessionflusher_1 = __webpack_require__(540);
+var sessionflusher_1 = __webpack_require__(787);
 exports.SessionFlusher = sessionflusher_1.SessionFlusher;
 var hub_1 = __webpack_require__(152);
 // eslint-disable-next-line deprecation/deprecation
@@ -21078,7 +20969,7 @@ module.exports = require("fs");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = __webpack_require__(422);
-var error_1 = __webpack_require__(614);
+var error_1 = __webpack_require__(540);
 var flags_1 = __webpack_require__(795);
 /** Regular expression used to parse a Dsn. */
 var DSN_REGEX = /^(?:(\w+):)\/\/(?:(\w+)(?::(\w+))?@)([\w.-]+)(?::(\d+))?\/(.+)/;
@@ -22192,6 +22083,118 @@ if (typeof process === 'undefined' || process.type === 'renderer' || process.bro
 	module.exports = __webpack_require__(81);
 }
 
+
+/***/ }),
+
+/***/ 787:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var utils_1 = __webpack_require__(657);
+var flags_1 = __webpack_require__(424);
+var hub_1 = __webpack_require__(152);
+/**
+ * @inheritdoc
+ */
+var SessionFlusher = /** @class */ (function () {
+    function SessionFlusher(transport, attrs) {
+        var _this = this;
+        this.flushTimeout = 60;
+        this._pendingAggregates = {};
+        this._isEnabled = true;
+        this._transport = transport;
+        // Call to setInterval, so that flush is called every 60 seconds
+        this._intervalId = setInterval(function () { return _this.flush(); }, this.flushTimeout * 1000);
+        this._sessionAttrs = attrs;
+    }
+    /** Sends session aggregates to Transport */
+    SessionFlusher.prototype.sendSessionAggregates = function (sessionAggregates) {
+        if (!this._transport.sendSession) {
+            flags_1.IS_DEBUG_BUILD && utils_1.logger.warn("Dropping session because custom transport doesn't implement sendSession");
+            return;
+        }
+        void this._transport.sendSession(sessionAggregates).then(null, function (reason) {
+            flags_1.IS_DEBUG_BUILD && utils_1.logger.error('Error while sending session:', reason);
+        });
+    };
+    /** Checks if `pendingAggregates` has entries, and if it does flushes them by calling `sendSessions` */
+    SessionFlusher.prototype.flush = function () {
+        var sessionAggregates = this.getSessionAggregates();
+        if (sessionAggregates.aggregates.length === 0) {
+            return;
+        }
+        this._pendingAggregates = {};
+        this.sendSessionAggregates(sessionAggregates);
+    };
+    /** Massages the entries in `pendingAggregates` and returns aggregated sessions */
+    SessionFlusher.prototype.getSessionAggregates = function () {
+        var _this = this;
+        var aggregates = Object.keys(this._pendingAggregates).map(function (key) {
+            return _this._pendingAggregates[parseInt(key)];
+        });
+        var sessionAggregates = {
+            attrs: this._sessionAttrs,
+            aggregates: aggregates,
+        };
+        return utils_1.dropUndefinedKeys(sessionAggregates);
+    };
+    /** JSDoc */
+    SessionFlusher.prototype.close = function () {
+        clearInterval(this._intervalId);
+        this._isEnabled = false;
+        this.flush();
+    };
+    /**
+     * Wrapper function for _incrementSessionStatusCount that checks if the instance of SessionFlusher is enabled then
+     * fetches the session status of the request from `Scope.getRequestSession().status` on the scope and passes them to
+     * `_incrementSessionStatusCount` along with the start date
+     */
+    SessionFlusher.prototype.incrementSessionStatusCount = function () {
+        if (!this._isEnabled) {
+            return;
+        }
+        var scope = hub_1.getCurrentHub().getScope();
+        var requestSession = scope && scope.getRequestSession();
+        if (requestSession && requestSession.status) {
+            this._incrementSessionStatusCount(requestSession.status, new Date());
+            // This is not entirely necessarily but is added as a safe guard to indicate the bounds of a request and so in
+            // case captureRequestSession is called more than once to prevent double count
+            if (scope) {
+                scope.setRequestSession(undefined);
+            }
+            /* eslint-enable @typescript-eslint/no-unsafe-member-access */
+        }
+    };
+    /**
+     * Increments status bucket in pendingAggregates buffer (internal state) corresponding to status of
+     * the session received
+     */
+    SessionFlusher.prototype._incrementSessionStatusCount = function (status, date) {
+        // Truncate minutes and seconds on Session Started attribute to have one minute bucket keys
+        var sessionStartedTrunc = new Date(date).setSeconds(0, 0);
+        this._pendingAggregates[sessionStartedTrunc] = this._pendingAggregates[sessionStartedTrunc] || {};
+        // corresponds to aggregated sessions in one specific minute bucket
+        // for example, {"started":"2021-03-16T08:00:00.000Z","exited":4, "errored": 1}
+        var aggregationCounts = this._pendingAggregates[sessionStartedTrunc];
+        if (!aggregationCounts.started) {
+            aggregationCounts.started = new Date(sessionStartedTrunc).toISOString();
+        }
+        switch (status) {
+            case 'errored':
+                aggregationCounts.errored = (aggregationCounts.errored || 0) + 1;
+                return aggregationCounts.errored;
+            case 'ok':
+                aggregationCounts.exited = (aggregationCounts.exited || 0) + 1;
+                return aggregationCounts.exited;
+            default:
+                aggregationCounts.crashed = (aggregationCounts.crashed || 0) + 1;
+                return aggregationCounts.crashed;
+        }
+    };
+    return SessionFlusher;
+}());
+exports.SessionFlusher = SessionFlusher;
+//# sourceMappingURL=sessionflusher.js.map
 
 /***/ }),
 
@@ -25103,9 +25106,6 @@ module.exports = require("tty");
 "use strict";
 
 // @ts-nocheck
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -25113,7 +25113,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const core = __importStar(__webpack_require__(470));
 const path_1 = __importDefault(__webpack_require__(622));
 const Sentry = __importStar(__webpack_require__(346));
 const integrations_1 = __webpack_require__(162);
@@ -25150,15 +25154,15 @@ const run = async () => {
     }
     catch (error) {
         // If there is any error we'll fail the action with the error message
-        // disable fail for now so students don't get emails
-        /*
-        let errorMessage = "Failed";
-        if (error instanceof Error) {
-          errorMessage = error.message;
+        if (!process.env.DISABLE_AUTOGRADING) {
+            // if output is disabled we also don't display fail to students
+            let errorMessage = "Failed";
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            console.error(errorMessage);
+            core.setFailed(`Autograding failure: ${error}`);
         }
-        console.error(errorMessage)
-        core.setFailed(`Autograding failure: ${error}`)
-        */
     }
 };
 // Don't auto-execute in the test environment
@@ -27284,7 +27288,7 @@ exports.IS_DEBUG_BUILD = typeof __SENTRY_DEBUG__ === 'undefined' ? true : __SENT
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var error_1 = __webpack_require__(614);
+var error_1 = __webpack_require__(540);
 var syncpromise_1 = __webpack_require__(144);
 /**
  * Creates an new PromiseBuffer object with the specified limit

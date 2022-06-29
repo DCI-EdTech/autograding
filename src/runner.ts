@@ -239,7 +239,10 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
     log('')
     log(color.red(`❌ ${test.name}`))
     result = error.result
-    core.setFailed(error.message)
+    if(!process.env.DISABLE_AUTOGRADING) {
+      // if output is disabled we also don't display fail to students
+      core.setFailed(error.message)
+    }
   }
 
   // Report bug as issue

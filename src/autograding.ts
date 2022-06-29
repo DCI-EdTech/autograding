@@ -44,15 +44,16 @@ const run = async (): Promise<void> => {
   } catch (error) {
     // If there is any error we'll fail the action with the error message
     
-    // disable fail for now so students don't get emails
-    /*
-    let errorMessage = "Failed";
-    if (error instanceof Error) {
-      errorMessage = error.message;
+    if(!process.env.DISABLE_AUTOGRADING) {
+      // if output is disabled we also don't display fail to students
+
+      let errorMessage = "Failed";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      console.error(errorMessage)
+      core.setFailed(`Autograding failure: ${error}`)
     }
-    console.error(errorMessage)
-    core.setFailed(`Autograding failure: ${error}`)
-    */
   }
 }
 
