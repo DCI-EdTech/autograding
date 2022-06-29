@@ -6,7 +6,7 @@ import { escapeRegExp, repoNameFromUrl } from './lib/helpers';
 
 const branch = process.env['GITHUB_REF_NAME']
 const readmeInfoPath = `./AUTOGRADING.md`;
-const mainBadgeString = `\n[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#results)\n`;
+const mainBadgeString = `\n[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#-results)\n`;
 
 async function modifyReadme(results, packageJson) {
   const octokit = createOctokit()
