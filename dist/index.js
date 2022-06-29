@@ -27113,7 +27113,7 @@ function badge(tasks) {
     <g id="Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g transform="translate(-101.000000, -743.000000)">
             <g transform="translate(101.000000, 744.000000)">
-                <g transform="translate(120.000000, 0.000000)">
+                <g transform="translate(0.000000, 0.000000)">
                     <rect id="Background" stroke="${colors.stroke}" fill="${colors.fill}" x="0" y="0" width="275" height="36" rx="6"></rect>
                     <g id="CTA" transform="translate(170.000000, 0.000000)">
                         <path d="M0,0 L99,0 C102.313708,-6.08718376e-16 105,2.6862915 105,6 L105,30 C105,33.3137085 102.313708,36 99,36 L0,36 L0,36 L0,0 Z" id="CTA-Background" stroke="${colors.ctaStroke}" fill="${colors.ctaFill}"></path>
@@ -27129,7 +27129,7 @@ function badge(tasks) {
                     </text>
                     ${colors.icon}
                 </g>
-                <g id="Logo">
+                <g id="Logo" transform="translate(295.000000, 0.000000)">
                     <g id="Bot">
                         <rect id="Rectangle" fill="#00CC93" x="4.66281107" y="7.64436165" width="28.990521" height="25.1459265" rx="4.82681564"></rect>
                         <polygon id="Path" fill="#0E123B" fill-rule="nonzero" transform="translate(19.176236, 27.924551) rotate(-90.000000) translate(-19.176236, -27.924551) " points="19.0957008 31.6842131 19.0957008 24.1542367 20.2449376 24.1542367 20.2449376 23.1422106 18.1075339 23.1422106 18.1075339 32.7068921 20.2449376 32.7068921 20.2449376 31.6842131"></polygon>
