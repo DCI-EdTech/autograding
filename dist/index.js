@@ -27113,7 +27113,7 @@ function badge(tasks) {
                     <rect id="Background" stroke="${colors.stroke}" fill="${colors.fill}" x="0" y="0" width="275" height="36" rx="6"></rect>
                     <g id="CTA" transform="translate(170.000000, 0.000000)">
                         <path d="M0,0 L99,0 C102.313708,-6.08718376e-16 105,2.6862915 105,6 L105,30 C105,33.3137085 102.313708,36 99,36 L0,36 L0,36 L0,0 Z" id="CTA-Background" stroke="${colors.ctaStroke}" fill="${colors.ctaFill}"></path>
-                        <text id="CTA-Text" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="#0E123B">
+                        <text id="CTA-Text" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="${colors.ctaFontColor}">
                             <tspan x="${colors.ctaLeft}" y="24">${colors.label}</tspan>
                         </text>
                     </g>
