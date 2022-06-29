@@ -61,10 +61,10 @@ const colorVariants = {
 export default function badge(tasks) {
     const positions = {
         badge: {
-            left: '0.000000' // '120.000000'
+            left: '120.000000' // '120.000000'
         },
         logo: {
-            left: '290.000000'
+            left: '0.000000'
         }
     }
     let colors = colorVariants.none
