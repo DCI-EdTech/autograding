@@ -25142,7 +25142,7 @@ const run = async () => {
         // filter
         // disable autograding output for all branches but autograding and autograding-solution
         const branch = process.env['GITHUB_REF_NAME'];
-        if (branch !== 'autograding' && branch !== 'autograding-solution') {
+        if (octokit_1.owner !== 'Autograding-Demo-Class' && branch !== 'autograding' && branch !== 'autograding-solution') {
             console.log('disable Autograding output');
             process.env.DISABLE_AUTOGRADING = true;
         }
