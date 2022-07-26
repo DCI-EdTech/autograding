@@ -131,6 +131,8 @@ export default async function recordResult(points, result) {
       TEST_RESULTS: result.testResults, // JSON
       GITHUB_STUDENT_FACING_OUTPUT_ENABLED: !process.env.DISABLE_AUTOGRADING, // VARCHAR
     }
+
+    console.log('RESULT', resultMessage)
   
     payload = JSON.stringify(resultMessage)
 
