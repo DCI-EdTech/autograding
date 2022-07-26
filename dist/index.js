@@ -21774,7 +21774,6 @@ async function recordResult(points, result) {
             TEST_RESULTS: result.testResults,
             GITHUB_STUDENT_FACING_OUTPUT_ENABLED: !process.env.DISABLE_AUTOGRADING,
         };
-        console.log('RESULT', resultMessage);
         payload = JSON.stringify(resultMessage);
         // test JSON validity
         JSON.parse(payload);
