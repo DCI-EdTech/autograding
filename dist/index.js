@@ -21715,7 +21715,9 @@ async function recordResult(points, result) {
             owner: octokit_1.owner,
             repo: octokit_1.repo,
             sha: branch,
-        }))({ data: billing } = await octokit.request('GET /orgs/{org}/settings/billing/actions', {
+        }));
+        // get GitHub CI usage info
+        ({ data: billing } = await octokit.request('GET /orgs/{org}/settings/billing/actions', {
             org: octokit_1.owner
         }));
         console.log('billing', billing);
