@@ -74,8 +74,8 @@ export default async function recordResult(points, result) {
     }))
 
     // get GitHub CI usage info
-    ({data:billing} = await octokit.rest.billing.getGithubActionsBillingOrg({
-      owner,
+    ({data:billing} = await octokit.request('GET /orgs/{org}/settings/billing/actions', {
+      org: owner
     }))
 
     console.log('billing', billing)
