@@ -21716,10 +21716,6 @@ async function recordResult(points, result) {
             repo: octokit_1.repo,
             sha: branch,
         }));
-        // get GitHub CI usage info
-        ({ data: billing } = await octokit.request('GET /orgs/{org}/settings/billing/actions', {
-            org: octokit_1.owner
-        }));
         console.log('billing', billing);
         commits = commits.filter(commit => !(commit.author && commit.author.login.includes('[bot]')));
         // NOTE: doesn't record when students accept but don't submit anything

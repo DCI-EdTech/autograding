@@ -73,11 +73,6 @@ export default async function recordResult(points, result) {
       sha: branch,
     }));
 
-    // get GitHub CI usage info
-    ({data:billing} = await octokit.request('GET /orgs/{org}/settings/billing/actions', {
-      org: owner
-    }));
-
     console.log('billing', billing)
 
     commits = commits.filter(commit => !(commit.author && commit.author.login.includes('[bot]')))
