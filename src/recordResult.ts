@@ -6,7 +6,7 @@ import { removeTerminalColoring, repoNameFromUrl } from './lib/helpers'
 
 export default async function recordResult(points, result) {
   // get run info
-  let runInfo, packageJson, updatedPackageJson, commits, templateRepoName = '', resultMessage = {}, payload = '', billing
+  let runInfo, packageJson, updatedPackageJson, commits, templateRepoName = '', resultMessage = {}, payload = ''
   try {
     const octokit: github.GitHub = createOctokit()
     if (!octokit) throw 'Octokit not initialized'
@@ -72,8 +72,6 @@ export default async function recordResult(points, result) {
       repo,
       sha: branch,
     }));
-
-    console.log('billing', billing)
 
     commits = commits.filter(commit => !(commit.author && commit.author.login.includes('[bot]')))
 

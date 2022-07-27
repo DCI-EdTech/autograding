@@ -21661,7 +21661,7 @@ const octokit_1 = __webpack_require__(994);
 const helpers_1 = __webpack_require__(948);
 async function recordResult(points, result) {
     // get run info
-    let runInfo, packageJson, updatedPackageJson, commits, templateRepoName = '', resultMessage = {}, payload = '', billing;
+    let runInfo, packageJson, updatedPackageJson, commits, templateRepoName = '', resultMessage = {}, payload = '';
     try {
         const octokit = octokit_1.createOctokit();
         if (!octokit)
@@ -21716,7 +21716,6 @@ async function recordResult(points, result) {
             repo: octokit_1.repo,
             sha: branch,
         }));
-        console.log('billing', billing);
         commits = commits.filter(commit => !(commit.author && commit.author.login.includes('[bot]')));
         // NOTE: doesn't record when students accept but don't submit anything
         // Another solution is needed to prevent recording when teachers create class template from main template
