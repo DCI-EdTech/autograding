@@ -21711,7 +21711,7 @@ async function recordResult(points, result) {
             owner: octokit_1.owner,
             repo: octokit_1.repo,
         });
-        console.log('repo', repository)({ data: commits } = await octokit.rest.repos.listCommits({
+        console.log('repo', JSON.stringify(repository, null, 2))({ data: commits } = await octokit.rest.repos.listCommits({
             owner: octokit_1.owner,
             repo: octokit_1.repo,
             sha: branch,
