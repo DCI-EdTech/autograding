@@ -6,6 +6,8 @@ import { createOctokit } from './octokit'
 export default async function getVisualReressionResult() {
     if(process.env.DISABLE_AUTOGRADING) return
 
+    // TODO: return earlier if no visual testing is being done
+
     const octokit: github.GitHub = createOctokit()
     if (!octokit) return
 
