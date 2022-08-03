@@ -9,7 +9,7 @@ export default async function getVisualReressionResult() {
     const octokit: github.GitHub = createOctokit()
     if (!octokit) return
 
-    const dir = path.join(process.env.GITHUB_WORKSPACE, '__tests__', '__image_snapshots__', '__diff_output__')
+    const dir = path.join(process.env.GITHUB_WORKSPACE, '__tests__', '__image_snapshots__')
     const images = []
 
     try {
