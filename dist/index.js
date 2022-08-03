@@ -27323,19 +27323,14 @@ async function getVisualReressionResult() {
     if (!octokit)
         return;
     const dir = path_1.default.join(process.env.GITHUB_WORKSPACE, '__tests__', '__image_snapshots__', '__diff_output__');
-    const files = [];
-    fs_1.default.readdir(dir, function (err, files) {
-        if (err) {
-            return console.log('Unable to scan directory: ' + err);
-        }
-        files.forEach(function (file) {
-            fs_1.default.readFile(path_1.default.join(dir, file), 'utf8', (err, data) => {
-                console.log(file, data);
-                files.push({ path: `.github/visual-regression-diffs/${file}`, content: data });
-            });
-        });
+    const images = [];
+    const files = fs_1.default.readdirSync(dir);
+    files.forEach(file => {
+        const data = fs_1.default.readFileSync(path_1.default.join(dir, file), 'utf8');
+        images.push({ path: `.github/visual-regression-diffs/${file}`, content: data });
     });
-    await octokit.commit(files, 'badges', 'upload regression diffs', true);
+    console.log('commit', images);
+    await octokit.commit(images, 'badges', 'upload regression diffs', true);
 }
 exports.default = getVisualReressionResult;
 
