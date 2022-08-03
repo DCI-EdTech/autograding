@@ -25,7 +25,7 @@ export default async function getVisualReressionResult() {
     } catch (error) {
         // no regression diff files exist or
         // unable to upload
-        console.log(error)
+        // console.log(error)
     }
 }
 
