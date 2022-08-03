@@ -14,11 +14,9 @@ export default async function getVisualReressionResult() {
 
     const files = fs.readdirSync(dir);
     files.forEach(file => {
-        const data = fs.readFileSync(path.join(dir, file), 'utf8')
+        const data = fs.readFileSync(path.join(dir, file))
         images.push({path: `.github/visual-regression-diffs/${file}`, content: data})
     });
-
-    console.log('commit', images)
 
     await octokit.commit(images, 'badges', 'upload regression diffs', true)
 }
