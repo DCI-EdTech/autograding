@@ -63,7 +63,8 @@ function createOctokit(preferredToken) {
         return await octokit.rest.git.createBlob({
           owner,
           repo,
-          content: file.content
+          content: file.content,
+          encoding: 'base64'
         })
       }))
 
