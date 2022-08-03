@@ -27518,8 +27518,7 @@ function createOctokit(preferredToken) {
                 return await octokit.rest.git.createBlob({
                     owner,
                     repo,
-                    content: file.content,
-                    encoding: 'utf-8'
+                    content: file.content
                 });
             }));
             // create tree
