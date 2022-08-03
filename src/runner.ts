@@ -12,6 +12,7 @@ import * as Sentry from "@sentry/node";
 import modifyReadme from './modifyReadme'
 import updateBadges from './updateBadges'
 import recordResult from './recordResult'
+import getVisualReressionResult from './getVisualRegressionResult'
 import extractJSON from './lib/extractJSON'
 import { removeTerminalColoring } from './lib/helpers'
 
@@ -326,4 +327,5 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   await recordResult(points, result)
   core.setOutput('Points', `${points}/${availablePoints}`)
   await setCheckRunOutput(points, availablePoints, result)
+  await getVisualReressionResult()
 }

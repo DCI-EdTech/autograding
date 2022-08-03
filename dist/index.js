@@ -4888,6 +4888,7 @@ const Sentry = __importStar(__webpack_require__(346));
 const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const updateBadges_1 = __importDefault(__webpack_require__(860));
 const recordResult_1 = __importDefault(__webpack_require__(770));
+const getVisualRegressionResult_1 = __importDefault(__webpack_require__(988));
 const extractJSON_1 = __importDefault(__webpack_require__(995));
 const helpers_1 = __webpack_require__(948);
 const currentBranch = process.env['GITHUB_REF_NAME'];
@@ -5156,6 +5157,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     await recordResult_1.default(points, result);
     core.setOutput('Points', `${points}/${availablePoints}`);
     await output_1.setCheckRunOutput(points, availablePoints, result);
+    await getVisualRegressionResult_1.default();
 };
 
 
@@ -27298,6 +27300,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** Flag that is true for debug builds, false otherwise. */
 exports.IS_DEBUG_BUILD = typeof __SENTRY_DEBUG__ === 'undefined' ? true : __SENTRY_DEBUG__;
 //# sourceMappingURL=flags.js.map
+
+/***/ }),
+
+/***/ 988:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+// @ts-nocheck
+const fs_1 = __importDefault(__webpack_require__(747));
+async function getVisualReressionResult() {
+    fs_1.default.readdir(__dirname, function (err, files) {
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        files.forEach(function (file) {
+            console.log(file);
+        });
+    });
+}
+exports.default = getVisualReressionResult;
+
 
 /***/ }),
 
