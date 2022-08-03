@@ -27326,8 +27326,10 @@ async function getVisualReressionResult() {
     const images = [];
     const files = fs_1.default.readdirSync(dir);
     files.forEach(file => {
-        const data = fs_1.default.readFileSync(path_1.default.join(dir, file));
-        images.push({ path: `.github/visual-regression-diffs/${file}`, content: data });
+        const data = fs_1.default.readFileSync(path_1.default.join(dir, file), 'binary');
+        const buffer = Buffer.from(data, 'binary');
+        const content = buffer.toString('base64');
+        images.push({ path: `.github/visual-regression-diffs/${file}`, content });
     });
     await octokit.commit(images, 'badges', 'upload regression diffs', true);
 }
