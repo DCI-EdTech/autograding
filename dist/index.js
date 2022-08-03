@@ -27322,7 +27322,7 @@ async function getVisualReressionResult() {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
         return;
-    const dir = path_1.default.join(process.env.GITHUB_WORKSPACE, '__tests__', '__image_snapshots__');
+    const dir = path_1.default.join(process.env.GITHUB_WORKSPACE, '__tests__', '__image_snapshots__', '__diff_output__');
     const images = [];
     try {
         const files = fs_1.default.readdirSync(dir);
