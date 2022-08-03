@@ -64,7 +64,7 @@ function createOctokit(preferredToken) {
           owner,
           repo,
           content: file.content,
-          encoding: 'base64'
+          encoding: file.encoding
         })
       }))
 

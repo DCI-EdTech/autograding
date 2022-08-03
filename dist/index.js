@@ -25059,13 +25059,13 @@ async function updateBadges(results) {
     // generate status badges
     const badges = results.testResults.reduce((acc, testResult) => {
         const statusBadges = testResult.map((result, index) => {
-            return { path: result.statusBadgePath, content: result.status === 'passed' ? statusIcons_1.successIcon : statusIcons_1.failureIcon };
+            return { path: result.statusBadgePath, content: result.status === 'passed' ? statusIcons_1.successIcon : statusIcons_1.failureIcon, encoding: 'utf8' };
         });
         acc.push(...statusBadges);
         return acc;
     }, []);
     // add main badge
-    badges.push({ path: badgePath, content: badge_1.default(results.tasks) });
+    badges.push({ path: badgePath, content: badge_1.default(results.tasks), encoding: 'utf8' });
     // update status badges
     await octokit.commit(badges, 'badges', 'Update badges', true);
 }
@@ -27324,14 +27324,20 @@ async function getVisualReressionResult() {
         return;
     const dir = path_1.default.join(process.env.GITHUB_WORKSPACE, '__tests__', '__image_snapshots__', '__diff_output__');
     const images = [];
-    const files = fs_1.default.readdirSync(dir);
-    files.forEach(file => {
-        const data = fs_1.default.readFileSync(path_1.default.join(dir, file), 'binary');
-        const buffer = Buffer.from(data, 'binary');
-        const content = buffer.toString('base64');
-        images.push({ path: `.github/visual-regression-diffs/${file}`, content });
-    });
-    await octokit.commit(images, 'badges', 'upload regression diffs', true);
+    try {
+        const files = fs_1.default.readdirSync(dir);
+        files.forEach(file => {
+            const data = fs_1.default.readFileSync(path_1.default.join(dir, file), 'binary');
+            const buffer = Buffer.from(data, 'binary');
+            const content = buffer.toString('base64');
+            images.push({ path: `.github/visual-regression-diffs/${file}`, content, encoding: 'base64' });
+        });
+        await octokit.commit(images, 'badges', 'upload regression diffs', true);
+    }
+    catch (error) {
+        // no regression diff files exist or
+        // unable to upload
+    }
 }
 exports.default = getVisualReressionResult;
 
@@ -27519,7 +27525,7 @@ function createOctokit(preferredToken) {
                     owner,
                     repo,
                     content: file.content,
-                    encoding: 'base64'
+                    encoding: file.encoding
                 });
             }));
             // create tree
