@@ -27315,6 +27315,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const fs_1 = __importDefault(__webpack_require__(747));
 async function getVisualReressionResult() {
+    console.log(process.env);
     fs_1.default.readdir(__dirname, function (err, files) {
         if (err) {
             return console.log('Unable to scan directory: ' + err);
