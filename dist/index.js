@@ -27314,14 +27314,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-nocheck
 const fs_1 = __importDefault(__webpack_require__(747));
+const path_1 = __importDefault(__webpack_require__(622));
 async function getVisualReressionResult() {
     console.log(process.env);
-    fs_1.default.readdir(process.env.GITHUB_WORKSPACE + '/__tests__/__image_snapshots__', function (err, files) {
+    const dir = path_1.default.join(process.env.GITHUB_WORKSPACE, '__tests__', '__image_snapshots__', '__diff_output__');
+    fs_1.default.readdir(dir, function (err, files) {
         if (err) {
             return console.log('Unable to scan directory: ' + err);
         }
         files.forEach(function (file) {
-            console.log(file);
+            fs_1.default.readFile(path_1.default.join(dir, file), 'utf8', (err, data) => {
+                console.log(file, data);
+            });
         });
     });
 }
