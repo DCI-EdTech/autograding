@@ -60,7 +60,7 @@ async function modifyReadme(results, packageJson) {
 
 function addMainBadge(readme) {
   const startInfoDelimiterAsEscapedRegEx = escapeRegExp(infoDelimiters[0])
-  const headlineLevel1Regex = new RegExp(`^(?<!${startInfoDelimiterAsEscapedRegEx}[\S\s]*)#[^#].*$`, 'm');
+  const headlineLevel1Regex = new RegExp(`^(?<!${startInfoDelimiterAsEscapedRegEx}[\\S\\s]*)#[^#].*$`, 'm');
   // delete old points badge
   const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '')
 
