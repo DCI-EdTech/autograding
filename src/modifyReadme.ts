@@ -7,6 +7,10 @@ import { escapeRegExp, repoNameFromUrl } from './lib/helpers';
 const branch = process.env['GITHUB_REF_NAME']
 const readmeInfoPath = `./AUTOGRADING.md`;
 const mainBadgeString = `\n[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#-results)\n`;
+const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
+const setupDelimiters = ['[//]: # (autograding setup start)', '[//]: # (autograding setup end)'];
+const infoRE = new RegExp(`[\n]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
+const setupRE = new RegExp(`[\n]*${escapeRegExp(setupDelimiters[0])}([\\s\\S]*)${escapeRegExp(setupDelimiters[1])}`, 'gsm');
 
 async function modifyReadme(results, packageJson) {
   const octokit = createOctokit()
@@ -55,7 +59,7 @@ async function modifyReadme(results, packageJson) {
 }
 
 function addMainBadge(readme) {
-  const headlineLevel1Regex = /^#[^#].*$/m;
+  const headlineLevel1Regex = new RegExp(`^(?<!${escapeRegExp(infoDelimiters[0])})[\S\s]*)#[^#].*$`, 'm');
   // delete old points badge
   const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '')
 
@@ -106,10 +110,6 @@ ${generateResult(results)}
 [📢 Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(exerciseTemplateName)})
 `
 
-  const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
-  const setupDelimiters = ['[//]: # (autograding setup start)', '[//]: # (autograding setup end)'];
-  const infoRE = new RegExp(`[\n]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
-  const setupRE = new RegExp(`[\n]*${escapeRegExp(setupDelimiters[0])}([\\s\\S]*)${escapeRegExp(setupDelimiters[1])}`, 'gsm');
 
   // remove old info
   fullReadme = fullReadme.replace(infoRE, '')
