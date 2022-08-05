@@ -26949,7 +26949,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeTerminalColoring", function() { return removeTerminalColoring; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "repoNameFromUrl", function() { return repoNameFromUrl; });
 const escapeRegExp = (text) => {
-  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  return text.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&');
 }
 
 const xmlSecure = (str) => {
