@@ -21778,7 +21778,7 @@ async function recordResult(points, result) {
             RUNNER_ARCH: process.env.RUNNER_ARCH,
             RUNNER_WORKSPACE: process.env.RUNNER_WORKSPACE,
             TEST_RESULTS: result.testResults,
-            GITHUB_STUDENT_FACING_OUTPUT_ENABLED: !process.env.DISABLE_AUTOGRADING,
+            GITHUB_STUDENT_FACING_OUTPUT_ENABLED: !process.env.DISABLE_AUTOGRADING ? 'true' : 'false',
         };
         payload = JSON.stringify(resultMessage);
         // test JSON validity
