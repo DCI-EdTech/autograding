@@ -1,5 +1,5 @@
 const escapeRegExp = (text) => {
-  return text.replace(/[-[\]{}()*+?.,\\/^$|#]/g, '\\$&');
+  return text.replace(/[-[\]{}()*+?.,\\/^$|]/g, '\\$&');
 }
 
 const xmlSecure = (str) => {

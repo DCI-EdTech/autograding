@@ -26083,7 +26083,7 @@ function addMainBadge(readme) {
     // check if there is a headline
     if (headlineLevel1Regex.test(newReadme)) {
         // insert points badge after level 1 headline
-        console.log('lvl 1 headline found', `^(?<!${helpers_1.escapeRegExp(infoDelimiters[0])}[\S\s]*)#[^#].*$`, JSON.stringify(headlineLevel1Regex.exec(newReadme), null, 2));
+        console.log('lvl 1 headline found', headlineLevel1Regex, JSON.stringify(headlineLevel1Regex.exec(newReadme), null, 2));
         return newReadme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
     }
     else {
@@ -26949,7 +26949,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeTerminalColoring", function() { return removeTerminalColoring; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "repoNameFromUrl", function() { return repoNameFromUrl; });
 const escapeRegExp = (text) => {
-  return text.replace(/[-[\]{}()*+?.,\\/^$|#]/g, '\\$&');
+  return text.replace(/[-[\]{}()*+?.,\\/^$|]/g, '\\$&');
 }
 
 const xmlSecure = (str) => {
