@@ -26075,7 +26075,8 @@ async function modifyReadme(results, packageJson) {
     }
 }
 function addMainBadge(readme) {
-    const headlineLevel1Regex = new RegExp(`^(?<!${helpers_1.escapeRegExp(infoDelimiters[0])}[\S\s]*)#[^#].*$`, 'm');
+    const startInfoDelimiterAsEscapedRegEx = helpers_1.escapeRegExp(infoDelimiters[0]);
+    const headlineLevel1Regex = new RegExp(`^(?<!${startInfoDelimiterAsEscapedRegEx}[\S\s]*)#[^#].*$`, 'm');
     // delete old points badge
     const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '');
     if (process.env.DISABLE_AUTOGRADING)
