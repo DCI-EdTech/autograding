@@ -145,6 +145,7 @@ export default async function recordResult(points, result) {
   }
 
   // send webhook event
+  console.log('record', payload)
   try {
     const req = https.request({
       hostname: 'autograding-results.dci.education',
