@@ -26029,6 +26029,10 @@ const helpers_1 = __webpack_require__(948);
 const branch = process.env['GITHUB_REF_NAME'];
 const readmeInfoPath = `./AUTOGRADING.md`;
 const mainBadgeString = `\n[![Status overview badge](../../blob/badges/.github/badges/${branch}/badge.svg)](#-results)\n`;
+const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
+const setupDelimiters = ['[//]: # (autograding setup start)', '[//]: # (autograding setup end)'];
+const infoRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
+const setupRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(setupDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(setupDelimiters[1])}`, 'gsm');
 async function modifyReadme(results, packageJson) {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
@@ -26071,7 +26075,7 @@ async function modifyReadme(results, packageJson) {
     }
 }
 function addMainBadge(readme) {
-    const headlineLevel1Regex = /^#[^#].*$/m;
+    const headlineLevel1Regex = new RegExp(`^(?<!${helpers_1.escapeRegExp(infoDelimiters[0])})[\S\s]*)#[^#].*$`, 'm');
     // delete old points badge
     const newReadme = readme.replaceAll(/[\n]{0,1}.*\[\!\[Status overview badge\]\(.*[\n]/g, '');
     if (process.env.DISABLE_AUTOGRADING)
@@ -26117,10 +26121,6 @@ ${generateResult(results)}
 [🐞 Tips on Debugging](https://github.com/DCI-EdTech/autograding-setup/wiki/How-to-work-with-CodeBuddy)
 [📢 Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(exerciseTemplateName)})
 `;
-    const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autograding info end)'];
-    const setupDelimiters = ['[//]: # (autograding setup start)', '[//]: # (autograding setup end)'];
-    const infoRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
-    const setupRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(setupDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(setupDelimiters[1])}`, 'gsm');
     // remove old info
     fullReadme = fullReadme.replace(infoRE, '');
     fullReadme = fullReadme.replace(setupRE, '').trim();
@@ -27319,17 +27319,21 @@ const octokit_1 = __webpack_require__(994);
 async function getVisualReressionResult() {
     if (process.env.DISABLE_AUTOGRADING)
         return;
+    // TODO: return earlier if no visual testing is being done
     const octokit = octokit_1.createOctokit();
     if (!octokit)
         return;
+    // TODO: cover __tests__ in /src
     const dir = path_1.default.join(process.env.GITHUB_WORKSPACE, '__tests__', '__image_snapshots__', '__diff_output__');
     const images = [];
     try {
         const files = fs_1.default.readdirSync(dir);
+        // TODO: upload all images from __image_snapshots__ recursively
         files.forEach(file => {
             const data = fs_1.default.readFileSync(path_1.default.join(dir, file), 'binary');
             const buffer = Buffer.from(data, 'binary');
             const content = buffer.toString('base64');
+            // TODO: better folder name
             images.push({ path: `.github/visual-regression-diffs/${file}`, content, encoding: 'base64' });
         });
         await octokit.commit(images, 'badges', 'upload regression diffs', true);
