@@ -26083,7 +26083,7 @@ function addMainBadge(readme) {
     // check if there is a headline
     if (headlineLevel1Regex.test(newReadme)) {
         // insert points badge after level 1 headline
-        console.log('lvl 1 headline found');
+        console.log('lvl 1 headline found', JSON.stringify(headlineLevel1Regex.exec(newReadme), null, 2));
         return newReadme.replace(headlineLevel1Regex, `$&${mainBadgeString}`);
     }
     else {
