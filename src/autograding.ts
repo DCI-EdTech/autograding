@@ -28,8 +28,7 @@ const run = async (): Promise<void> => {
     // filter
     // disable autograding output for all branches but autograding and autograding-solution
     // enable for classes passed through action yaml input
-    const classes = core.getInput('classes')
-    console.error("CLASSES", classes.split("\n"))
+    const classes = core.getInput('classes').split("\n")
     const branch = process.env['GITHUB_REF_NAME']
     if( !classes.includes(owner) &&
         branch !== 'autograding' &&
