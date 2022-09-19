@@ -133,7 +133,7 @@ export default async function recordResult(points, result) {
       RUNNER_ARCH: process.env.RUNNER_ARCH, // VARCHAR
       RUNNER_WORKSPACE: process.env.RUNNER_WORKSPACE, // VARCHAR
       TEST_RESULTS: result.testResults, // JSON
-      GITHUB_STUDENT_FACING_OUTPUT_ENABLED: !process.env.DISABLE_AUTOGRADING ? 'true' : 'false', // VARCHAR
+      GITHUB_STUDENT_FACING_OUTPUT_ENABLED: !process.env.DISABLE_AUTOGRADING ? 'true' : 'false', // VARCHAR // converting to string as temporary fix because of wrong validation in API
     }
   
     payload = JSON.stringify(resultMessage)

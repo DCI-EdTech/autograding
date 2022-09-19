@@ -12,6 +12,10 @@ inputs:
   ghtoken:
     description: "original GH token"
     default: ${{ github.token }}
+  classes:
+    description: "List of enabled classes"
+    default:
+      - "Autograding-Demo-Class"
 runs:
   using: "node16"
   main: "./dist/index.js"
