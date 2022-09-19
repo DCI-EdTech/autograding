@@ -14,7 +14,7 @@ inputs:
     default: ${{ github.token }}
   classes:
     description: "List of enabled classes"
-    default: ["Autograding-Demo-Class"]
+    default: "none"
 runs:
   using: "node16"
   main: "./dist/index.js"
