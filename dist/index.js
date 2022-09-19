@@ -21788,7 +21788,6 @@ async function recordResult(points, result) {
         Sentry.captureException(error);
     }
     // send webhook event
-    console.log('record', payload);
     try {
         const req = https_1.default.request({
             hostname: 'autograding-results.dci.education',
