@@ -78,9 +78,6 @@ const indent = (text: any): string => {
 const getResultObject = (outputString) => {
   const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
   const resultObj = extractJSON(cleanedString)
-  if(!resultObj) {
-    console.error('result could not be parsed', 'output:', outputString)
-  }
   return resultObj
 }
 
@@ -219,7 +216,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   const test = {
     "name": `Tasks`,
     "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
-    "run": `CI=true npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json`,
+    "run": `CI=true npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --silent`,
     "timeout": 10
   }
 
