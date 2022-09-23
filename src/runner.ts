@@ -77,7 +77,11 @@ const indent = (text: any): string => {
 
 const getResultObject = (outputString) => {
   const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
-  return extractJSON(cleanedString)
+  const resultObj = extractJSON(cleanedString)
+  if(!resultObj) {
+    console.error('result could not be parsed', 'output:', cleanedString)
+  }
+  return resultObj
 }
 
 const waitForExit = async (child: ChildProcess, timeout: number): Promise<void> => {

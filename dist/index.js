@@ -4932,7 +4932,11 @@ const indent = (text) => {
 };
 const getResultObject = (outputString) => {
     const cleanedString = helpers_1.removeTerminalColoring(outputString).replace('●', '').replace('›', '');
-    return extractJSON_1.default(cleanedString);
+    const resultObj = extractJSON_1.default(cleanedString);
+    if (!resultObj) {
+        console.error('result could not be parsed', 'output:', cleanedString);
+    }
+    return resultObj;
 };
 const waitForExit = async (child, timeout) => {
     // eslint-disable-next-line no-undef
