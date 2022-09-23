@@ -79,7 +79,7 @@ const getResultObject = (outputString) => {
   const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
   const resultObj = extractJSON(cleanedString)
   if(!resultObj) {
-    console.error('result could not be parsed', 'output:', cleanedString)
+    console.error('result could not be parsed', 'output:', outputString)
   }
   return resultObj
 }

@@ -4934,7 +4934,7 @@ const getResultObject = (outputString) => {
     const cleanedString = helpers_1.removeTerminalColoring(outputString).replace('●', '').replace('›', '');
     const resultObj = extractJSON_1.default(cleanedString);
     if (!resultObj) {
-        console.error('result could not be parsed', 'output:', cleanedString);
+        console.error('result could not be parsed', 'output:', outputString);
     }
     return resultObj;
 };
