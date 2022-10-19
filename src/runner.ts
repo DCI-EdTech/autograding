@@ -166,12 +166,12 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
   
     child.stdout.on('data', chunk => {
       output += chunk
-      console.log('stdout:', chunk)
+      console.log('stdout:', chunk.toString('utf8'))
     })
   
     child.stderr.on('data', chunk => {
       process.stderr.write(indent(chunk))
-      console.log('stderr:', chunk)
+      console.log('stderr:', chunk.toString('utf8'))
     })
   
     await waitForExit(child, timeout)
