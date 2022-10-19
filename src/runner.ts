@@ -254,27 +254,33 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   }
 
   // sort results by filename
-  result.testResults.sort((a, b) => {
-    const nameA = a.name.toLowerCase();
-    const nameB = b.name.toLowerCase()
+  try {
+    result.testResults.sort((a, b) => {
+      const nameA = a.name.toLowerCase();
+      const nameB = b.name.toLowerCase()
 
-    // check for numbering in file names
-    const numA = parseInt(nameA.match(taskNamePattern)[3])
-    const numB = parseInt(nameB.match(taskNamePattern)[3])
+      // check for numbering in file names
+      const numA = parseInt(nameA.match(taskNamePattern)[3])
+      const numB = parseInt(nameB.match(taskNamePattern)[3])
 
-    
-    if(!isNaN(numA) && !isNaN(numB)) {
-      // sort by number
-      if(numA < numB) return -1
-      if(numA > numB) return  1
-    } else {
-      // sort by name
-      if (nameA < nameB) return -1
-      if (nameA > nameB) return 1;
-    }
+      
+      if(!isNaN(numA) && !isNaN(numB)) {
+        // sort by number
+        if(numA < numB) return -1
+        if(numA > numB) return  1
+      } else {
+        // sort by name
+        if (nameA < nameB) return -1
+        if (nameA > nameB) return 1;
+      }
 
-    return 0;
-  })
+      return 0;
+    })
+  } catch (error) {
+    console.error(error)
+    console.log('result:', JSON.stringify(result, null, 2))
+  }
+  
   
   // group results
   result.testResults = result.testResults.reduce((acc, item) => {
