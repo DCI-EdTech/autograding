@@ -4931,6 +4931,7 @@ const indent = (text) => {
     return str;
 };
 const getResultObject = (outputString) => {
+    console.log('output:', outputString);
     const cleanedString = helpers_1.removeTerminalColoring(outputString).replace('●', '').replace('›', '');
     const resultObj = extractJSON_1.default(cleanedString);
     return resultObj;
