@@ -70,7 +70,7 @@ const normalizeLineEndings = (text: string): string => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const indent = (text: any): string => {
-  let str = '' + new String(text)
+  let str = '' + new String(text.toString('utf8'))
   str = str.replace(/\r\n/gim, '\n').replace(/\n/gim, '\n  ')
   return str
 }
