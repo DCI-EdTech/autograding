@@ -4934,13 +4934,13 @@ const getResultObject = (outputString) => {
     let file;
     try {
         file = fs_1.default.readFileSync('./testResults.json', { encoding: 'utf8' });
-        if (file)
-            outputString = file;
     }
     catch (error) {
         console.error(error);
     }
-    console.log('output:', outputString);
+    if (file)
+        return helpers_1.removeTerminalColoring(file).replace('●', '').replace('›', '');
+    //console.log('output:', outputString)
     const cleanedString = helpers_1.removeTerminalColoring(outputString).replace('●', '').replace('›', '');
     const resultObj = extractJSON_1.default(cleanedString);
     return resultObj;

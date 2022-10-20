@@ -79,11 +79,11 @@ const getResultObject = (outputString) => {
   let file
   try {
     file = fs.readFileSync('./testResults.json', {encoding:'utf8'})
-    if(file) outputString = file
   } catch (error) {
     console.error(error)
   }
-  console.log('output:', outputString)
+  if(file) return removeTerminalColoring(file).replace('●', '').replace('›', '')
+  //console.log('output:', outputString)
   const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
   const resultObj = extractJSON(cleanedString)
   return resultObj
