@@ -4940,7 +4940,6 @@ const getResultObject = (outputString) => {
     catch (error) {
         console.error(error);
     }
-    console.log('file:', file);
     if (file)
         return file;
     //console.log('output:', outputString)
