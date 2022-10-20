@@ -76,6 +76,13 @@ const indent = (text: any): string => {
 }
 
 const getResultObject = (outputString) => {
+  let file
+  try {
+    file = fs.readFileSync('./testResults.json', {encoding:'utf8'})
+    if(file) outputString = file
+  } catch (error) {
+    console.error(error)
+  }
   console.log('output:', outputString)
   const cleanedString = removeTerminalColoring(outputString).replace('●', '').replace('›', '')
   const resultObj = extractJSON(cleanedString)
@@ -217,7 +224,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   const test = {
     "name": `Tasks`,
     "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
-    "run": `CI=true npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --silent`,
+    "run": `CI=true npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --outputFile=testResults.json --silent`,
     "timeout": 10
   }
 
