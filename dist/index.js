@@ -4934,6 +4934,7 @@ const getResultObject = (outputString) => {
     let file;
     try {
         file = fs_1.default.readFileSync('./testResults.json', { encoding: 'utf8' });
+        file = helpers_1.removeTerminalColoring(file).replace('●', '').replace('›', '');
         file = JSON.parse(file);
     }
     catch (error) {
@@ -4941,7 +4942,7 @@ const getResultObject = (outputString) => {
     }
     console.log('file:', file);
     if (file)
-        return helpers_1.removeTerminalColoring(file).replace('●', '').replace('›', '');
+        return file;
     //console.log('output:', outputString)
     const cleanedString = helpers_1.removeTerminalColoring(outputString).replace('●', '').replace('›', '');
     const resultObj = extractJSON_1.default(cleanedString);
