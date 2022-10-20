@@ -4934,6 +4934,7 @@ const getResultObject = (outputString) => {
     let file;
     try {
         file = fs_1.default.readFileSync('./testResults.json', { encoding: 'utf8' });
+        file = JSON.parse(file);
     }
     catch (error) {
         console.error(error);
