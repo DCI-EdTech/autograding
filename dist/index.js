@@ -21743,6 +21743,7 @@ async function recordResult(points, result) {
         console.log('AUTHOR:', runInfo.actor.login);
         if (commits.length < 1 ||
             (commits.length && commits[0].author && commits[0].author.login.includes('[bot]')) ||
+            (runInfo && runInfo.actor.login.includes('[bot]')) ||
             process.env.IS_ORIGINAL_TEMPLATE_REPO ||
             repository.is_template ||
             repository.owner.type === 'User')
