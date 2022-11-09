@@ -21740,7 +21740,6 @@ async function recordResult(points, result) {
         commits = commits.filter(commit => !(commit.author && commit.author.login.includes('[bot]')));
         // NOTE: doesn't record when students accept but don't submit anything
         // Another solution is needed to prevent recording when teachers create class template from main template
-        console.log('AUTHOR:', runInfo.actor.login);
         if (commits.length < 1 ||
             (commits.length && commits[0].author && commits[0].author.login.includes('[bot]')) ||
             (runInfo && runInfo.actor.login.includes('[bot]')) ||
