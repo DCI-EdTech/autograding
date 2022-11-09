@@ -77,6 +77,7 @@ export default async function recordResult(points, result) {
 
     // NOTE: doesn't record when students accept but don't submit anything
     // Another solution is needed to prevent recording when teachers create class template from main template
+    console.log('COMMITS:', JSON.stringify(commits, null, 2))
     if(commits.length < 1 ||
       (commits.length && commits[0].author && commits[0].author.login.includes('[bot]')) ||
       process.env.IS_ORIGINAL_TEMPLATE_REPO ||
