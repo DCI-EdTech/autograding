@@ -5586,7 +5586,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     const test = {
         "name": `Tasks`,
         "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
-        "run": `CI=true npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --outputFile=testResults.json --maxWorkers=2 --ci --silent`,
+        "run": `npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --outputFile=testResults.json --maxWorkers=2 --silent`,
         "timeout": 10
     };
     // https://help.github.com/en/actions/reference/development-tools-for-github-actions#stop-and-start-log-commands-stop-commands

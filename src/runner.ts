@@ -226,7 +226,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   const test = {
     "name": `Tasks`,
     "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
-    "run": `CI=true npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --outputFile=testResults.json --maxWorkers=2 --ci --silent`,
+    "run": `npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --outputFile=testResults.json --maxWorkers=2 --silent`,
     "timeout": 10
   }
 
