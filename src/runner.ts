@@ -225,7 +225,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   const testOpts = packageJson.autograding && packageJson.autograding.testOpts
   const test = {
     "name": `Tasks`,
-    "setup": `npm ci --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
+    "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
     "run": `npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --outputFile=testResults.json --maxWorkers=2 --ci --silent`,
     "timeout": 10
   }
@@ -238,6 +238,14 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
 
   let failed = false
 
+  // set jest cache directory in package.json
+  packageJson.jest = {
+    ...packageJson.jest,
+    cacheDirectory: '.jest-cache'
+  }
+
+  // write updated package.json
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
   
   try {
     log(color.cyan(`📝 ${test.name}`))

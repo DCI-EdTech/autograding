@@ -5585,7 +5585,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
     const testOpts = packageJson.autograding && packageJson.autograding.testOpts;
     const test = {
         "name": `Tasks`,
-        "setup": `npm ci --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
+        "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
         "run": `npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --outputFile=testResults.json --maxWorkers=2 --ci --silent`,
         "timeout": 10
     };
@@ -5595,6 +5595,13 @@ exports.runAll = async (cwd, packageJsonPath) => {
     log(`::stop-commands::${token}`);
     log('');
     let failed = false;
+    // set jest cache directory in package.json
+    packageJson.jest = {
+        ...packageJson.jest,
+        cacheDirectory: '.jest-cache'
+    };
+    // write updated package.json
+    fs_1.default.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
     try {
         log(color.cyan(`📝 ${test.name}`));
         log('');
