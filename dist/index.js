@@ -5583,10 +5583,11 @@ exports.runAll = async (cwd, packageJsonPath) => {
     }
     const additionalSetup = packageJson.autograding && packageJson.autograding.setup;
     const testOpts = packageJson.autograding && packageJson.autograding.testOpts;
+    const jestMaxWorkers = packageJson.scripts && packageJson.scripts.test && !packageJson.scripts.test.includes('--runInBand') ? ' --maxWorkers=2' : '';
     const test = {
         "name": `Tasks`,
         "setup": `npm install --ignore-scripts${additionalSetup ? ' && ' + additionalSetup : ''}`,
-        "run": `npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --outputFile=testResults.json --ci --silent`,
+        "run": `npm test -- "(src\/)?__tests__\/${taskNamePattern}"${testOpts ? ' ' + testOpts : ''} --json --outputFile=testResults.json --ci${jestMaxWorkers} --silent`,
         "timeout": 10
     };
     // https://help.github.com/en/actions/reference/development-tools-for-github-actions#stop-and-start-log-commands-stop-commands
