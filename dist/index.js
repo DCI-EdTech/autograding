@@ -5404,7 +5404,6 @@ const output_1 = __webpack_require__(52);
 const os = __importStar(__webpack_require__(87));
 const chalk_1 = __importDefault(__webpack_require__(273));
 const fs_1 = __importDefault(__webpack_require__(747));
-const path_1 = __importDefault(__webpack_require__(622));
 const Sentry = __importStar(__webpack_require__(346));
 const modifyReadme_1 = __importDefault(__webpack_require__(905));
 const updateBadges_1 = __importDefault(__webpack_require__(860));
@@ -5603,9 +5602,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
         cacheDirectory: '.jest-cache'
     };
     // write updated package.json
-    fs_1.default.writeFileSync(path_1.default.resolve(cwd, 'jest.config.js'), `module.exports = {
-    cacheDirectory: ".jest-cache",
-  };`);
+    fs_1.default.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
     try {
         log(color.cyan(`📝 ${test.name}`));
         log('');
