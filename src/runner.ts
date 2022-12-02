@@ -247,7 +247,9 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   }
 
   // write updated package.json
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+  fs.writeFileSync(path.resolve(cwd, 'jest.config.js'), `module.exports = {
+    cacheDirectory: ".jest-cache",
+  };`)
   
   try {
     log(color.cyan(`📝 ${test.name}`))
