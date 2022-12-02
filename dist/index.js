@@ -5562,6 +5562,9 @@ exports.run = async (test, cwd) => {
     timeout -= Math.floor(elapsed[0] * 1000 + elapsed[1] / 1000000);
     let result;
     try {
+        // jest cache dir 
+        const jestCacheDir = await runCommand('./node_modules/.bin/jest --showConfig | grep cacheDir', cwd, timeout);
+        console.log("CACHE DIR:", jestCacheDir);
         result = await runCommand(test, cwd, timeout);
         return result;
     }
