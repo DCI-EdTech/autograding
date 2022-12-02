@@ -247,7 +247,7 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   }
 
   // write updated package.json
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+  //fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
   
   try {
     log(color.cyan(`📝 ${test.name}`))
