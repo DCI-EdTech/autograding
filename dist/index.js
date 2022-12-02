@@ -5539,7 +5539,6 @@ const runCommand = async (test, cwd, timeout) => {
         // Start with a single new line
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
-            console.log("chunk", chunk.toString('utf8'));
             output += chunk.toString('utf8');
         });
         child.stderr.on('data', chunk => {
@@ -5549,6 +5548,7 @@ const runCommand = async (test, cwd, timeout) => {
         return getResultObject(output);
     }
     catch (error) {
+        console.log("raw out", output);
         error.result = getResultObject(output);
         throw error;
     }

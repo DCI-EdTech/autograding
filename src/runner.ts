@@ -175,7 +175,6 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     process.stdout.write(indent('\n'))
   
     child.stdout.on('data', chunk => {
-      console.log("chunk", chunk.toString('utf8'))
       output += chunk.toString('utf8')
     })
   
@@ -186,6 +185,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     await waitForExit(child, timeout)
     return getResultObject(output)
   } catch (error) {
+    console.log("raw out", output)
     error.result = getResultObject(output)
     throw error
   }
