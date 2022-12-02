@@ -175,6 +175,7 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     process.stdout.write(indent('\n'))
   
     child.stdout.on('data', chunk => {
+      console.log("chunk", chunk.toString('utf8'))
       output += chunk.toString('utf8')
     })
   
@@ -201,8 +202,8 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   let result
   try {
     result = await runCommand(test, cwd, timeout)
-    const jestCacheDir = await runCommand({run:'./node_modules/.bin/jest --showConfig | grep cacheDir'}, cwd, timeout)
-    console.log("CACHE DIR:", jestCacheDir)
+    // test
+    await runCommand({run:'./node_modules/.bin/jest --showConfig | grep cacheDir'}, cwd, timeout)
     return result
   } catch (error) {
     throw error

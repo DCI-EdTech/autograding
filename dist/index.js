@@ -5539,6 +5539,7 @@ const runCommand = async (test, cwd, timeout) => {
         // Start with a single new line
         process.stdout.write(indent('\n'));
         child.stdout.on('data', chunk => {
+            console.log("chunk", chunk.toString('utf8'));
             output += chunk.toString('utf8');
         });
         child.stderr.on('data', chunk => {
@@ -5563,8 +5564,8 @@ exports.run = async (test, cwd) => {
     let result;
     try {
         result = await runCommand(test, cwd, timeout);
-        const jestCacheDir = await runCommand({ run: './node_modules/.bin/jest --showConfig | grep cacheDir' }, cwd, timeout);
-        console.log("CACHE DIR:", jestCacheDir);
+        // test
+        await runCommand({ run: './node_modules/.bin/jest --showConfig | grep cacheDir' }, cwd, timeout);
         return result;
     }
     catch (error) {
