@@ -15,6 +15,7 @@ import recordResult from './recordResult'
 import getVisualReressionResult from './getVisualRegressionResult'
 import extractJSON from './lib/extractJSON'
 import { removeTerminalColoring } from './lib/helpers'
+import util from 'util'
 
 const currentBranch = process.env['GITHUB_REF_NAME']
 const color = new chalk.Instance({level: 1})
@@ -185,7 +186,6 @@ const runCommand = async (test: Test, cwd: string, timeout: number): Promise<voi
     await waitForExit(child, timeout)
     return getResultObject(output)
   } catch (error) {
-    console.log("raw out", output)
     error.result = getResultObject(output)
     throw error
   }
@@ -202,8 +202,21 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   let result
   try {
     result = await runCommand(test, cwd, timeout)
-    // test
-    await runCommand({run:'./node_modules/.bin/jest --showConfig | grep cacheDir'}, cwd, timeout)
+
+    const exec = util.promisify(require('child_process').exec);
+
+    async function lsExample() {
+      try {
+        const { stdout, stderr } = await exec('./node_modules/.bin/jest --showConfig | grep cacheDir');
+        console.log('stdout:', stdout);
+        console.log('stderr:', stderr);
+      } catch (e) {
+        console.error(e); // should contain code (exit code) and signal (that caused the termination).
+      }
+    }
+    lsExample()
+
+
     return result
   } catch (error) {
     throw error
