@@ -5557,23 +5557,23 @@ exports.run = async (test, cwd) => {
     let timeout = (test.timeout || 1) * 60 * 1000 || 30000;
     const start = process.hrtime();
     await runSetup(test, cwd, timeout);
+    const res = await new Promise((resolve, reject) => {
+        ChildProcess.exec(`./node_modules/.bin/jest --showConfig | grep cacheDir`, (error, stdout, stderr) => {
+            if (error) {
+                reject(error);
+            }
+            else {
+                resolve(stdout);
+            }
+        });
+    });
+    console.log(res);
     const elapsed = process.hrtime(start);
     // Subtract the elapsed seconds (0) and nanoseconds (1) to find the remaining timeout
     timeout -= Math.floor(elapsed[0] * 1000 + elapsed[1] / 1000000);
     let result;
     try {
         result = await runCommand(test, cwd, timeout);
-        const res = await new Promise((resolve, reject) => {
-            ChildProcess.exec(`./node_modules/.bin/jest --showConfig | grep cacheDir`, (error, stdout, stderr) => {
-                if (error) {
-                    reject(error);
-                }
-                else {
-                    resolve(stdout);
-                }
-            });
-        });
-        console.log(res);
         return result;
     }
     catch (error) {
