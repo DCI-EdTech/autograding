@@ -5411,7 +5411,6 @@ const recordResult_1 = __importDefault(__webpack_require__(770));
 const getVisualRegressionResult_1 = __importDefault(__webpack_require__(988));
 const extractJSON_1 = __importDefault(__webpack_require__(995));
 const helpers_1 = __webpack_require__(948);
-const util_1 = __importDefault(__webpack_require__(669));
 const currentBranch = process.env['GITHUB_REF_NAME'];
 const color = new chalk_1.default.Instance({ level: 1 });
 const taskNamePattern = 'task(s)?(\.(.*))?\.js';
@@ -5564,18 +5563,17 @@ exports.run = async (test, cwd) => {
     let result;
     try {
         result = await runCommand(test, cwd, timeout);
-        const exec = util_1.default.promisify(ChildProcess.exec);
-        async function lsExample() {
-            try {
-                const { stdout, stderr } = await exec('./node_modules/.bin/jest --showConfig | grep cacheDir');
-                console.log('stdout:', stdout);
-                console.log('stderr:', stderr);
-            }
-            catch (e) {
-                console.error(e); // should contain code (exit code) and signal (that caused the termination).
-            }
-        }
-        await lsExample();
+        const res = await new Promise((resolve, reject) => {
+            ChildProcess.exec(`./node_modules/.bin/jest --showConfig | grep cacheDir`, (error, stdout, stderr) => {
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    resolve(stdout);
+                }
+            });
+        });
+        console.log(res);
         return result;
     }
     catch (error) {
