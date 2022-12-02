@@ -5602,7 +5602,7 @@ exports.runAll = async (cwd, packageJsonPath) => {
         cacheDirectory: '.jest-cache'
     };
     // write updated package.json
-    //fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+    fs_1.default.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
     try {
         log(color.cyan(`📝 ${test.name}`));
         log('');
