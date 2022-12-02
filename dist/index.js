@@ -5564,7 +5564,7 @@ exports.run = async (test, cwd) => {
     let result;
     try {
         result = await runCommand(test, cwd, timeout);
-        const exec = util_1.default.promisify(__webpack_require__(129).exec);
+        const exec = util_1.default.promisify(ChildProcess.exec);
         async function lsExample() {
             try {
                 const { stdout, stderr } = await exec('./node_modules/.bin/jest --showConfig | grep cacheDir');

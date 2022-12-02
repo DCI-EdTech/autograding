@@ -203,7 +203,7 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   try {
     result = await runCommand(test, cwd, timeout)
 
-    const exec = util.promisify(require('child_process').exec);
+    const exec = util.promisify(ChildProcess.exec);
 
     async function lsExample() {
       try {
