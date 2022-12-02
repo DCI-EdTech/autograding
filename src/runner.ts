@@ -202,20 +202,6 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
   let result
   try {
     result = await runCommand(test, cwd, timeout)
-
-    const res = await new Promise((resolve, reject) => {
-      ChildProcess.exec(
-         `./node_modules/.bin/jest --showConfig | grep cacheDir`,
-         (error: ChildProcess.ExecException, stdout: string, stderr: string) => {
-           if (error) {
-             reject(error);
-           } else {
-             resolve(stdout); 
-           }
-         });
-   });
-   console.log(res)
-
     return result
   } catch (error) {
     throw error

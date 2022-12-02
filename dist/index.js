@@ -5563,17 +5563,6 @@ exports.run = async (test, cwd) => {
     let result;
     try {
         result = await runCommand(test, cwd, timeout);
-        const res = await new Promise((resolve, reject) => {
-            ChildProcess.exec(`./node_modules/.bin/jest --showConfig | grep cacheDir`, (error, stdout, stderr) => {
-                if (error) {
-                    reject(error);
-                }
-                else {
-                    resolve(stdout);
-                }
-            });
-        });
-        console.log(res);
         return result;
     }
     catch (error) {
