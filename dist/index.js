@@ -5575,7 +5575,7 @@ exports.run = async (test, cwd) => {
                 console.error(e); // should contain code (exit code) and signal (that caused the termination).
             }
         }
-        lsExample();
+        await lsExample();
         return result;
     }
     catch (error) {

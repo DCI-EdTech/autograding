@@ -214,7 +214,7 @@ export const run = async (test: Test, cwd: string): Promise<void> => {
         console.error(e); // should contain code (exit code) and signal (that caused the termination).
       }
     }
-    lsExample()
+    await lsExample()
 
 
     return result
