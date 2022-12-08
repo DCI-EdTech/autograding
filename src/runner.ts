@@ -239,15 +239,6 @@ export const runAll = async (cwd: string, packageJsonPath: string): Promise<void
   log('')
 
   let failed = false
-
-  // set jest cache directory in package.json
-  packageJson.jest = {
-    ...packageJson.jest,
-    cacheDirectory: '.jest-cache'
-  }
-
-  // write updated package.json
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
   
   try {
     log(color.cyan(`📝 ${test.name}`))
