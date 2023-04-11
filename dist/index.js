@@ -26752,14 +26752,14 @@ const run = async () => {
         // enable for classes passed through action yaml input
         const classes = core.getInput('classes').split("\n");
         const branch = process.env['GITHUB_REF_NAME'];
-        if ( /*!classes.includes(owner) && */ // enable for all classes
-        branch !== 'autograding' &&
+        /*if( !classes.includes(owner) &&
+            branch !== 'autograding' &&
             branch !== 'autograding-solution' &&
             branch !== 'codebuddy' &&
             branch !== 'codebuddy-solution') {
-            console.log('disable Autograding output');
-            process.env.DISABLE_AUTOGRADING = true;
-        }
+          console.log('disable Autograding output')
+          process.env.DISABLE_AUTOGRADING = true
+        }*/ // enable for all classes
         // check if running on exercise collection org
         if (octokit_1.owner === 'DigitalCareerInstitute') {
             process.env.IS_ORIGINAL_TEMPLATE_REPO = true;

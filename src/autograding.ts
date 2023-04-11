@@ -30,14 +30,14 @@ const run = async (): Promise<void> => {
     // enable for classes passed through action yaml input
     const classes = core.getInput('classes').split("\n")
     const branch = process.env['GITHUB_REF_NAME']
-    if( /*!classes.includes(owner) && */ // enable for all classes
+    /*if( !classes.includes(owner) &&
         branch !== 'autograding' &&
         branch !== 'autograding-solution' &&
         branch !== 'codebuddy' &&
         branch !== 'codebuddy-solution') {
       console.log('disable Autograding output')
       process.env.DISABLE_AUTOGRADING = true
-    }
+    }*/ // enable for all classes
 
 
     // check if running on exercise collection org
