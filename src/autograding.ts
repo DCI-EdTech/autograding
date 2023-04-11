@@ -30,7 +30,7 @@ const run = async (): Promise<void> => {
     // enable for classes passed through action yaml input
     const classes = core.getInput('classes').split("\n")
     const branch = process.env['GITHUB_REF_NAME']
-    if( !classes.includes(owner) &&
+    if( /*!classes.includes(owner) && */ // enable for all classes
         branch !== 'autograding' &&
         branch !== 'autograding-solution' &&
         branch !== 'codebuddy' &&
