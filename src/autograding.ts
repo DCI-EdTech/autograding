@@ -43,6 +43,13 @@ const run = async (): Promise<void> => {
     // check if running on exercise collection org
     if(owner === 'DigitalCareerInstitute') {
       process.env.IS_ORIGINAL_TEMPLATE_REPO = true
+      
+      if( branch == 'main' ||
+          branch == 'solution' ||
+          branch == 'master') {
+            console.log('disable Autograding output')
+            process.env.DISABLE_AUTOGRADING = true
+          }
     }
 
     await runAll(cwd, path.resolve(cwd, 'package.json'))

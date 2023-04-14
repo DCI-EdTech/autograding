@@ -26763,6 +26763,12 @@ const run = async () => {
         // check if running on exercise collection org
         if (octokit_1.owner === 'DigitalCareerInstitute') {
             process.env.IS_ORIGINAL_TEMPLATE_REPO = true;
+            if (branch == 'main' ||
+                branch == 'solution' ||
+                branch == 'master') {
+                console.log('disable Autograding output');
+                process.env.DISABLE_AUTOGRADING = true;
+            }
         }
         await runner_1.runAll(cwd, path_1.default.resolve(cwd, 'package.json'));
     }
