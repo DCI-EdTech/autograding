@@ -26765,7 +26765,8 @@ const run = async () => {
             process.env.IS_ORIGINAL_TEMPLATE_REPO = true;
             if (branch == 'main' ||
                 branch == 'solution' ||
-                branch == 'master') {
+                branch == 'master' ||
+                branch == 'autotranslate') {
                 console.log('disable Autograding output');
                 process.env.DISABLE_AUTOGRADING = true;
             }
