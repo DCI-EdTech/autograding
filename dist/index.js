@@ -27675,7 +27675,7 @@ async function modifyReadme(results, packageJson) {
         // add autograding info
         newReadme = await addAutogradingInfo(newReadme, results, packageJson);
         // don't update if nothing changed
-        if (newReadme === readme || process.env.DISABLE_AUTOGRADING)
+        if (newReadme === readme || (process.env.IS_ORIGINAL_TEMPLATE_REPO && process.env.DISABLE_AUTOGRADING))
             return;
         // update readme
         await octokit.rest.repos.createOrUpdateFileContents({
