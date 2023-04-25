@@ -26761,7 +26761,7 @@ const run = async () => {
           process.env.DISABLE_AUTOGRADING = true
         }*/ // enable for all classes
         // check if running on exercise collection org
-        if (octokit_1.owner === 'DigitalCareerInstitute') {
+        if (octokit_1.owner === 'DigitalCareerInstitute' || octokit_1.owner === 'FBW-Demo-Org') {
             process.env.IS_ORIGINAL_TEMPLATE_REPO = true;
             if (branch == 'main' ||
                 branch == 'solution' ||

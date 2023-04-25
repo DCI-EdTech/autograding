@@ -41,9 +41,9 @@ const run = async (): Promise<void> => {
 
 
     // check if running on exercise collection org
-    if(owner === 'DigitalCareerInstitute') {
+    if(owner === 'DigitalCareerInstitute' || owner === 'FBW-Demo-Org') {
       process.env.IS_ORIGINAL_TEMPLATE_REPO = true
-      
+
       if( branch == 'main' ||
           branch == 'solution' ||
           branch == 'master') {
