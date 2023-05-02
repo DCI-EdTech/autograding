@@ -13,8 +13,9 @@ const infoRE = new RegExp(`[\n]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${e
 const setupRE = new RegExp(`[\n]*${escapeRegExp(setupDelimiters[0])}([\\s\\S]*)${escapeRegExp(setupDelimiters[1])}`, 'gsm');
 
 export function removeAutogradingInfo(readme) {
-  const newReadme = readme.replace(infoRE, '')
-  return newReadme.replace(setupRE, '').trim()
+  let newReadme = readme.replace(infoRE, '')
+  newReadme = newReadme.replace(setupRE, '')
+  return 
 }
 
 async function modifyReadme(results, packageJson) {
@@ -122,7 +123,7 @@ ${generateResult(results)}
 
   if(process.env.DISABLE_AUTOGRADING) return fullReadme
 
-  return `${fullReadme}\n\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
+  return `${fullReadme.trim()}\n\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
 }
 
 export default modifyReadme;
