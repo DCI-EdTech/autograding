@@ -12,6 +12,11 @@ const setupDelimiters = ['[//]: # (autograding setup start)', '[//]: # (autograd
 const infoRE = new RegExp(`[\n]*${escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${escapeRegExp(infoDelimiters[1])}`, 'gsm');
 const setupRE = new RegExp(`[\n]*${escapeRegExp(setupDelimiters[0])}([\\s\\S]*)${escapeRegExp(setupDelimiters[1])}`, 'gsm');
 
+export function removeAutogradingInfo(readme) {
+  const newReadme = readme.replace(infoRE, '')
+  return newReadme.replace(setupRE, '').trim()
+}
+
 async function modifyReadme(results, packageJson) {
   const octokit = createOctokit()
   if (!octokit) return
@@ -113,8 +118,7 @@ ${generateResult(results)}
 
 
   // remove old info
-  fullReadme = fullReadme.replace(infoRE, '')
-  fullReadme = fullReadme.replace(setupRE, '').trim()
+  fullReadme = removeAutogradingInfo(fullReadme)
 
   if(process.env.DISABLE_AUTOGRADING) return fullReadme
 

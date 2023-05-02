@@ -27652,6 +27652,11 @@ const infoDelimiters = ['[//]: # (autograding info start)', '[//]: # (autogradin
 const setupDelimiters = ['[//]: # (autograding setup start)', '[//]: # (autograding setup end)'];
 const infoRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(infoDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(infoDelimiters[1])}`, 'gsm');
 const setupRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(setupDelimiters[0])}([\\s\\S]*)${helpers_1.escapeRegExp(setupDelimiters[1])}`, 'gsm');
+function removeAutogradingInfo(readme) {
+    const newReadme = readme.replace(infoRE, '');
+    return newReadme.replace(setupRE, '').trim();
+}
+exports.removeAutogradingInfo = removeAutogradingInfo;
 async function modifyReadme(results, packageJson) {
     const octokit = octokit_1.createOctokit();
     if (!octokit)
@@ -27742,8 +27747,7 @@ ${generateResult(results)}
 [📢 Report Problem](https://docs.google.com/forms/d/e/1FAIpQLSfS8wPh6bCMTLF2wmjiE5_UhPiOEnubEwwPLN_M8zTCjx5qbg/viewform?usp=pp_url&entry.652569746=${encodeURIComponent(exerciseTemplateName)})
 `;
     // remove old info
-    fullReadme = fullReadme.replace(infoRE, '');
-    fullReadme = fullReadme.replace(setupRE, '').trim();
+    fullReadme = removeAutogradingInfo(fullReadme);
     if (process.env.DISABLE_AUTOGRADING)
         return fullReadme;
     return `${fullReadme}\n\n${infoDelimiters[0]}\n${readmeInfo}\n\n${infoDelimiters[1]}`;
