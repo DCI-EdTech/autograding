@@ -15,7 +15,7 @@ const setupRE = new RegExp(`[\n]*${escapeRegExp(setupDelimiters[0])}([\\s\\S]*)$
 export function removeAutogradingInfo(readme) {
   let newReadme = readme.replace(infoRE, '')
   newReadme = newReadme.replace(setupRE, '')
-  return 
+  return newReadme
 }
 
 async function modifyReadme(results, packageJson) {

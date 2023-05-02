@@ -27655,7 +27655,7 @@ const setupRE = new RegExp(`[\n]*${helpers_1.escapeRegExp(setupDelimiters[0])}([
 function removeAutogradingInfo(readme) {
     let newReadme = readme.replace(infoRE, '');
     newReadme = newReadme.replace(setupRE, '');
-    return;
+    return newReadme;
 }
 exports.removeAutogradingInfo = removeAutogradingInfo;
 async function modifyReadme(results, packageJson) {
