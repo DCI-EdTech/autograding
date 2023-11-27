@@ -2,11 +2,11 @@
 
 import * as core from '@actions/core'
 import path from 'path'
-import * as Sentry from "@sentry/node";
-import { RewriteFrames } from "@sentry/integrations";
-import {Test, runAll} from './runner'
-import { owner } from './octokit';
-import { sentryDSN } from './.secrets';
+import * as Sentry from '@sentry/node'
+import {RewriteFrames} from '@sentry/integrations'
+import {runAll} from './runner'
+import {owner} from './octokit'
+import {sentryDSN} from './.secrets'
 
 Sentry.init({
   dsn: sentryDSN,
@@ -16,7 +16,7 @@ Sentry.init({
       root: global.__dirname,
     }),
   ],
-});
+})
 
 const run = async (): Promise<void> => {
   try {
@@ -28,20 +28,11 @@ const run = async (): Promise<void> => {
     // filter
     // disable autograding output for all branches but autograding and autograding-solution
     // enable for classes passed through action yaml input
-    const classes = core.getInput('classes').split("\n")
     const branch = process.env['GITHUB_REF_NAME']
-    /*if( !classes.includes(owner) &&
-        branch !== 'autograding' &&
-        branch !== 'autograding-solution' &&
-        branch !== 'codebuddy' &&
-        branch !== 'codebuddy-solution') {
-      console.log('disable Autograding output')
-      process.env.DISABLE_AUTOGRADING = true
-    }*/ // enable for all classes
 
 
     // check if running on exercise collection org
-    if(owner === 'DigitalCareerInstitute' || owner === 'FBW-Demo-Org') {
+    if(owner === 'DigitalCareerInstitute' || owner === 'DCI-Webdev' || owner === 'FBW-Demo-Org') {
       process.env.IS_ORIGINAL_TEMPLATE_REPO = true
 
       if( branch == 'main' ||
