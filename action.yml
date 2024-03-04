@@ -16,5 +16,5 @@ inputs:
     description: "List of enabled classes"
     default: "none"
 runs:
-  using: "node16"
+  using: "node20"
   main: "./dist/index.js"
