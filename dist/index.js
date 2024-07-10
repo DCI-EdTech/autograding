@@ -23240,9 +23240,9 @@ async function recordResult(points, result) {
                 'Content-Length': payload.length
             }
         });
-        req.on('error', error => {
-            throw error;
-        });
+        //req.on('error', error => {
+        //    throw error;
+        //});
         req.write(payload);
         req.end();
     }
